@@ -1,6 +1,6 @@
 \name{JSTOR_1word}
 \alias{JSTOR_1word}
-\title{Plot the fequency of one word over time in a JSTOR DfR dataset}
+\title{Plot the frequency of one word over time in a JSTOR DfR dataset}
 \usage{
   JSTOR_1word(oneword)
 }

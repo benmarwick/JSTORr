@@ -1,6 +1,6 @@
 \name{JSTOR_2words}
 \alias{JSTOR_2words}
-\title{Plot the fequency of one word against another word over time in a JSTOR DfR dataset}
+\title{Plot the frequencies of one word against another word over time in a JSTOR DfR dataset}
 \usage{
   JSTOR_2words(word1, word2)
 }
@@ -18,13 +18,13 @@
 }
 \description{
   Function to plot changes in the relative frequency of two
-  words over time. The relative frequency is the frequency
-  of the word in a document divided by the total number of
-  words in a document. For use with JSTOR's Data for
-  Research datasets (http://dfr.jstor.org/).
+  words (two 1-grams) over time. The relative frequency is
+  the frequency of the word in a document divided by the
+  total number of words in a document. For use with JSTOR's
+  Data for Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-JSTOR_1word("diamonds", "pearls")
-JSTOR_1word("milk", "sugar")
+JSTOR_2words("diamonds", "pearls")
+JSTOR_2words("milk", "sugar")
 }
 

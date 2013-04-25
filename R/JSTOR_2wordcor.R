@@ -25,5 +25,5 @@ JSTOR_2wordcor <- function(word1, word2){
                      ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_min+1, 2)) +
                      ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +
-                     scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001))
+                     scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001)))
 }
