@@ -12,6 +12,8 @@ Description: Simple exploratory text mining of journal articles from JSTOR's Dat
   JSTOR_unpack() and then you're ready to go with any 
   of the other functions.
 License: MIT
+Date: 2013-04-25
+Depends: ggplot2, reshape2, plyr
 Collate:
     'JSTOR_1word.R'
     'JSTOR_2wordcor.R'

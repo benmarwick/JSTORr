@@ -4,7 +4,7 @@ JSTOR_2wordcor <- function(word1, word2){
   cw2 <- word2
   cword1 <- sapply(1:length(wordcounts), function(i) sum(wordcounts[[i]] %in% cw1))
   cword2 <- sapply(1:length(wordcounts), function(i) sum(wordcounts[[i]] %in% cw2))
-  leng <- sapply(1:length(wordcounts), function(i) length(wordcounts[[i]]))
+  leng <-   sapply(1:length(wordcounts), function(i) length(wordcounts[[i]]))
   # calculate ratios
   cword1_ratio <- cword1/leng
   cword2_ratio <- cword2/leng
