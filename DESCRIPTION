@@ -5,8 +5,9 @@ Version: 1.0
 Date: 2013-04-24
 Author: Ben Marwick
 Maintainer: Ben Marwick <bmarwick@gmail.com>
-Description: Simple text mining of JSTOR journals. 
-  Go to http://dfr.jstor.org/, make a request for data, 
+Description: Simple exploratory text mining of journal articles from JSTOR's Data for Research service. 
+  Go to http://dfr.jstor.org/, make a request for data 
+  (specify CSV as outout format and Word Counts as data type), 
   then once you get a zip file, start with the function 
   JSTOR_unpack() and then you're ready to go with any 
   of the other functions.

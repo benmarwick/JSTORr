@@ -1,4 +1,4 @@
-#' Plot the fequency of one word over time in a JSTOR DfR dataset
+#' Plot the frequency of one word over time in a JSTOR DfR dataset
 #' 
 #' @description Function to plot changes in the relative frequency of a word over time. The relative frequency is the frequency of the word in a document divided by the total number of words in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param oneword  One word, surrounded by standard quote marks.

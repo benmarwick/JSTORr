@@ -1,17 +1,26 @@
 
+#' Plot the frequencies of one set of words against another set of words over time in a JSTOR DfR dataset
+#' 
+#' @description Function to plot changes in the relative frequency of two set of words (two sets of 1-grams) over time. The relative frequency is the frequency of the set of words in a document divided by the total number of words in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @param v1 One vector of words, each word surrounded by standard quote marks.
+#' @param v2 A second vector of words, each word surrounded by standard quote marks.
+#' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
+#' @examples 
+#' JSTOR_2wordvectors(c("diamonds", "pearls"), c"milk", "sugar"))
+#' JSTOR_2wordvectors(c("silver", "gold", "platinum"), c("oil", "gas"))
 
 
 
 JSTOR_2wordvectors <- function(v1, v2){
-  # THIRD, try comparing vectors of related words
-  # now word of interest (always lower case)
+  # Comparing vectors of related words of interest (always lower case)
   wv1 <- v1
   wv2 <- v2
   wordv1 <- sapply(1:length(wordcounts), function(i) sum(wordcounts[[i]] %in% wv1))
   wordv2 <- sapply(1:length(wordcounts), function(i) sum(wordcounts[[i]] %in% wv2))
+  leng <- sapply(1:length(wordcounts), function(i) length(wordcounts[[i]]))
   # calculate ratios
-  wordv1_ratio <- wordv1/the
-  wordv2_ratio <- wordv2/the
+  wordv1_ratio <- wordv1/leng
+  wordv2_ratio <- wordv2/leng
   # get years for each article and make data frame
   twowordvs_by_year <- data.frame(wordv1_ratio, wordv2_ratio, year = as.numeric(as.character(bibliodata$year)))
   # reshape into a long table to make it easier to work with in ggplt

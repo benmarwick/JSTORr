@@ -1,5 +1,5 @@
 JSTOR_2wordcor <- function(word1, word2){
-  ## FOURTH investigate correlations between words over time
+  ## investigate correlations between words over time
   cw1 <- word1
   cw2 <- word2
   cword1 <- sapply(1:length(wordcounts), function(i) sum(wordcounts[[i]] %in% cw1))
@@ -18,12 +18,12 @@ JSTOR_2wordcor <- function(word1, word2){
   # visualise
   library(ggplot2)
   suppressWarnings(ggplot(corrp, aes(year, corr)) +
-                     geom_point(aes(size = 1/pval)) +
+                     geom_point(aes(size = -pval)) +
                      geom_smooth(  method = "loess", span = 0.4) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      geom_hline(yintercept=0, colour = "red") + 
                      ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_min+1, 2)) +
-                     # this is not quite working properly...
-                     scale_size_continuous(name = "p-values", breaks = c(100, 50, 10), labels = c(0.01, 0.05, 0.10)) )
+                     ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +
+                     scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001))
 }
