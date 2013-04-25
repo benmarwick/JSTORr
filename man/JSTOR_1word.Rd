@@ -21,7 +21,7 @@
   Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-JSTOR_1word("diamonds")
-JSTOR_1word("pearls")
+##JSTOR_1word("diamonds")
+##JSTOR_1word("pearls")
 }
 

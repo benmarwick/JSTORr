@@ -24,7 +24,7 @@
   Data for Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-JSTOR_2words("diamonds", "pearls")
-JSTOR_2words("milk", "sugar")
+##JSTOR_2words("diamonds", "pearls")
+##JSTOR_2words("milk", "sugar")
 }
 

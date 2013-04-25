@@ -6,8 +6,8 @@
 #' @param v2 A second vector of words, each word surrounded by standard quote marks.
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
-#' JSTOR_2wordvectors(c("diamonds", "pearls"), c"milk", "sugar"))
-#' JSTOR_2wordvectors(c("silver", "gold", "platinum"), c("oil", "gas"))
+#' ##JSTOR_2wordvectors(c("diamonds", "pearls"), c"milk", "sugar"))
+#' ##JSTOR_2wordvectors(c("silver", "gold", "platinum"), c("oil", "gas"))
 
 
 
@@ -35,6 +35,6 @@ JSTOR_2wordvectors <- function(v1, v2){
                      geom_smooth( aes(colour = variable), method = "loess", span = 0.4, subset = .(value > 0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of words")) +
-                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_min+1, 2)) +
+                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
                      scale_colour_discrete(labels = c(paste(wv1, collapse = ", "), paste(wv2, collapse = ", "))) )
 }

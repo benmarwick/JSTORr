@@ -1,3 +1,15 @@
+
+#' Plot the change over time of the correlation between one set of words and another set of words in a JSTOR DfR dataset
+#' 
+#' @description Function to plot changes in the relative frequency of two set of words (two sets of 1-grams) over time. The relative frequency is the frequency of the set of words in a document divided by the total number of words in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @param word1 One word or a vector of words, each word surrounded by standard quote marks.
+#' @param word2  One word or a vector of words, each word surrounded by standard quote marks.
+#' @return Returns a ggplot object with publication year on the horizontal axis and Pearson's correlation on the vertical axis. Each point represents all the documents of a single year, point size is inversely proportional to p-value of the correlation.
+#' @examples 
+#' ##JSTOR_2wordcor(c("diamonds", "pearls"), c"milk", "sugar"))
+#' ##JSTOR_2wordcor(c("silver", "gold", "platinum"), c("oil", "gas"))
+
+
 JSTOR_2wordcor <- function(word1, word2){
   ## investigate correlations between words over time
   cw1 <- word1
@@ -23,7 +35,7 @@ JSTOR_2wordcor <- function(word1, word2){
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      geom_hline(yintercept=0, colour = "red") + 
                      ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +
-                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_min+1, 2)) +
+                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
                      ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +
                      scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001)))
 }

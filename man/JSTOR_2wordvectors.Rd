@@ -25,7 +25,7 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-JSTOR_2wordvectors(c("diamonds", "pearls"), c"milk", "sugar"))
-JSTOR_2wordvectors(c("silver", "gold", "platinum"), c("oil", "gas"))
+##JSTOR_2wordvectors(c("diamonds", "pearls"), c"milk", "sugar"))
+##JSTOR_2wordvectors(c("silver", "gold", "platinum"), c("oil", "gas"))
 }
 

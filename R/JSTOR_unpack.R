@@ -5,8 +5,8 @@
 #' @param zipfile The name of the zip file obtained from JSTOR's Data for Research tool (include the zip file suffix)
 #' @return Returns "wordcounts", a list of character vectors where each vector contains the words of one article, and 'bibliodata', a table of bibliographic information for all articles. 
 #' @examples 
-#' JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
-#' JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
+#' ##JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
+#' ##JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
 
 
 

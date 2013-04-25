@@ -14,7 +14,13 @@ License: MIT
 Depends:
     ggplot2,
     reshape2,
-    plyr
+    plyr,
+    stringr
+Imports:
+    ggplot2,
+    reshape2,
+    plyr,
+    stringr
 Collate:
     'JSTOR_1word.R'
     'JSTOR_2wordcor.R'

@@ -27,7 +27,7 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
-JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
+##JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
+##JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
 }
 

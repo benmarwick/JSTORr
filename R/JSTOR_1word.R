@@ -4,8 +4,8 @@
 #' @param oneword  One word, surrounded by standard quote marks.
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
-#' JSTOR_1word("diamonds")
-#' JSTOR_1word("pearls")
+#' ##JSTOR_1word("diamonds")
+#' ##JSTOR_1word("pearls")
 
 
 

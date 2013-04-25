@@ -6,8 +6,8 @@
 #' @param word2 One word, surrounded by standard quote marks.
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
-#' JSTOR_2words("diamonds", "pearls")
-#' JSTOR_2words("milk", "sugar")
+#' ##JSTOR_2words("diamonds", "pearls")
+#' ##JSTOR_2words("milk", "sugar")
 
 
 JSTOR_2words <- function(word1, word2){
@@ -34,6 +34,6 @@ JSTOR_2words <- function(word1, word2){
                      geom_smooth( aes(colour = variable), method = "loess", span = 0.4, subset = .(value > 0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of words")) +
-                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_min+1, 2)) +
+                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
                      scale_colour_discrete(labels = c(w1, w2)))
 }
