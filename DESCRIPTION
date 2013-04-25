@@ -5,8 +5,11 @@ Version: 1.0
 Date: 2013-04-24
 Author: Ben Marwick
 Maintainer: Ben Marwick <bmarwick@gmail.com>
-Description: Simple text mining of JSTOR journals (use ls("package:JSTORr") to
-    see available functions)
+Description: Simple text mining of JSTOR journals. 
+Go to http://dfr.jstor.org/, make a request for data, 
+then once you get a zip file, start with the function 
+JSTOR_unpack() and then you're ready to go with any 
+of the other functions.
 License: MIT
 Collate:
     'JSTOR_1word.R'
