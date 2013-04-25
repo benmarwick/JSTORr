@@ -23,7 +23,7 @@ Then, use the `install_github()` function to fetch this package from github:
 
 ```
 library(devtools)
-install_github(repo = "JSTORr", username = "benmarwick")
+install_github(repo = "JSTORr", username = "UW-ARCHY-textual-macroanalysis-lab")
 ```
 How to get started
 ----
