@@ -1,7 +1,8 @@
 #' Plot the frequency of one word over time in a JSTOR DfR dataset
 #' 
 #' @description Function to plot changes in the relative frequency of a word over time. The relative frequency is the frequency of the word in a document divided by the total number of words in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
-#' @param oneword  One word, surrounded by standard quote marks.
+#' @param x object returned by the function JSTOR_unpack.
+#' @param oneword One word, surrounded by standard quote marks.
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ##JSTOR_1word("diamonds")
@@ -9,9 +10,11 @@
 
 
 
-JSTOR_1word <- function(oneword){
+JSTOR_1word <- function(x, oneword){
   #### investigate change in use of certain words of interest over time
-  # FIRST get total number of word in the article to standarise for different article lengths
+  wordcounts <- x$wordcounts
+  bibliodata <- x$bibliodata
+  # Get total number of word in the article to standarise for different article lengths
   leng <- sapply(1:length(wordcounts), function(i) length(wordcounts[[i]]))
   # now word of interest (always lower case)
   word <- sapply(1:length(wordcounts), function(i) sum(wordcounts[[i]] %in% oneword ))

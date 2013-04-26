@@ -17,7 +17,7 @@
 #' @author Ben Marwick \email{benmarwick@@gmail.com}
 #' @references
 #' \url{http://dfr.jstor.org/}
-#' @import plyr reshape2 ggplot2 stringr
+#' @import plyr reshape2 ggplot2 stringr tm openNLP openNLPmodels.en
 #' @export JSTOR_1word JSTOR_2words JSTOR_2wordvectors JSTOR_2wordcor JSTOR_unpack
 NULL
 

@@ -3,10 +3,10 @@
 #' @description Unzip, import and reshape journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param path  Full path name of the directory containing the zip file obtained from JSTOR's Data for Research tool
 #' @param zipfile The name of the zip file obtained from JSTOR's Data for Research tool (include the zip file suffix)
-#' @return Returns "wordcounts", a list of character vectors where each vector contains the words of one article, and 'bibliodata', a table of bibliographic information for all articles. 
+#' @return Returns a list of two items. First is "wordcounts", a list of character vectors where each vector contains the words of one article, and second is 'bibliodata', a data frame of bibliographic information for all articles. 
 #' @examples 
-#' ##JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
-#' ##JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
+#' ## dat1 <- JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
+#' ## dat2 <- JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
 
 
 
@@ -16,7 +16,7 @@ JSTOR_unpack <- function(path, zipfile){
   setwd(path) # change this to where you downloaded the data!
   # Get zip file of CSVs from JSTOR and unzip
   # this may take a few minutes...
-  # unzip(zipfile)
+  unzip(zipfile)
   # set working directory to newly created folder
   # (within working directory) with lots of CSV files
   setwd(paste0(getwd(),"/wordcounts"))
@@ -33,6 +33,9 @@ JSTOR_unpack <- function(path, zipfile){
   # `untable' each CSV file into a list of data frames, one data frame per file
   aawc1 <- sapply(1:length(aawc), function(x) {rep(aawc[[x]]$WORDCOUNTS, times = aawc[[x]]$WEIGHT)})
   names(aawc1) <- myfiles
+  # go through each item of the list and randomise the order of the words
+  # so they are not in alpha order (which distorts the topic modelling)
+  aawc1 <- lapply(aawc1, function(i) sample(i, length(i)))
   
   #### bring in citations file with biblio data for each paper
   setwd(path) # change this to the location of the citations.csv file
@@ -60,7 +63,6 @@ JSTOR_unpack <- function(path, zipfile){
   bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]+{4}")
   # now we have a table of citations with a unique ID for each article
   # that is linked to the year of publication. We can come back to this
-  wordcounts <<- wordcounts
-  bibliodata <<- bibliodata
   invisible(gc())
+  return(list("wordcounts" = wordcounts, "bibliodata" = bibliodata))
 }

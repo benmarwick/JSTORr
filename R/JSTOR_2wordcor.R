@@ -2,16 +2,19 @@
 #' Plot the change over time of the correlation between one set of words and another set of words in a JSTOR DfR dataset
 #' 
 #' @description Function to plot changes in the relative frequency of two set of words (two sets of 1-grams) over time. The relative frequency is the frequency of the set of words in a document divided by the total number of words in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @param x object returned by the function JSTOR_unpack.
 #' @param word1 One word or a vector of words, each word surrounded by standard quote marks.
 #' @param word2  One word or a vector of words, each word surrounded by standard quote marks.
 #' @return Returns a ggplot object with publication year on the horizontal axis and Pearson's correlation on the vertical axis. Each point represents all the documents of a single year, point size is inversely proportional to p-value of the correlation.
 #' @examples 
-#' ##JSTOR_2wordcor(c("diamonds", "pearls"), c"milk", "sugar"))
-#' ##JSTOR_2wordcor(c("silver", "gold", "platinum"), c("oil", "gas"))
+#' ##JSTOR_2wordcor(dat1, word1 = "pearls", word2 = "diamonds"))
+#' ##JSTOR_2wordcor(dat1, c("silver", "gold", "platinum"), c("oil", "gas"))
 
 
-JSTOR_2wordcor <- function(word1, word2){
+JSTOR_2wordcor <- function(x, word1, word2){
   ## investigate correlations between words over time
+  wordcounts <- x$wordcounts
+  bibliodata <- x$bibliodata
   cw1 <- word1
   cw2 <- word2
   cword1 <- sapply(1:length(wordcounts), function(i) sum(wordcounts[[i]] %in% cw1))

@@ -2,9 +2,11 @@
 \alias{JSTOR_2wordvectors}
 \title{Plot the frequencies of one set of words against another set of words over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_2wordvectors(v1, v2)
+  JSTOR_2wordvectors(x, v1, v2)
 }
 \arguments{
+  \item{x}{object returned by the function JSTOR_unpack.}
+
   \item{v1}{One vector of words, each word surrounded by
   standard quote marks.}
 
@@ -25,7 +27,7 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-##JSTOR_2wordvectors(c("diamonds", "pearls"), c"milk", "sugar"))
-##JSTOR_2wordvectors(c("silver", "gold", "platinum"), c("oil", "gas"))
+##JSTOR_2wordvectors(dat1, c("diamonds", "pearls"), c"milk", "sugar"))
+##JSTOR_2wordvectors(dat1, v1 = c("silver", "gold", "platinum"), v2 = c("oil", "gas"))
 }
 

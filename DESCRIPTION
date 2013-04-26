@@ -15,12 +15,18 @@ Depends:
     ggplot2,
     reshape2,
     plyr,
-    stringr
+    stringr,
+    tm,
+    openNLP,
+    openNLPmodels.en
 Imports:
     ggplot2,
     reshape2,
     plyr,
-    stringr
+    stringr,
+    tm,
+    openNLP,
+    openNLPmodels.en
 Collate:
     'JSTOR_1word.R'
     'JSTOR_2wordcor.R'
@@ -28,3 +34,4 @@ Collate:
     'JSTOR_2wordvectors.R'
     'JSTOR_unpack.R'
     'JSTORr-package.r'
+    'JSTOR_corpusofnouns.R'

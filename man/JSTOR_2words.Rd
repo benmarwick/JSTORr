@@ -2,9 +2,11 @@
 \alias{JSTOR_2words}
 \title{Plot the frequencies of one word against another word over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_2words(word1, word2)
+  JSTOR_2words(x, word1, word2)
 }
 \arguments{
+  \item{x}{object returned by the function JSTOR_unpack.}
+
   \item{word1}{One word, surrounded by standard quote
   marks.}
 
@@ -24,7 +26,7 @@
   Data for Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-##JSTOR_2words("diamonds", "pearls")
-##JSTOR_2words("milk", "sugar")
+##JSTOR_2words(dat1, "diamonds", "pearls")
+##JSTOR_2words(dat1, word1 = "milk", word2 = "sugar")
 }
 

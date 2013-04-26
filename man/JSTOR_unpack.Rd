@@ -14,10 +14,10 @@
   suffix)}
 }
 \value{
-  Returns "wordcounts", a list of character vectors where
-  each vector contains the words of one article, and
-  'bibliodata', a table of bibliographic information for
-  all articles.
+  Returns a list of two items. First is "wordcounts", a
+  list of character vectors where each vector contains the
+  words of one article, and second is 'bibliodata', a data
+  frame of bibliographic information for all articles.
 }
 \description{
   Unzip, import and reshape journal articles and
@@ -27,7 +27,7 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-##JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
-##JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
+## dat1 <- JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
+## dat2 <- JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
 }
 

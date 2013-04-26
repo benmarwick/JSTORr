@@ -2,9 +2,11 @@
 \alias{JSTOR_2wordcor}
 \title{Plot the change over time of the correlation between one set of words and another set of words in a JSTOR DfR dataset}
 \usage{
-  JSTOR_2wordcor(word1, word2)
+  JSTOR_2wordcor(x, word1, word2)
 }
 \arguments{
+  \item{x}{object returned by the function JSTOR_unpack.}
+
   \item{word1}{One word or a vector of words, each word
   surrounded by standard quote marks.}
 
@@ -27,7 +29,7 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-##JSTOR_2wordcor(c("diamonds", "pearls"), c"milk", "sugar"))
-##JSTOR_2wordcor(c("silver", "gold", "platinum"), c("oil", "gas"))
+##JSTOR_2wordcor(dat1, word1 = "pearls", word2 = "diamonds"))
+##JSTOR_2wordcor(dat1, c("silver", "gold", "platinum"), c("oil", "gas"))
 }
 
