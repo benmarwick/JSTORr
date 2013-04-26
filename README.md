@@ -40,7 +40,7 @@ Third, have fun exploring the other functions in the package!
 
 Limitations
 ----
-Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives.
+Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress, use and share as you like, at your own risk. 
   
   
   [dfr]:http://dfr.jstor.org/
