@@ -35,3 +35,4 @@ Collate:
     'JSTOR_unpack.R'
     'JSTORr-package.r'
     'JSTOR_corpusofnouns.R'
+    'JSTOR_chunk.R'

@@ -31,6 +31,7 @@ for(i in 1:length(mycorpus.clean)){
   invisible(gc(v=FALSE)) # force empty RAM between each iteration
   cat("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b")
 }
+
 # split the word/tag strings to make a dataframe with words in 
 # one col and tags in another col
 mycorpus.POStag.split <- llply(1:length(mycorpus.clean.POStag), function(i)  read.table(textConnection(gsub(" ", "\n", mycorpus.clean.POStag[[i]])), sep="/", stringsAsFactors=FALSE), .progress = "text", .inform = FALSE)
