@@ -17,8 +17,8 @@
 #' @author Ben Marwick \email{benmarwick@@gmail.com}
 #' @references
 #' \url{http://dfr.jstor.org/}
-#' @import plyr reshape2 ggplot2 stringr tm openNLP openNLPmodels.en
-#' @export JSTOR_unpack JSTOR_1word JSTOR_2words JSTOR_1bigram JSTOR_2bigrams JSTOR_2bigramscor JSTOR_2wordcor JSTOR_corpusofnouns JSTOR_chunk
+#' @import plyr reshape2 ggplot2 stringr tm openNLP openNLPmodels.en topicmodels lda 
+#' @export JSTOR_unpack JSTOR_1word JSTOR_2words JSTOR_1bigram JSTOR_2bigrams JSTOR_2bigramscor JSTOR_2wordcor JSTOR_corpusofnouns JSTOR_chunk JSTOR_lda
 NULL
 
 

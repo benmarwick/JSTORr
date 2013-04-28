@@ -18,7 +18,9 @@ Depends:
     stringr,
     tm,
     openNLP,
-    openNLPmodels.en
+    openNLPmodels.en,
+    topicmodels,
+    lda
 Imports:
     ggplot2,
     reshape2,
@@ -26,7 +28,9 @@ Imports:
     stringr,
     tm,
     openNLP,
-    openNLPmodels.en
+    openNLPmodels.en,
+    topicmodels,
+    lda
 Collate:
     'JSTOR_1word.R'
     'JSTOR_2wordcor.R'
@@ -38,3 +42,4 @@ Collate:
     'JSTOR_1bigram.R'
     'JSTOR_2bigrams.R'
     'JSTOR_2bigramscor.R'
+    'JSTOR_lda.R'

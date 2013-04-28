@@ -16,27 +16,33 @@ JSTOR_unpack <- function(path, zipfile){
   setwd(path) # change this to where you downloaded the data!
   # Get zip file of CSVs from JSTOR and unzip
   # this may take a few minutes...
+  message("unzipping the DfR archive...")
   unzip(zipfile)
+  message("done")
   #### Deal with wordcounts (ie. 1-grams) first
   # set working directory to newly created folder
   # (within working directory) with lots of CSV files
   setwd(paste0(getwd(),"/wordcounts"))
   
   #### get list of data, the CSV files of wordcounts in dropbox folder
+  message("reading 1-grams into R...")
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
   # read CSV files into a R data object
   library(plyr)
   aawc <-  llply(myfiles, read.csv, .progress = "text", .inform = FALSE)
   # assign file names to each dataframe in the list
   names(aawc) <- myfiles
+  message("done")
   
   #### reshape data
+  message("reshaping the 1-grams...")
   # `untable' each CSV file into a list of data frames, one data frame per file
   aawc1 <- sapply(1:length(aawc), function(x) {rep(aawc[[x]]$WORDCOUNTS, times = aawc[[x]]$WEIGHT)})
   names(aawc1) <- myfiles
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
   aawc1 <- lapply(aawc1, function(i) sample(i, length(i)))
+  message("done")
   
   #### bring in citations file with biblio data for each paper
   setwd(path) # change this to the location of the citations.csv file
@@ -70,23 +76,28 @@ JSTOR_unpack <- function(path, zipfile){
   # (within working directory) with lots of CSV files of bigrams
   setwd(paste0(getwd(),"/bigrams"))
   
-  #### get list of data, the CSV files of wordcounts in dropbox folder
+  #### get list of data, the CSV files of bigrams in dropbox folder
+  message("reading the 2-grams into R...")
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
   # read CSV files into a R data object
   library(plyr)
   aawc2 <-  llply(myfiles, read.csv, .progress = "text", .inform = FALSE)
   # assign file names to each dataframe in the list
   names(aawc2) <- myfiles
+  message("done")
   
   #### reshape data
+  message("reshaping the 2-grams...")
   # `untable' each CSV file into a list of data frames, one data frame per file
   aawc2 <- sapply(1:length(aawc2), function(x) {rep(aawc2[[x]]$BIGRAMS, times = aawc2[[x]]$WEIGHT)})
   names(aawc2) <- myfiles
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
   aawc2 <- lapply(aawc2, function(i) sample(i, length(i)))
+  message("done")
   
   #### bring in citations file with biblio data for each paper
+  message("reshaping bibliographics data...")
   setwd(path) # change this to the location of the citations.csv file
   cit <- read.csv("citations.CSV")
   # replace for-slash with underscore to make it match the filenames
@@ -119,5 +130,6 @@ JSTOR_unpack <- function(path, zipfile){
   # now we have a table of citations with a unique ID for each article
   # that is linked to the year of publication. We can come back to this
   invisible(gc())
+  message("done")
   return(list("wordcounts" = wordcounts, "bigrams" = bigrams, "bibliodata" = bibliodata))
 }

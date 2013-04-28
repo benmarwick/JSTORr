@@ -9,16 +9,16 @@
 #' ## chunk1 <- JSTOR_chunk(x = unpacked, corpus = corpus, n = 1000) 
 
 
-
-
 JSTOR_chunk <- function(x, corpus, n)
   {
 # convert corpus to list of character vectors
+message("converting corpus to list of vectors...")
 listofwords <- vector("list", length(corpus))
 for(i in 1:length(corpus))
   {
   listofwords[[i]] <- corpus[[i]]
   }
+message("done")
 # divide each vector into chunks of n words
 # from http://stackoverflow.com/q/16232467/1036500
 f <- function(x) 
@@ -27,8 +27,10 @@ f <- function(x)
  ly <- length(y)
  split(y, gl(ly%/%n+1, n, ly))
 }
+message("splitting documents into chunks...")
 listofnwords1 <- sapply(listofwords, f)
 listofnwords2 <- unlist(listofnwords1, recursive = FALSE)
+message("done")
 # append IDs to list items so we can get bibliographic data for each chunk
 lengths <- sapply(1:length(listofwords), function(i) length(listofnwords1[[i]]))
 names(listofnwords2) <- unlist(lapply(1:length(lengths), function(i) rep(x$bibliodata$x[i], lengths[i])))
