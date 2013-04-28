@@ -17,6 +17,7 @@ JSTOR_unpack <- function(path, zipfile){
   # Get zip file of CSVs from JSTOR and unzip
   # this may take a few minutes...
   unzip(zipfile)
+  #### Deal with wordcounts (ie. 1-grams) first
   # set working directory to newly created folder
   # (within working directory) with lots of CSV files
   setwd(paste0(getwd(),"/wordcounts"))
@@ -61,8 +62,62 @@ JSTOR_unpack <- function(path, zipfile){
   # create a variable that holds the year of publication for
   # each article
   bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]+{4}")
+  
+  #### end 1-grams ####
+  
+  #### Now deal with bigrams (ie. 2-grams) 
+  # set working directory to folder with bigrams
+  # (within working directory) with lots of CSV files of bigrams
+  setwd(paste0(getwd(),"/bigrams"))
+  
+  #### get list of data, the CSV files of wordcounts in dropbox folder
+  myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
+  # read CSV files into a R data object
+  library(plyr)
+  aawc2 <-  llply(myfiles, read.csv, .progress = "text", .inform = FALSE)
+  # assign file names to each dataframe in the list
+  names(aawc2) <- myfiles
+  
+  #### reshape data
+  # `untable' each CSV file into a list of data frames, one data frame per file
+  aawc2 <- sapply(1:length(aawc2), function(x) {rep(aawc2[[x]]$BIGRAMS, times = aawc2[[x]]$WEIGHT)})
+  names(aawc2) <- myfiles
+  # go through each item of the list and randomise the order of the words
+  # so they are not in alpha order (which distorts the topic modelling)
+  aawc2 <- lapply(aawc2, function(i) sample(i, length(i)))
+  
+  #### bring in citations file with biblio data for each paper
+  setwd(path) # change this to the location of the citations.csv file
+  cit <- read.csv("citations.CSV")
+  # replace for-slash with underscore to make it match the filenames
+  # and replace odd \t that was added during import 
+  library(stringr)
+  cit$id <- str_extract(chartr('/', '_', cit$id), ".*[^\t]")
+  # limit list of citations to full length articles only 
+  # note that citation type is not in the correct column
+  # and that we need \t in there also
+  citfla <- cit[cit$publisher == 'fla\t',]
+  # subset from the wordcount data only the full length articles
+  # remove characters from the file names that are not in the citation list
+  # to enable matching with citation IDs
+  library(stringr)
+  names(aawc2) <- str_extract(basename(names(aawc2)), "[^bigrams_].+[^.CSV]")
+  # subset items in the list of wordcount data whose names are in 
+  # the list of fla citation IDs
+  bigrams <- aawc2[which(names(aawc2) %in% citfla$id)]
+  
+  
+  #### end bigrams ####
+  
+  
+  
+  # put citation IDs in order with wordcount data names (order is the same for bigrams)
+  bibliodata <- (merge(names(wordcounts), citfla, by.x=1, by.y="id"))
+  # create a variable that holds the year of publication for
+  # each article
+  bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]+{4}")
   # now we have a table of citations with a unique ID for each article
   # that is linked to the year of publication. We can come back to this
   invisible(gc())
-  return(list("wordcounts" = wordcounts, "bibliodata" = bibliodata))
+  return(list("wordcounts" = wordcounts, "bigrams" = bigrams, "bibliodata" = bibliodata))
 }

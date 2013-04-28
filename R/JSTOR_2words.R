@@ -38,5 +38,5 @@ JSTOR_2words <- function(x, word1, word2){
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of words")) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
-                     scale_colour_discrete(labels = c(w1, w2)))
+                     scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) )
 }

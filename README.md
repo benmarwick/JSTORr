@@ -29,7 +29,7 @@ How to get started
 ----
 First, go to JSTOR's [Data for Research service][dfr] and make a request for data. The DfR service makes available large numbers of journal articles in a format that is convenient for text mining. When making a request for data to use with this package, you **must** chose:
 - `CSV` as the 'output format', not `XML`, which is the default
-- `Word Counts` as the 'Data Type'
+- `Word Counts` **and** `bigrams` as the 'Data Type'
 
 Second, once you've downloaded the zip file that is the 'full dataset' from DfR then you can start `R`, install this package and run this function: 
 

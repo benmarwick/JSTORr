@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>JSTORr</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<h1>JSTORr</h1>
+
+<p>Simple exploratory text mining of journal articles from JSTOR&#39;s Data for Research service.</p>
+
+<h2>Objective</h2>
+
+<p>The aim of this package is provide some simple functions in <code>R</code> to explore changes in word frequencies over time in a specific journal archive. Currently there are functions to explore changes in:</p>
+
+<ul>
+<li>a single word (ie. plot the relative frequency of a 1-gram over time)</li>
+<li>two words independantly (ie. plot the relative frequency of two 1-grams over time)</li>
+<li>sets of words (ie. plot the relative frequency of a single group of mulitple 1-grams over time)</li>
+<li>correlations between two words over time (ie. plot the correlation of two 1-grams over time)</li>
+<li>correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)</li>
+</ul>
+
+<h2>How to install</h2>
+
+<p>First, make sure you&#39;ve got Hadley Wickham&#39;s excellent devtools package installed. If you haven&#39;t got it, you can get it with these lines in your R console:</p>
+
+<pre><code>install.packages(pkgs = &quot;devtools&quot;, dependencies = TRUE)
+</code></pre>
+
+<p>Then, use the <code>install_github()</code> function to fetch this package from github:</p>
+
+<pre><code>library(devtools)
+install_github(repo = &quot;JSTORr&quot;, username = &quot;benmarwick&quot;)
+</code></pre>
+
+<h2>How to get started</h2>
+
+<p>First, go to JSTOR&#39;s <a href="http://dfr.jstor.org/">Data for Research service</a> and make a request for data. The DfR service makes available large numbers of journal articles in a format that is convenient for text mining. When making a request for data to use with this package, you <strong>must</strong> chose:</p>
+
+<ul>
+<li><code>CSV</code> as the &#39;output format&#39;, not <code>XML</code>, which is the default</li>
+<li><code>Word Counts</code> as the &#39;Data Type&#39;</li>
+</ul>
+
+<p>Second, once you&#39;ve downloaded the zip file that is the &#39;full dataset&#39; from DfR then you can start <code>R</code>, install this package and run this function: </p>
+
+<pre><code>JSTOR_unpack
+</code></pre>
+
+<p>Third, have fun exploring the other functions in the package!</p>
+
+<h2>Limitations</h2>
+
+<p>Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives.</p>
+
+</body>
+
+</html>
+

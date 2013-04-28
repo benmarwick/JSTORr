@@ -1,14 +1,14 @@
-\name{JSTOR_1word}
-\alias{JSTOR_1word}
+\name{JSTOR_1bigram}
+\alias{JSTOR_1bigram}
 \title{Plot the frequency of one word over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_1word(x, oneword)
+  JSTOR_1bigram(x, bigram)
 }
 \arguments{
   \item{x}{object returned by the function JSTOR_unpack.}
 
-  \item{oneword}{One word, surrounded by standard quote
-  marks, or a vector of words}
+  \item{bigram}{two words, surrounded by standard quote
+  marks, or a vector of bigrams.}
 }
 \value{
   Returns a ggplot object with publication year on the
@@ -17,13 +17,13 @@
 }
 \description{
   Function to plot changes in the relative frequency of a
-  word over time. The relative frequency is the frequency
-  of the word in a document divided by the total number of
-  words in a document. For use with JSTOR's Data for
+  bigram over time. The relative frequency is the frequency
+  of the bigram in a document divided by the total number
+  of bigrams in a document. For use with JSTOR's Data for
   Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-##JSTOR_1word(unpack, "diamonds")
-##JSTOR_1word(unpack, c("diamonds", pearls"))
+## JSTOR_1bigram(unpack, "pirate booty")
+## JSTOR_1bigram(unpack, c("treasure chest", "musket balls", "jolly roger")
 }
 
