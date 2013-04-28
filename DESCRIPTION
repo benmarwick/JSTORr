@@ -37,3 +37,4 @@ Collate:
     'JSTOR_chunk.R'
     'JSTOR_1bigram.R'
     'JSTOR_2bigrams.R'
+    'JSTOR_2bigramscor.R'

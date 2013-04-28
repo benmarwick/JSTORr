@@ -11,6 +11,7 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - sets of words (ie. plot the relative frequency of a single group of mulitple 1-grams over time)
 - correlations between two words over time (ie. plot the correlation of two 1-grams over time)
 - correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)
+- all of the above with bigrams (a sequence of two words)
 
 How to install
 ----
@@ -38,9 +39,9 @@ JSTOR_unpack
 ```
 Third, have fun exploring the other functions in the package!
 
-Limitations
+Limitations and Disclaimer
 ----
-Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress, use and share as you like, at your own risk. 
+Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress, there is currently no custom error handling, use at your own risk, and share as you like. 
   
   
   [dfr]:http://dfr.jstor.org/

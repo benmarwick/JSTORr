@@ -1,6 +1,7 @@
 export(JSTOR_1bigram)
 export(JSTOR_1word)
 export(JSTOR_2bigrams)
+export(JSTOR_2bigramscor)
 export(JSTOR_2wordcor)
 export(JSTOR_2words)
 export(JSTOR_chunk)
