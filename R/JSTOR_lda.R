@@ -15,9 +15,9 @@ JSTOR_lda <- function(x, corpus, K){
   if (as.integer(K) != K || as.integer(K) < 2) 
     stop("\nK needs to be an integer of at least 2")
   
-library(tm)
+library(tm) # needed to convert corpus to dtm
 library(lda)
-library(topicmodels)
+library(topicmodels) # needed for dtm2ldaformat function
 message("converting corpus to document term matrix and then to doclines format...")
 dtm <- DocumentTermMatrix(corpus)
 message("done")
@@ -26,7 +26,7 @@ wc <- word.counts(ldafmt$documents) #get word counts
 # generate topic model
 message("generating topic model...")
 result <- lda.collapsed.gibbs.sampler(ldafmt$documents, 
-                                          K, 
+                                          K,    # number of topics
                                           ldafmt$vocab, 
                                           100,  # number of iterations
                                           0.01, # alpha

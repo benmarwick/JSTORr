@@ -1,6 +1,6 @@
 \name{JSTOR_lda}
 \alias{JSTOR_lda}
-\title{Generate a topic model with n topics using Latent Dirichlet allocation (LDA)}
+\title{Generate a topic model with K topics using Latent Dirichlet allocation (LDA)}
 \usage{
   JSTOR_lda(x, corpus, K)
 }
@@ -19,7 +19,7 @@
   columns and posterior probabilities as cell values.
 }
 \description{
-  Generates a topic model with n topics using Latent
+  Generates a topic model with K topics using Latent
   Dirichlet allocation (LDA, with the lda package) For use
   with JSTOR's Data for Research datasets
   (http://dfr.jstor.org/).
