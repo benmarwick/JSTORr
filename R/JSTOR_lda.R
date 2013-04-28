@@ -1,6 +1,6 @@
-#' Generate a topic model with n topics using Latent Dirichlet allocation (LDA)
+#' Generate a topic model with K topics using Latent Dirichlet allocation (LDA)
 #' 
-#' @description Generates a topic model with n topics using Latent Dirichlet allocation (LDA, with the lda package) For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @description Generates a topic model with K topics using Latent Dirichlet allocation (LDA, with the lda package) For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param x the object returned by the function JSTOR_unpack.
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
 #' @param K the number of topics that the model should contain
