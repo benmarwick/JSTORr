@@ -43,3 +43,4 @@ Collate:
     'JSTOR_2bigrams.R'
     'JSTOR_2bigramscor.R'
     'JSTOR_lda.R'
+    'JSTOR_MALLET.R'

@@ -155,6 +155,7 @@ hr {
 <li>sets of words (ie. plot the relative frequency of a single group of mulitple 1-grams over time)</li>
 <li>correlations between two words over time (ie. plot the correlation of two 1-grams over time)</li>
 <li>correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)</li>
+<li>all of the above with bigrams (a sequence of two words)</li>
 </ul>
 
 <h2>How to install</h2>
@@ -167,7 +168,7 @@ hr {
 <p>Then, use the <code>install_github()</code> function to fetch this package from github:</p>
 
 <pre><code>library(devtools)
-install_github(repo = &quot;JSTORr&quot;, username = &quot;benmarwick&quot;)
+install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macroanalysis-lab&quot;)
 </code></pre>
 
 <h2>How to get started</h2>
@@ -176,7 +177,7 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;benmarwick&quot;)
 
 <ul>
 <li><code>CSV</code> as the &#39;output format&#39;, not <code>XML</code>, which is the default</li>
-<li><code>Word Counts</code> as the &#39;Data Type&#39;</li>
+<li><code>Word Counts</code> <strong>and</strong> <code>bigrams</code> as the &#39;Data Type&#39;</li>
 </ul>
 
 <p>Second, once you&#39;ve downloaded the zip file that is the &#39;full dataset&#39; from DfR then you can start <code>R</code>, install this package and run this function: </p>
@@ -186,9 +187,29 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;benmarwick&quot;)
 
 <p>Third, have fun exploring the other functions in the package!</p>
 
-<h2>Limitations</h2>
+<h2>Typical workflow</h2>
 
-<p>Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives.</p>
+<p>Here&#39;s one way to make use of this package:</p>
+
+<p>First, go to <a href="http://dfr.jstor.org/">Data for Research service</a> and request data as specified above and download the zip file when it&#39;s available (it can take a few hours to days for DfR to prepare your archive). No need to unzip, that&#39;s done by the package.</p>
+
+<p>Second, start <code>R</code> and run something like <code>unpacked &lt;- JSTOR_unpack</code> and paste in the directory and zip file name when prompted. Then you&#39;ll get a data object <code>unpacked</code>, containing 1-grams, 2-grams and bibliographic data.</p>
+
+<p>Third, explore some visualisations of key words over time with <code>JSTOR_1word</code>, <code>JSTOR_2words</code>, <code>JSTOR_1bigram</code>, <code>JSTOR_2bigrams</code>, and correlations of words over time with <code>JSTOR_2wordcor</code> and <code>JSTOR_2bigramscor</code></p>
+
+<p>Fourth, put the documents into a corpus with <code>JSTOR_corpusofnouns</code> and explore further with more complex text analysis methods. The corpus can be changed to a Document Term Matrix using the <code>tm</code> package which has many advanced text mining methods. </p>
+
+<p>Fifth, generate topic models with <code>JSTOR_lda</code> (using the <code>lda</code> package, it&#39;s a lot faster than <code>topicmodels</code>) and <code>JSTOR_MALLET</code>. The latter function requires MALLET to be installed on your computer. See more about MALLET here <a href="http://mallet.cs.umass.edu/topics.php">http://mallet.cs.umass.edu/topics.php</a> and <a href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">http://programminghistorian.org/lessons/topic-modeling-and-mallet</a> </p>
+
+<p>Sixth, visualise and explore the output from the topic models.</p>
+
+<h2>Limitations and Disclaimer</h2>
+
+<p>Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress and there is currently very little custom error handling. Use at your own risk, and fork and share as you like. </p>
+
+<h2>Acknowledgements</h2>
+
+<p>Many of the ideas for these functions have come directly from the prolific and creative research of Andrew Goldstone, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. </p>
 
 </body>
 

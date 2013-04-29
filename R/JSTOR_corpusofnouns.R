@@ -4,7 +4,7 @@
 #' @param x object returned by the function JSTOR_unpack.
 #' @return Returns a corpus containing documents, ready for more advanced text mining and topic modelling.  
 #' @examples 
-#' ## mycorpus1 <- JSTOR_corpusofnouns(dat1) 
+#' ## mycorpus1 <- JSTOR_corpusofnouns(unpack) 
 
 
 

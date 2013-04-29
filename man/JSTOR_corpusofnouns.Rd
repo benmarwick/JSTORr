@@ -21,6 +21,6 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-## mycorpus1 <- JSTOR_corpusofnouns(dat1)
+## mycorpus1 <- JSTOR_corpusofnouns(unpack)
 }
 

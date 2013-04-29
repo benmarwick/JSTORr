@@ -1,23 +1,43 @@
 #' Unpack JSTOR journal articles and bibliographic data 
 #' 
-#' @description Unzip, import and reshape journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
-#' @param path  Full path name of the directory containing the zip file obtained from JSTOR's Data for Research tool
-#' @param zipfile The name of the zip file obtained from JSTOR's Data for Research tool (include the zip file suffix)
-#' @return Returns a list of two items. First is "wordcounts", a list of character vectors where each vector contains the words of one article, and second is 'bibliodata', a data frame of bibliographic information for all articles. 
+#' @description Unzip, import and reshape journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). Function prompts for full path name of the directory containing the zip file obtained from JSTOR's Data for Research tool and for the name of the zip file obtained from JSTOR's Data for Research tool (include the zip file suffix)
+#' @return Returns a list of three items. First is "wordcounts", a list of character vectors where each vector contains the words of one article,  second is 'bigrams', as for 'wordcounts' but with 2-grams instead of 1-grams, and third is 'bibliodata', a data frame of bibliographic information for all articles. 
 #' @examples 
-#' ## dat1 <- JSTOR_unpack("C:/Documents", "2013.4.20.FxFmBVYd.zip") # note forward slash, not backslash
-#' ## dat2 <- JSTOR_unpack(getwd(), "2013.4.20.FxFmBVYd.zip")
+#' ## dat1 <- JSTOR_unpack() # then follow prompts to paste in path and the name of the zipfile
+#' ## unpack <- JSTOR_unpack() # as above
 
 
 
-JSTOR_unpack <- function(path, zipfile){
+JSTOR_unpack <- function(){
   #### get data into the R session 
+  # get user to paste in the path to the zipfile
+  
+  # from  http://r.789695.n4.nabble.com/url-prep-function-backslash-issue-tp3778530p3779086.html
+  message("please paste in the path to the zip file (no quotes needed):")
+  oldstring1 <- readline() 
+  path <- chartr("\\", "/", oldstring1) 
+  
+  # get user to paste in the name of the zipfile
+  
+  message("please paste in the name of the zip file (no quotes needed):")
+  oldstring2 <- readline() 
+  zipfile <- oldstring2
+  
+  
   # set R's working directory
   setwd(path) # change this to where you downloaded the data!
   # Get zip file of CSVs from JSTOR and unzip
   # this may take a few minutes...
   message("unzipping the DfR archive...")
-  unzip(zipfile)
+  
+       ifelse((tail(strsplit(as.character(zipfile), "\\.")[[1]], 1)  !=  "zip"),   # test
+         stop("the zip file name must end in '.zip'"),                  # yes
+         
+         
+       ifelse(!is.character(zipfile) || length(zipfile) != 1L || !nzchar(zipfile),  # no   # test
+         stop("the zip file name must be a single character string"),                      # yes
+         unzip(zipfile)))                                                                  # no
+  
   message("done")
   #### Deal with wordcounts (ie. 1-grams) first
   # set working directory to newly created folder
@@ -74,6 +94,7 @@ JSTOR_unpack <- function(path, zipfile){
   #### Now deal with bigrams (ie. 2-grams) 
   # set working directory to folder with bigrams
   # (within working directory) with lots of CSV files of bigrams
+  setwd(path)
   setwd(paste0(getwd(),"/bigrams"))
   
   #### get list of data, the CSV files of bigrams in dropbox folder
@@ -117,10 +138,7 @@ JSTOR_unpack <- function(path, zipfile){
   # the list of fla citation IDs
   bigrams <- aawc2[which(names(aawc2) %in% citfla$id)]
   
-  
   #### end bigrams ####
-  
-  
   
   # put citation IDs in order with wordcount data names (order is the same for bigrams)
   bibliodata <- (merge(names(wordcounts), citfla, by.x=1, by.y="id"))
@@ -133,3 +151,4 @@ JSTOR_unpack <- function(path, zipfile){
   message("done")
   return(list("wordcounts" = wordcounts, "bigrams" = bigrams, "bibliodata" = bibliodata))
 }
+

@@ -39,9 +39,30 @@ JSTOR_unpack
 ```
 Third, have fun exploring the other functions in the package!
 
+Typical workflow
+----
+Here's one way to make use of this package:
+
+First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). No need to unzip, that's done by the package.
+
+Second, start `R` and run something like `unpacked <- JSTOR_unpack` and paste in the directory and zip file name when prompted. Then you'll get a data object `unpacked`, containing 1-grams, 2-grams and bibliographic data.
+
+Third, explore some visualisations of key words over time with `JSTOR_1word`, `JSTOR_2words`, `JSTOR_1bigram`, `JSTOR_2bigrams`, and correlations of words over time with `JSTOR_2wordcor` and `JSTOR_2bigramscor`
+
+Fourth, put the documents into a corpus with `JSTOR_corpusofnouns` and explore further with more complex text analysis methods. The corpus can be changed to a Document Term Matrix using the `tm` package which has many advanced text mining methods. 
+
+Fifth, generate topic models with `JSTOR_lda` (using the `lda` package, it's a lot faster than `topicmodels`) and `JSTOR_MALLET`. The latter function requires MALLET to be installed on your computer. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
+
+Sixth, visualise and explore the output from the topic models.
+
+
 Limitations and Disclaimer
 ----
-Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress, there is currently no custom error handling, use at your own risk, and share as you like. 
+Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress and there is currently very little custom error handling. Use at your own risk, and fork and share as you like. 
+
+Acknowledgements
+----
+Many of the ideas for these functions have come directly from the prolific and creative research of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. 
   
   
   [dfr]:http://dfr.jstor.org/

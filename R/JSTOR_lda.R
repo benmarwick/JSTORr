@@ -43,11 +43,12 @@ topic.proportions <- t(result$document_sums) / colSums(result$document_sums) # a
 topic.proportions[is.na(topic.proportions)] <-  1 / K # etc. from demo(lda)
 colnames(topic.proportions) <- apply(top.words, 2, paste, collapse=" ") # assign col names...
 topic.proportions <- data.frame(topic.proportions)
-# add row names that match to bibliodata
-#  ...
+# add cols of article ID and year of publication from bibliodata
+topic.proportions$ID <- x$bibliodata$x # DOI id of article
+topic.proportions$year <- as.numeric(as.character(x$bibliodata$year)) # year of article publication
   
-  message("done")
-return(topic.proportions)
+message("done")
+return(list("topic.proportions" = topic.proportions, "model" = result))
 }
 
 
