@@ -7,15 +7,20 @@
 #' @param K the number of topics that the model should contain. Can also be a vector of numbers of topics, then a model will be generated for each number. Useful for comparing diagnostics of different models.
 #' @return Returns plots of diagnostics if more than one number of topics is specified. Output files from MALLET can be found in the working directory.
 #' @examples 
-#' ## mallet1 <- JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = 150) # generate a single model
-#' ## mallet2 <- JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
+#' ## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = 150) # generate a single model
+#' ## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
 
 
-JSTOR_MALLET <- function(corpus, MALLET, K){
+JSTOR_MALLET <- function(x, corpus, MALLET, K){
+  
+  # stop if number of topics is less than 2
+  if (as.integer(K) != K || as.integer(K) < 2) 
+    stop("\nK needs to be an integer of at least 2")
   
   # create new directory to hold the text files that MALLET will use
-  dir.create(paste0(getwd(),"/text_files_for_MALLET"))
-  setwd(paste0(getwd(),"/text_files_for_MALLET"))
+  setwd(MALLET)
+  suppressWarnings(dir.create(paste0(getwd(),"/text_files_for_MALLET")))
+  suppressWarnings(setwd(paste0(getwd(),"/text_files_for_MALLET")))
   # delete everything in case that dir was previously used.
   do.call(file.remove,list(list.files(getwd())))
   
@@ -29,15 +34,12 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
   
   #### Generate topic model with MALLET
   # setup system enviroment for R and MALLET
-  MALLET_HOME <- MALLET # "C:/mallet-2.0.7" # location of the bin directory
-  Sys.setenv("MALLET_HOME" = MALLET_HOME)
-  Sys.setenv(PATH = "C:/Program Files (x86)/Java/jre7/bin")
-  
+  # MALLET_HOME <- MALLET # "C:/mallet-2.0.7"                 # location of the bin directory
+  # Sys.setenv("MALLET_HOME" = MALLET_HOME)                   # at one point, I needed these to make it work
+  # Sys.setenv(PATH = "C:/Program Files (x86)/Java/jre7/bin") # but now I can't build the package with them...
+                                                              # and it seems to work fine without them
   # configure variables and filenames for MALLET
   ## here using MALLET's built-in example data 
-  
-  # set list of topic numbers to iterate over
-  K #<- seq(100, 300, 50)
   
   # create list to store output of loop
   loop <- vector("list", length(K))
@@ -79,7 +81,7 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
   # Output files are in inspect the diagnostics files to see which number of topics is best. 
   message("preparing diagnostics...")
   library(XML)
-  setwd(MALLET_HOME)
+  setwd(MALLET)
   diagnosticfiles <- list.files(pattern="(diagnostics).*\\.xml$")
   diagnostics <- lapply(1:length(K), function(j) xmlParse(diagnosticfiles[[j]], useInternal = TRUE))
   # function to get topic diagnostics from XML files
@@ -103,10 +105,10 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
   suppressWarnings(df <- melt(df, id.vars = "L1"))
   # visualize
   library(ggplot2)
-  ggplot(df, aes(factor(L1), value)) + 
+  print(ggplot(df, aes(factor(L1), value)) + 
     geom_violin() + 
     geom_jitter(alpha = 0.1) + 
-    facet_wrap(~variable, scale = "free")
+    facet_wrap(~variable, scale = "free"))
   # to assist with interpretation: http://article.gmane.org/gmane.comp.ai.mallet.devel/1483/
   message("done")
   message(paste0("MALLET's output files are in ", getwd()))

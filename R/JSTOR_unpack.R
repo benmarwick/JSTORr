@@ -94,7 +94,7 @@ JSTOR_unpack <- function(){
   #### Now deal with bigrams (ie. 2-grams) 
   # set working directory to folder with bigrams
   # (within working directory) with lots of CSV files of bigrams
-  setwd(path)
+  setwd(path) 
   setwd(paste0(getwd(),"/bigrams"))
   
   #### get list of data, the CSV files of bigrams in dropbox folder
@@ -137,6 +137,7 @@ JSTOR_unpack <- function(){
   # subset items in the list of wordcount data whose names are in 
   # the list of fla citation IDs
   bigrams <- aawc2[which(names(aawc2) %in% citfla$id)]
+                             
   
   #### end bigrams ####
   
@@ -150,5 +151,6 @@ JSTOR_unpack <- function(){
   invisible(gc())
   message("done")
   return(list("wordcounts" = wordcounts, "bigrams" = bigrams, "bibliodata" = bibliodata))
+ 
 }
 

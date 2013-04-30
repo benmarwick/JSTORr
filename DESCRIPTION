@@ -30,7 +30,8 @@ Imports:
     openNLP,
     openNLPmodels.en,
     topicmodels,
-    lda
+    lda,
+    XML
 Collate:
     'JSTOR_1word.R'
     'JSTOR_2wordcor.R'

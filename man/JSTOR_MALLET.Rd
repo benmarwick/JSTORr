@@ -2,7 +2,7 @@
 \alias{JSTOR_MALLET}
 \title{Divide documents up into chunks of n words}
 \usage{
-  JSTOR_MALLET(corpus, MALLET, K)
+  JSTOR_MALLET(x, corpus, MALLET, K)
 }
 \arguments{
   \item{x}{object returned by the function JSTOR_unpack.}
@@ -30,7 +30,7 @@
   datasets (http://dfr.jstor.org/).
 }
 \examples{
-## mallet1 <- JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = 150) # generate a single model
-## mallet2 <- JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics
+## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = 150) # generate a single model
+## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics
 }
 
