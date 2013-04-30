@@ -12,6 +12,7 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - correlations between two words over time (ie. plot the correlation of two 1-grams over time)
 - correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)
 - all of the above with bigrams (a sequence of two words)
+- generating topic models with the `lda` package and MALLET (if you have it installed)
 
 How to install
 ----
