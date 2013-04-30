@@ -40,20 +40,28 @@ message("done")
 message("extracting non-name nouns and discarding the rest...")
 # split the word/tag strings to make a dataframe with words in 
 # one col and tags in another col
+library(plyr)
 mycorpus.POStag.split <- llply(1:length(mycorpus.clean.POStag), function(i)  read.table(textConnection(gsub(" ", "\n", mycorpus.clean.POStag[[i]])), sep="/", stringsAsFactors=FALSE), .progress = "text", .inform = FALSE)
 # just keep NNs
 mycorpus.nouns <- llply(1:length(mycorpus.POStag.split), function(i) mycorpus.POStag.split[[i]][mycorpus.POStag.split[[i]]$V2 == "NN" | mycorpus.POStag.split[[i]]$V2 == "NNS",], .progress = "text", .inform = FALSE)
 # remove words with less than 3 characters
 mycorpus.nouns <- llply(1:length(mycorpus.nouns), function(i) mycorpus.nouns[[i]][nchar(mycorpus.nouns[[i]]$V1)  > 3, ], .progress = "text", .inform = FALSE)
+# remove words with more than two consequtive characters (probably OCR errors)
+# also converts data frames to vectors
+mycorpus.nouns <- llply(1:length(mycorpus.nouns), function(i) mycorpus.nouns[[i]]$V1[!grepl("(.)\\1{2,}", mycorpus.nouns[[i]]$V1)], .progress = "text", .inform = FALSE)
+
+
 # remove common human names http://www.fakenamegenerator.com/ http://www.census.gov/genealogy/www/data/2000surnames/index.html
 babynames <- tolower(read.csv("https://raw.github.com/hadley/data-baby-names/master/baby-names.csv")[,2])
-mycorpus.nouns  <- llply(1:length(mycorpus.nouns), function(i) mycorpus.nouns[[i]][!mycorpus.nouns[[i]]$V1 %in% babynames, ], .progress = "text", .inform = FALSE)
+mycorpus.nouns  <- llply(1:length(mycorpus.nouns), function(i) mycorpus.nouns[[i]][!mycorpus.nouns[[i]] %in% babynames ], .progress = "text", .inform = FALSE)
 # make character string of NNs for topic modelling
-mycorpus.noun.strings <- llply(1:length(mycorpus.nouns), function(i) paste(mycorpus.nouns[[i]][,1], collapse = ", "), .progress = "text", .inform = FALSE)
+mycorpus.noun.strings <- llply(1:length(mycorpus.nouns), function(i) paste(mycorpus.nouns[[i]], collapse = ", "), .progress = "text", .inform = FALSE)
 # remove odd characters
 mycorpus.noun.strings <- llply(1:length(mycorpus.noun.strings), function(j) iconv(mycorpus.noun.strings[[j]], "latin1", "ASCII", sub=""), .progress = "text", .inform = FALSE)
 # remove punctuation
 mycorpus.noun.strings <- llply(1:length(mycorpus.noun.strings), function(j) gsub("[[:punct:]]", "",  mycorpus.noun.strings[[j]]), .progress = "text", .inform = FALSE)
+
+
 message("done")
 # put in corpus
 message("converting vectors back into a corpus")
