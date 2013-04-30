@@ -2,11 +2,9 @@
 \alias{JSTOR_MALLET}
 \title{Divide documents up into chunks of n words}
 \usage{
-  JSTOR_MALLET(x, corpus, MALLET, K)
+  JSTOR_MALLET(corpus, MALLET, K)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
-
   \item{corpus}{the object returned by the function
   JSTOR_corpusofnouns. A corpus containing the documents.}
 
