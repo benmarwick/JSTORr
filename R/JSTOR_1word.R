@@ -11,7 +11,7 @@
 
 
 
-JSTOR_1word <- function(x, oneword, span){
+JSTOR_1word <- function(x, oneword, span = 0.5){
   #### investigate change in use of certain words of interest over time
   wordcounts <- x$wordcounts
   bibliodata <- x$bibliodata
