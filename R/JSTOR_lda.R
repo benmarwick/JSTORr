@@ -28,7 +28,7 @@ result <- lda.collapsed.gibbs.sampler(ldafmt$documents,
                                           K,    # number of topics
                                           ldafmt$vocab, 
                                           100,  # number of iterations
-                                          0.01, # alpha
+                                          50/K, # alpha, after Griffiths & Steyvers 2004
                                           0.1,  # eta
                                           burnin = 100,
                                           compute.log.likelihood = FALSE

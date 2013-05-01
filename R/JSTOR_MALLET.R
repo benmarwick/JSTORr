@@ -57,6 +57,11 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
     optint <-  10
     # set number of iterations per model
     iter <- 1000
+    # other variables
+    alpha <- 50/K # after after Griffiths & Steyvers 2004
+    beta  <- 0.01
+    # parallel
+    num-threads <- Sys.getenv('NUMBER_OF_PROCESSORS') 
     
     # set file names for output of model, extensions must be as shown
     outputstate <-     paste("outputstate", i, "gz", sep = ".")
@@ -67,7 +72,7 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
     # combine variables into strings ready for windows command line
     cd <- "cd C:\\mallet-2.0.7" # location of the bin directory
     import <- paste("bin\\mallet import-dir --input", importdir, "--output", output, "--keep-sequence --remove-stopwords", sep = " ")
-    train  <- paste("bin\\mallet run cc.mallet.topics.tui.TopicTrainer --input", output, "--num-topics", ntopics, "--optimize-interval",  optint, "--output-state", outputstate, "--output-topic-keys", outputtopickeys, "--output-doc-topics", outputdoctopics, "--diagnostics-file", diagnostics, "--optimize-burn-in 200", sep = " ")
+    train  <- paste("bin\\mallet run cc.mallet.topics.tui.TopicTrainer --input", output, "--num-topics", ntopics, "--alpha", alpha, "--beta", beta, "--num-threads", num-threads, "--optimize-interval",  optint, "--output-state", outputstate, "--output-topic-keys", outputtopickeys, "--output-doc-topics", outputdoctopics, "--diagnostics-file", diagnostics, "--optimize-burn-in 200", sep = " ")
     
     # send commands to the Windows command prompt and run MALLET from there
     # collect console output in a list

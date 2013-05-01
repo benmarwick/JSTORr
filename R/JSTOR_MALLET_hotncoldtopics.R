@@ -87,5 +87,4 @@ JSTOR_MALLET_hotncoldtopics <- function(x, mallet_dir){
   
   
 }
-  
-  
+

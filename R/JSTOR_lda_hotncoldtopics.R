@@ -51,5 +51,4 @@ JSTOR_lda_hotncoldtopics <- function(x, lda){
   
   
 }
-  
-  
+
