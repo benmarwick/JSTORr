@@ -2,14 +2,13 @@
 #' 
 #' @description Generates plots and data frames of the top five hot and cold topics. Hot topics are topics with a positive correlation to year of publication, cold topics have a negative correlation. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param x the object returned by the function JSTOR_unpack.
-#' @param mallet_dir the cirectory containing the MALLET output files
 #' @return Returns a plot of the hot topics and plot of the cold topics and a list of dataframes of the topic proportions per year. Years as rows, topics as columns and posterior probabilities as cell values.
 #' @examples 
-#' ## hotncold <- JSTOR_MALLET_hotncoldtopics(x = unpacked, mallet_dir =  "C:/mallet-2.0.7")
+#' ## hotncold <- JSTOR_MALLET_hotncoldtopics(x = unpacked)
 
 
 
-JSTOR_MALLET_hotncoldtopics <- function(x, mallet_dir){
+JSTOR_MALLET_hotncoldtopics <- function(x){
   
   # get user to paste in the path to the MALLET output files
   
@@ -57,8 +56,8 @@ JSTOR_MALLET_hotncoldtopics <- function(x, mallet_dir){
   # add 'year' column from bibliodata to topic.props
   # they should both be in the same order, unless you've fiddled with them...
   topic.props$year <- bibliodata$year
-  # aggregate topic props to get a mean value per year
-  topic.props.agg <- aggregate(formula = . ~ year, data = topic.props, FUN = mean)
+  # aggregate topic props to get a mean value per year (exclude filenames and docnum)
+  topic.props.agg <- aggregate(formula = . ~ year, data = topic.props[, !(colnames(topic.props) %in% c("V2","docnum"))], FUN = mean)
   # find correlations between topics and year
   year_cors <- data.frame(cor(as.numeric(topic.props.agg$year), topic.props.agg[,-ncol(topic.props.agg)][sapply(topic.props.agg[,-ncol(topic.props.agg)], is.numeric)]))
   which.max(year_cors); max(year_cors)
