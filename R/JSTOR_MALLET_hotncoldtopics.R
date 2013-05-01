@@ -42,7 +42,6 @@ JSTOR_MALLET_hotncoldtopics <- function(x){
   topic.props <- dcast(l_dat, V2 ~ V3)
   rm(l_dat) # because this is very big but not longer needed
   # end up with table of docs (rows) and columns (topics)   
-  ################### todo: make topic numbers == topic top 5 words
   
   # reorder by document number
   # extract document number from file name
@@ -58,31 +57,62 @@ JSTOR_MALLET_hotncoldtopics <- function(x){
   topic.props$year <- bibliodata$year
   # aggregate topic props to get a mean value per year (exclude filenames and docnum)
   topic.props.agg <- aggregate(formula = . ~ year, data = topic.props[, !(colnames(topic.props) %in% c("V2","docnum"))], FUN = mean)
-  # find correlations between topics and year
-  year_cors <- data.frame(cor(as.numeric(topic.props.agg$year), topic.props.agg[,-ncol(topic.props.agg)][sapply(topic.props.agg[,-ncol(topic.props.agg)], is.numeric)]))
-  which.max(year_cors); max(year_cors)
-  which.min(year_cors); min(year_cors)
   
-  year_cors_sorted <- sort(year_cors)
+  # get pearson correlation between topic and year
+  year_cors <- as.numeric(unlist(lapply(1:(ncol(topic.props.agg[,!(colnames(topic.props.agg) %in% "year")])), function(i) cor(as.numeric(topic.props.agg$year), 
+                                                                                                                                       topic.props.agg[,!(colnames(topic.props.agg) %in% "year")][,i]))))
+  # get p-value for pearson correlation
+  year_cor.pval <- as.numeric(unlist(lapply(1:(ncol(topic.props.agg[,!(colnames(topic.props.agg) %in% "year")])), function(i) cor.test(as.numeric(topic.props.agg$year), 
+                                                                                                                                       topic.props.agg[,!(colnames(topic.props.agg) %in% "year")][,i])$p.value)))
+  # get five top-ranked words for each topic to use when plotting
+  topic_string <- unlist(lapply(1:nrow(outputtopickeysresult), function(i) paste(unlist(strsplit(as.character(outputtopickeysresult[i,"V3"]), " "))[1:5], collapse = ".")))
   
-  # top 5 -ve correlations
-  top5_negative <- year_cors_sorted[1:5]
+  # make a df of correlations, p-values, topic names and numbers
+  years_cor_comb <- data.frame(cor = year_cors, pval = year_cor.pval, topic = topic_string, topicnum = seq(1,length(topic_string),1))
   
-  # top 5 +ve correlations
-  top5_positive <- year_cors_sorted[(length(year_cors_sorted)-5):length(year_cors_sorted)]
+  # subset for only topics with p<0.05
+  years_cor_comb <- years_cor_comb[years_cor_comb$pval <= 0.1, ]
+  # sort the subset
+  years_cor_comb <- years_cor_comb[with(years_cor_comb, order(-cor)),]
+  
+  # get top 5 -ve correlations
+  neg <- tail(years_cor_comb[years_cor_comb$cor < 0, ],5)
+  
+  # get top 5 -ve correlations
+  pos <- head(years_cor_comb[years_cor_comb$cor > 0, ],5)
   
   # plot top five +ve
-  top5_positive_df <- data.frame(year = topic.props.agg$year, topic.props.agg[as.character(as.numeric(gsub("\\D", "", names(top5_positive))))])
+  top5_positive_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% pos$topicnum])
+  # get topic numbers in order of column names
+  tnu <- intersect(gsub("\\D", "", names(top5_positive_df)), pos$topicnum)
+  # get topic names in same order as topic numbers in colnames
+  tna <- rep(NA, length(tnu))
+  for(i in 1:length(tnu)){
+    tna[i] <- as.character(pos[pos$topicnum == tnu[[i]], ]$topic)
+  }
+  names(top5_positive_df) <- c("year", tna)
+  
   dat.m.pos <- melt(top5_positive_df, id.vars='year')
   library(ggplot2)
-  ggplot(dat.m.pos , aes(year, value, group=variable)) + geom_line(aes(colour=variable))
+  print(ggplot(dat.m.pos , aes(year, value, group=variable)) + 
+    geom_line(aes(colour=variable)) )
   
   # plot top five -ve
-  top5_negative_df <- data.frame(year = topic.props.agg$year, topic.props.agg[as.character(as.numeric(gsub("\\D", "", names(top5_negative))))])
-  dat.m.neg <- melt(top5_negative_df, id.vars='year')
-  ggplot(dat.m.neg , aes(year, value, group=variable)) + geom_line(aes(colour=variable))
+  top5_negative_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% neg$topicnum])
+  # get topic numbers in order of column names
+  tnu <- intersect(gsub("\\D", "", names(top5_negative_df)), neg$topicnum)
+  # get topic names in same order as topic numbers in colnames
+  tna <- rep(NA, length(tnu))
+  for(i in 1:length(tnu)){
+    tna[i] <- as.character(neg[neg$topicnum == tnu[[i]], ]$topic)
+  }
+  names(top5_negative_df) <- c("year", tna)
   
-  return(list("top5_positive" = top5_positive_df, "top5_negative" = top5_negative_df))
+  dat.m.neg <- melt(top5_negative_df, id.vars='year')
+  print(ggplot(dat.m.neg , aes(year, value, group=variable)) + 
+          geom_line(aes(colour=variable)) )
+  
+  return(list("top5_positive" = top5_positive_df, "top5_negative" = top5_negative_df, "top5_pos_cor" = pos, "top5_neg_cor" = neg))
   
   
 }
