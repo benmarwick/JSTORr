@@ -46,3 +46,4 @@ Collate:
     'JSTOR_lda.R'
     'JSTOR_MALLET.R'
     'JSTOR_lda_hotncoldtopics.R'
+    'JSTOR_MALLET_hotncoldtopics.R'

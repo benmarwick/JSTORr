@@ -1,15 +1,15 @@
-\name{JSTOR_lda_hotncoldtopics}
-\alias{JSTOR_lda_hotncoldtopics}
+\name{JSTOR_MALLET_hotncoldtopics}
+\alias{JSTOR_MALLET_hotncoldtopics}
 \title{Plot the top five hot and cold topics in the archive}
 \usage{
-  JSTOR_lda_hotncoldtopics(x, lda)
+  JSTOR_MALLET_hotncoldtopics(x, mallet_dir)
 }
 \arguments{
   \item{x}{the object returned by the function
   JSTOR_unpack.}
 
-  \item{lda}{the object returned by the function
-  JSTOR_lda.}
+  \item{mallet_dir}{the cirectory containing the MALLET
+  output files}
 }
 \value{
   Returns a plot of the hot topics and plot of the cold
@@ -25,6 +25,6 @@
   Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-## hotncold <- JSTOR_lda_hotncoldtopics(x = unpacked, lda = lda150)
+## hotncold <- JSTOR_MALLET_hotncoldtopics(x = unpacked, mallet_dir =  "C:/mallet-2.0.7")
 }
 

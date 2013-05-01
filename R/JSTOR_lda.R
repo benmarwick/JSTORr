@@ -1,7 +1,6 @@
 #' Generate a topic model with K topics using Latent Dirichlet allocation (LDA)
 #' 
 #' @description Generates a topic model with K topics using Latent Dirichlet allocation (LDA, with the lda package) For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
-#' @param x the object returned by the function JSTOR_unpack.
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
 #' @param K the number of topics that the model should contain
 #' @return Returns a data frame with documents as rows, topics as columns and posterior probabilities as cell values.
@@ -10,7 +9,7 @@
 
 
 
-JSTOR_lda <- function(x, corpus, K){ 
+JSTOR_lda <- function(corpus, K){ 
   # stop if number of topics is less than 2
   if (as.integer(K) != K || as.integer(K) < 2) 
     stop("\nK needs to be an integer of at least 2")

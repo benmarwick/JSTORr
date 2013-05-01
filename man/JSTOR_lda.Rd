@@ -2,12 +2,9 @@
 \alias{JSTOR_lda}
 \title{Generate a topic model with K topics using Latent Dirichlet allocation (LDA)}
 \usage{
-  JSTOR_lda(x, corpus, K)
+  JSTOR_lda(corpus, K)
 }
 \arguments{
-  \item{x}{the object returned by the function
-  JSTOR_unpack.}
-
   \item{corpus}{the object returned by the function
   JSTOR_corpusofnouns. A corpus containing the documents.}
 

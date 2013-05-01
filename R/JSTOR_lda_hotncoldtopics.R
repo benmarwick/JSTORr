@@ -5,7 +5,7 @@
 #' @param lda the object returned by the function JSTOR_lda.
 #' @return Returns a plot of the hot topics and plot of the cold topics and a list of dataframes of the topic proportions per year. Years as rows, topics as columns and posterior probabilities as cell values.
 #' @examples 
-#' ## hotncold <- JSTOR_hotncoldtopics(x = unpacked, lda = lda150) 
+#' ## hotncold <- JSTOR_lda_hotncoldtopics(x = unpacked, lda = lda150) 
 
 
 
