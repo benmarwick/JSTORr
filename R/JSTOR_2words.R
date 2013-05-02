@@ -5,13 +5,14 @@
 #' @param x object returned by the function JSTOR_unpack.
 #' @param word1 One word, surrounded by standard quote marks.
 #' @param word2 One word, surrounded by standard quote marks.
+#' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ##JSTOR_2words(dat1, "diamonds", "pearls")
-#' ##JSTOR_2words(dat1, word1 = "milk", word2 = "sugar")
+#' ##JSTOR_2words(dat1, word1 = "milk", word2 = "sugar"), span = 0.8
 
 
-JSTOR_2words <- function(x, word1, word2){
+JSTOR_2words <- function(x, word1, word2, span = 0.4){
   # Comparing two words of interest (always lower case)
   wordcounts <- x$wordcounts
   bibliodata <- x$bibliodata
@@ -34,7 +35,7 @@ JSTOR_2words <- function(x, word1, word2){
   library(ggplot2)
   suppressWarnings(ggplot(twowords_by_year_melt, aes(year, log(value))) +
                      geom_point(subset = .(value > 0), aes(colour = variable)) +
-                     geom_smooth( aes(colour = variable), method = "loess", span = 0.4, subset = .(value > 0)) +
+                     geom_smooth( aes(colour = variable), method = "loess", span = span, subset = .(value > 0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of words")) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +

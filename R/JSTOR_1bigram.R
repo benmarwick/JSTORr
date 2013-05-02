@@ -3,14 +3,15 @@
 #' @description Function to plot changes in the relative frequency of a bigram over time. The relative frequency is the frequency of the bigram in a document divided by the total number of bigrams in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param x object returned by the function JSTOR_unpack.
 #' @param bigram two words, surrounded by standard quote marks, or a vector of bigrams.
+#' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ## JSTOR_1bigram(unpack, "pirate booty")
-#' ## JSTOR_1bigram(unpack, c("treasure chest", "musket balls", "jolly roger")
+#' ## JSTOR_1bigram(unpack, c("treasure chest", "musket balls", "jolly roger"), span = 0.7)
 
 
 
-JSTOR_1bigram <- function(x, bigram){
+JSTOR_1bigram <- function(x, bigram, span = 0.4){
   #### investigate change in use of certain bigrams of interest over time
   # set working directory to where the bigrams are
   # (within working directory) with lots of CSV files
@@ -30,7 +31,7 @@ JSTOR_1bigram <- function(x, bigram){
   library(ggplot2)
   suppressWarnings(ggplot(bigram_by_year, aes(year, log(bigram_ratio))) +
                      geom_point(subset = .(bigram_ratio > 0)) +
-                     geom_smooth( aes(group=1), method = "loess", span = 0.4, data=subset(bigram_by_year, bigram_ratio>0)) +
+                     geom_smooth( aes(group=1), method = "loess", span = span, data=subset(bigram_by_year, bigram_ratio>0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of the bigram '", bigram, "'")) +
                      # inspect bibliodata$year to see min and max year to set axis limits

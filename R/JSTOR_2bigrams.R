@@ -4,14 +4,15 @@
 #' @param x object returned by the function JSTOR_unpack.
 #' @param bigram1 two words, surrounded by standard quote marks, or a vector of bigrams.
 #' @param bigram2 two words, surrounded by standard quote marks, or a vector of bigrams.
-#' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
+#' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
+#' @retu rn Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ## JSTOR_2bigrams(unpack, "pirate booty", "treasure chest")
-#' ## JSTOR_2bigrams(unpack, c("treasure chest", "musket balls"), c("jolly roger"))
+#' ## JSTOR_2bigrams(unpack, c("treasure chest", "musket balls"), c("jolly roger"), span = 0.2)
 
 
 
-JSTOR_2bigrams <- function(x, bigram1, bigram2){
+JSTOR_2bigrams <- function(x, bigram1, bigram2, span = 0.4){
   #### investigate change in use of certain bigrams of interest over time
   # set working directory to where the bigrams are
   # (within working directory) with lots of CSV files
@@ -36,7 +37,7 @@ JSTOR_2bigrams <- function(x, bigram1, bigram2){
   library(ggplot2)
   suppressWarnings(ggplot(two_bigrams_by_year, aes(year, log(value))) +
                      geom_point(subset = .(value > 0), aes(colour = variable)) +
-                     geom_smooth( aes(colour = variable), method = "loess", span = 0.4, subset = .(value > 0)) +
+                     geom_smooth( aes(colour = variable), method = "loess", span = span, subset = .(value > 0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of bigrams")) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +

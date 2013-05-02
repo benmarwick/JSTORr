@@ -5,13 +5,14 @@
 #' @param x object returned by the function JSTOR_unpack.
 #' @param word1 One word or a vector of words, each word surrounded by standard quote marks.
 #' @param word2  One word or a vector of words, each word surrounded by standard quote marks.
+#' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
 #' @return Returns a ggplot object with publication year on the horizontal axis and Pearson's correlation on the vertical axis. Each point represents all the documents of a single year, point size is inversely proportional to p-value of the correlation.
 #' @examples 
 #' ##JSTOR_2wordcor(dat1, word1 = "pearls", word2 = "diamonds"))
-#' ##JSTOR_2wordcor(dat1, c("silver", "gold", "platinum"), c("oil", "gas"))
+#' ##JSTOR_2wordcor(dat1, c("silver", "gold", "platinum"), c("oil", "gas"), span = 0.3)
 
 
-JSTOR_2wordcor <- function(x, word1, word2){
+JSTOR_2wordcor <- function(x, word1, word2, span = 0.4){
   ## investigate correlations between words over time
   wordcounts <- x$wordcounts
   bibliodata <- x$bibliodata
@@ -34,7 +35,7 @@ JSTOR_2wordcor <- function(x, word1, word2){
   library(ggplot2)
   suppressWarnings(ggplot(corrp, aes(year, corr)) +
                      geom_point(aes(size = -pval)) +
-                     geom_smooth(  method = "loess", span = 0.4) +
+                     geom_smooth(  method = "loess", span = span) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      geom_hline(yintercept=0, colour = "red") + 
                      ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +

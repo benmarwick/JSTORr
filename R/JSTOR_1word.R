@@ -3,11 +3,11 @@
 #' @description Function to plot changes in the relative frequency of a word over time. The relative frequency is the frequency of the word in a document divided by the total number of words in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param x object returned by the function JSTOR_unpack.
 #' @param oneword One word, surrounded by standard quote marks, or a vector of words
-#' @param span span of the lowess line (controls the degree of smoothing)
+#' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
-#' ##JSTOR_1word(unpack, "diamonds", span = 0.4)
-#' ##JSTOR_1word(unpack, c("diamonds", pearls"), span = 0.4)
+#' ##JSTOR_1word(unpack, "diamonds")
+#' ##JSTOR_1word(unpack, c("diamonds", pearls"), span = 0.8)
 
 
 
