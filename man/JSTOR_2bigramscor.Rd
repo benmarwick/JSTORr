@@ -2,7 +2,7 @@
 \alias{JSTOR_2bigramscor}
 \title{Plot the change over time of the correlation between one bigram (or set of bigrams) and another bigram (or set of bigrams) in a JSTOR DfR dataset}
 \usage{
-  JSTOR_2bigramscor(x, bigram1, bigram2)
+  JSTOR_2bigramscor(x, bigram1, bigram2, span = 0.4)
 }
 \arguments{
   \item{x}{object returned by the function JSTOR_unpack.}
@@ -12,6 +12,9 @@
 
   \item{bigram2}{One bigram or a vector of bigrams, each
   bigram surrounded by standard quote marks.}
+
+  \item{span}{span of the lowess line (controls the degree
+  of smoothing). Default is 0.4}
 }
 \value{
   Returns a ggplot object with publication year on the

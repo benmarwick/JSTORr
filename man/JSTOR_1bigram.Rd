@@ -2,13 +2,16 @@
 \alias{JSTOR_1bigram}
 \title{Plot the frequency of one word over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_1bigram(x, bigram)
+  JSTOR_1bigram(x, bigram, span = 0.4)
 }
 \arguments{
   \item{x}{object returned by the function JSTOR_unpack.}
 
   \item{bigram}{two words, surrounded by standard quote
   marks, or a vector of bigrams.}
+
+  \item{span}{span of the lowess line (controls the degree
+  of smoothing). Default is 0.4}
 }
 \value{
   Returns a ggplot object with publication year on the
@@ -24,6 +27,6 @@
 }
 \examples{
 ## JSTOR_1bigram(unpack, "pirate booty")
-## JSTOR_1bigram(unpack, c("treasure chest", "musket balls", "jolly roger")
+## JSTOR_1bigram(unpack, c("treasure chest", "musket balls", "jolly roger"), span = 0.7)
 }
 

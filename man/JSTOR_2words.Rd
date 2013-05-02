@@ -2,7 +2,7 @@
 \alias{JSTOR_2words}
 \title{Plot the frequencies of one word against another word over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_2words(x, word1, word2)
+  JSTOR_2words(x, word1, word2, span = 0.4)
 }
 \arguments{
   \item{x}{object returned by the function JSTOR_unpack.}
@@ -12,6 +12,9 @@
 
   \item{word2}{One word, surrounded by standard quote
   marks.}
+
+  \item{span}{span of the lowess line (controls the degree
+  of smoothing). Default is 0.4}
 }
 \value{
   Returns a ggplot object with publication year on the
@@ -27,6 +30,6 @@
 }
 \examples{
 ##JSTOR_2words(dat1, "diamonds", "pearls")
-##JSTOR_2words(dat1, word1 = "milk", word2 = "sugar")
+##JSTOR_2words(dat1, word1 = "milk", word2 = "sugar"), span = 0.8
 }
 
