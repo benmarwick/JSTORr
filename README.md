@@ -12,7 +12,7 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - correlations between two words over time (ie. plot the correlation of two 1-grams over time)
 - correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)
 - all of the above with bigrams (a sequence of two words)
-- topic models (with the `lda` package for `R` or MALLET, if you have it installed)
+- topic models with the `lda` package for full `R` solution or the MALLET Java-based program (if installing that is an option)
 
 How to install
 ----
@@ -36,7 +36,7 @@ First, go to JSTOR's [Data for Research service][dfr] and make a request for dat
 Second, once you've downloaded the zip file that is the 'full dataset' from DfR then you can start `R`, install this package and run this function: 
 
 ```
-JSTOR_unpack
+unpack <- JSTOR_unpack() # takes no arguments, but watch for prompts to enter details
 ```
 Third, have fun exploring the other functions in the package!
 
@@ -46,7 +46,7 @@ Here's one way to make use of this package:
 
 First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). No need to unzip, that's done by the package.
 
-Second, start `R` and run something like `unpacked <- JSTOR_unpack` and paste in the directory and zip file name when prompted. Then you'll get a data object `unpacked`, containing 1-grams, 2-grams and bibliographic data.
+Second, start `R` and run something like `unpack <- JSTOR_unpack()` and paste in the directory and zip file name when prompted. Then you'll get a data object `unpack`, containing 1-grams, 2-grams and bibliographic data.
 
 Third, explore some visualisations of key words over time with `JSTOR_1word`, `JSTOR_2words`, `JSTOR_1bigram`, `JSTOR_2bigrams`, and correlations of words over time with `JSTOR_2wordcor` and `JSTOR_2bigramscor`
 

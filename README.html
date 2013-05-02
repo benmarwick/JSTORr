@@ -156,6 +156,7 @@ hr {
 <li>correlations between two words over time (ie. plot the correlation of two 1-grams over time)</li>
 <li>correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)</li>
 <li>all of the above with bigrams (a sequence of two words)</li>
+<li>topic models with the <code>lda</code> package for full <code>R</code> solution or the MALLET Java-based program (if installing that is an option)</li>
 </ul>
 
 <h2>How to install</h2>
@@ -182,7 +183,7 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macr
 
 <p>Second, once you&#39;ve downloaded the zip file that is the &#39;full dataset&#39; from DfR then you can start <code>R</code>, install this package and run this function: </p>
 
-<pre><code>JSTOR_unpack
+<pre><code>unpack &lt;- JSTOR_unpack() # takes no arguments, but watch for prompts to enter details
 </code></pre>
 
 <p>Third, have fun exploring the other functions in the package!</p>
@@ -193,7 +194,7 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macr
 
 <p>First, go to <a href="http://dfr.jstor.org/">Data for Research service</a> and request data as specified above and download the zip file when it&#39;s available (it can take a few hours to days for DfR to prepare your archive). No need to unzip, that&#39;s done by the package.</p>
 
-<p>Second, start <code>R</code> and run something like <code>unpacked &lt;- JSTOR_unpack</code> and paste in the directory and zip file name when prompted. Then you&#39;ll get a data object <code>unpacked</code>, containing 1-grams, 2-grams and bibliographic data.</p>
+<p>Second, start <code>R</code> and run something like <code>unpack &lt;- JSTOR_unpack()</code> and paste in the directory and zip file name when prompted. Then you&#39;ll get a data object <code>unpack</code>, containing 1-grams, 2-grams and bibliographic data.</p>
 
 <p>Third, explore some visualisations of key words over time with <code>JSTOR_1word</code>, <code>JSTOR_2words</code>, <code>JSTOR_1bigram</code>, <code>JSTOR_2bigrams</code>, and correlations of words over time with <code>JSTOR_2wordcor</code> and <code>JSTOR_2bigramscor</code></p>
 
@@ -205,11 +206,11 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macr
 
 <h2>Limitations and Disclaimer</h2>
 
-<p>Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal. It may be useful for other types of DfR archives, but has only been tested on single-journal archives. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress and there is currently very little custom error handling. Use at your own risk, and fork and share as you like. </p>
+<p>Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal or on one subject. It may be useful for other types of DfR archives, but has only been tested on single-journal archives. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress and there is currently very little custom error handling. Use at your own risk, and fork and share as you like. </p>
 
 <h2>Acknowledgements</h2>
 
-<p>Many of the ideas for these functions have come directly from the prolific and creative research of Andrew Goldstone, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. </p>
+<p>Many of the ideas for these functions have come directly from the prolific and creative research of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. </p>
 
 </body>
 
