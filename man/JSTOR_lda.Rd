@@ -2,7 +2,7 @@
 \alias{JSTOR_lda}
 \title{Generate a topic model with K topics using Latent Dirichlet allocation (LDA)}
 \usage{
-  JSTOR_lda(corpus, K)
+  JSTOR_lda(corpus, K, alpha = 50/K)
 }
 \arguments{
   \item{corpus}{the object returned by the function
@@ -10,6 +10,11 @@
 
   \item{K}{the number of topics that the model should
   contain}
+
+  \item{alpha}{The scalar value of the Dirichlet
+  hyperparameter for topic proportions. Higher values lead
+  to more uniform distributions of topics over documents.
+  Default is 50/K}
 }
 \value{
   Returns a data frame with documents as rows, topics as

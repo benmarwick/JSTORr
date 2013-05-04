@@ -3,13 +3,14 @@
 #' @description Generates a topic model with K topics using Latent Dirichlet allocation (LDA, with the lda package) For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
 #' @param K the number of topics that the model should contain
+#' @param alpha The scalar value of the Dirichlet hyperparameter for topic proportions. Higher values lead to more uniform distributions of topics over documents. Default is 50/K
 #' @return Returns a data frame with documents as rows, topics as columns and posterior probabilities as cell values.
 #' @examples 
 #' ## lda1 <- JSTOR_lda(x = unpacked, corpus = corpus, K = 150) 
 
 
 
-JSTOR_lda <- function(corpus, K){ 
+JSTOR_lda <- function(corpus, K, alpha = 50/K){ 
   # stop if number of topics is less than 2
   if (as.integer(K) != K || as.integer(K) < 2) 
     stop("\nK needs to be an integer of at least 2")
@@ -28,7 +29,7 @@ result <- lda.collapsed.gibbs.sampler(ldafmt$documents,
                                           K,    # number of topics
                                           ldafmt$vocab, 
                                           100,  # number of iterations
-                                          50/K, # alpha, after Griffiths & Steyvers 2004
+                                          alpha, # alpha, after Griffiths & Steyvers 2004
                                           0.1,  # eta
                                           burnin = 100,
                                           compute.log.likelihood = FALSE

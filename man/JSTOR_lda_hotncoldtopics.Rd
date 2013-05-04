@@ -2,7 +2,7 @@
 \alias{JSTOR_lda_hotncoldtopics}
 \title{Plot the top five hot and cold topics in the archive}
 \usage{
-  JSTOR_lda_hotncoldtopics(x, lda)
+  JSTOR_lda_hotncoldtopics(x, lda, pval)
 }
 \arguments{
   \item{x}{the object returned by the function
@@ -10,6 +10,10 @@
 
   \item{lda}{the object returned by the function
   JSTOR_lda.}
+
+  \item{pval}{p-value of the correlation cutoff for topics
+  to include in the top 5 negative/positive list (ie. only
+  topics where p<0.01 or 0.001?)}
 }
 \value{
   Returns a plot of the hot topics and plot of the cold

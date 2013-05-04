@@ -47,3 +47,4 @@ Collate:
     'JSTOR_MALLET.R'
     'JSTOR_lda_hotncoldtopics.R'
     'JSTOR_MALLET_hotncoldtopics.R'
+    'JSTOR_freqwords.R'

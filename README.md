@@ -13,6 +13,7 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)
 - all of the above with bigrams (a sequence of two words)
 - topic models with the `lda` package for full `R` solution or the MALLET Java-based program (if installing that is an option)
+- most frequent words by n-year ranges of documents (ie. top words all documents published in 2-5-10 year ranges, whatever you like)
 
 How to install
 ----

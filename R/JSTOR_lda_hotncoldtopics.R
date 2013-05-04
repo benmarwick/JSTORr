@@ -3,13 +3,14 @@
 #' @description Generates plots and data frames of the top five hot and cold topics. Hot topics are topics with a positive correlation to year of publication, cold topics have a negative correlation. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param x the object returned by the function JSTOR_unpack.
 #' @param lda the object returned by the function JSTOR_lda.
+#' @param pval p-value of the correlation cutoff for topics to include in the top 5 negative/positive list (ie. only topics where p<0.01 or 0.001?)
 #' @return Returns a plot of the hot topics and plot of the cold topics and a list of dataframes of the topic proportions per year. Years as rows, topics as columns and posterior probabilities as cell values.
 #' @examples 
 #' ## hotncold <- JSTOR_lda_hotncoldtopics(x = unpacked, lda = lda150) 
 
 
 
-JSTOR_lda_hotncoldtopics <- function(x, lda){
+JSTOR_lda_hotncoldtopics <- function(x, lda, pval){
   
   # unpack output from JSTOR_lda
   topic.props <- lda[[1]]
@@ -36,7 +37,7 @@ JSTOR_lda_hotncoldtopics <- function(x, lda){
   years_cor_comb <- data.frame(cor = year_cors, pval = year_cor.pval, topic = topic_string, topicnum = seq(1,length(topic_string),1))
   
   # subset for only topics with p<0.xx
-  years_cor_comb <- years_cor_comb[years_cor_comb$pval <= 0.1, ]
+  years_cor_comb <- years_cor_comb[years_cor_comb$pval <= pval, ]
   # sort the subset
   years_cor_comb <- years_cor_comb[with(years_cor_comb, order(-cor)),]
   
