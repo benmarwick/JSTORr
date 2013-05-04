@@ -35,6 +35,7 @@ years <- split(uniqueyears, ceiling(x/n))
 dtmlist <- lapply(1:length(years), function(i) dtm1[[i]] <- dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(years[i]))])
 # put names on the list of dtm so we can see the years represented by each dtm
 names(dtmlist) <- lapply(years, function(i) paste0(min(i),"_",max(i) ))
+# Here's the heavy lifting...
 # find most frequent words per chunk (results are in alpha order, not very useful)
 freqterms <- lapply(dtmlist, function(i) findFreqTerms(i, lowfreq = lowfreq, highfreq = Inf))
 # get frequencies of words to put in order of abundance, rather than alpha
