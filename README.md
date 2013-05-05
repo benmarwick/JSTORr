@@ -14,6 +14,7 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - all of the above with bigrams (a sequence of two words)
 - topic models with the `lda` package for full `R` solution or the MALLET Java-based program (if installing that is an option)
 - most frequent words by n-year ranges of documents (ie. top words all documents published in 2-5-10 year ranges, whatever you like)
+- the top n words correlated a word by n-year ranges of documents (ie. the top 20 words associated with the word 'pirate' in 5 year ranges)
 
 How to install
 ----
