@@ -58,7 +58,7 @@ Fifth, generate topic models with `JSTOR_lda` (using the `lda` package, it's a l
 
 Sixth, visualise and explore the output from the topic models. Identify the hot and cold topics in the corpus
 
-Seventh, determine the most frequently used words at various intervals over time. Identify the words most strongly correlated with a word at various intervals over time.
+Seventh, determine the most frequently used words at various intervals over time. Identify and visualise the words most strongly correlated with a word at various intervals over time.
 
 
 Limitations and Disclaimer
