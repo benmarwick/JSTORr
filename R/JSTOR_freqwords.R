@@ -32,6 +32,7 @@ years <- split(uniqueyears, ceiling(x/n))
 # create list of dtms by subsetting the full dtm into seperate
 # dtms of documents where publication year matches the chunks
 # of years
+dtm1 <- NULL
 dtmlist <- lapply(1:length(years), function(i) dtm1[[i]] <- dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(years[i]))])
 # put names on the list of dtm so we can see the years represented by each dtm
 names(dtmlist) <- lapply(years, function(i) paste0(min(i),"_",max(i) ))
@@ -52,13 +53,15 @@ freqterms3$rank <- as.numeric(gsub(".*\\.","", rownames(freqterms3)))
 
 # plot in a word-cloud-y kind of way, but with more useful information in the 
 # structure of the visualiation... 
-print(ggplot(freqterms3, aes(factor(year), rank)) + 
+require(ggplot2)
+suppressWarnings(print(ggplot(freqterms3, aes(factor(year), rank)) + 
   geom_text(aes(label = word, size = count, alpha = count), data = subset(freqterms3, rank < topn)) +
   scale_y_reverse() + 
   scale_size(range = c(3, biggest), name = "Word count") +
   scale_alpha(range=c(0.5,1), limits=c(min(freqterms3$count),max(freqterms3$count)), guide = 'none') + 
   xlab("Year range") +
-  ylab("Rank order of word"))
+  ylab("Rank order of word")
+  ))
 
 # return the dataframe in case anything else is wanted with it
 return(freqterms3)
