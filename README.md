@@ -13,7 +13,7 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)
 - all of the above with bigrams (a sequence of two words)
 - topic models with the `lda` package for full `R` solution or the MALLET Java-based program (if installing that is an option)
-- most frequent words by n-year ranges of documents (ie. top words all documents published in 2-5-10 year ranges, whatever you like)
+- most frequent words by n-year ranges of documents (ie. top words in all documents published in 2-5-10 year ranges, whatever you like)
 - the top n words correlated a word by n-year ranges of documents (ie. the top 20 words associated with the word 'pirate' in 5 year ranges)
 
 How to install
@@ -56,7 +56,9 @@ Fourth, put the documents into a corpus with `JSTOR_corpusofnouns` and explore f
 
 Fifth, generate topic models with `JSTOR_lda` (using the `lda` package, it's a lot faster than `topicmodels`) and `JSTOR_MALLET`. The latter function requires MALLET to be installed on your computer. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
 
-Sixth, visualise and explore the output from the topic models.
+Sixth, visualise and explore the output from the topic models. Identify the hot and cold topics in the corpus
+
+Seventh, determine the most frequently used words at various intervals over time. Identify the words most strongly correlated with a word at various intervals over time.
 
 
 Limitations and Disclaimer
