@@ -29,6 +29,8 @@ Then, use the `install_github()` function to fetch this package from github:
 library(devtools)
 install_github(repo = "JSTORr", username = "UW-ARCHY-textual-macroanalysis-lab")
 ```
+Error messages relating to rJava can probably be fixed by following exactly the instructions [here][SOrJava].
+
 How to get started
 ----
 First, go to JSTOR's [Data for Research service][dfr] and make a request for data. The DfR service makes available large numbers of journal articles in a format that is convenient for text mining. When making a request for data to use with this package, you **must** chose:
@@ -70,4 +72,5 @@ Acknowledgements
 Many of the ideas for these functions have come directly from the prolific and creative research of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. None of them are responsible for the consequences of use of this package, no matter how awful, even if they arise from flaws in it (I take responsibility for the flaws). 
   
   [dfr]:http://dfr.jstor.org/
+  [SOrJava]:http://stackoverflow.com/a/7604469/1036500
   
