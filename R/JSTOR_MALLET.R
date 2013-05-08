@@ -1,16 +1,17 @@
-#' Divide documents up into chunks of n words 
+#' Generate one or more topic models using MALLET
 #' 
-#' @description Generates one or more topic models using MALLET and plots diagnostics. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @description Generates one or more topic models using MALLET and plots diagnostics. Works only on Windows. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
 #' @param MALLET the directory containing MALLET's bin directory, ideally "C:/mallet-2.0.7" or similarly close to C:/ on a Windows computer.
+#' @param JAVA the directory containing java.exe
 #' @param K the number of topics that the model should contain. Can also be a vector of numbers of topics, then a model will be generated for each number. Useful for comparing diagnostics of different models.
 #' @return Returns plots of diagnostics if more than one number of topics is specified. Output files from MALLET can be found in the working directory.
 #' @examples 
-#' ## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = 150) # generate a single model
-#' ## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
+#' ## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = 150) # generate a single model
+#' ## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
 
 
-JSTOR_MALLET <- function(corpus, MALLET, K){
+JSTOR_MALLET <- function(corpus, MALLET="C:/mallet-2.0.7" , JAVA = "C:/Program Files (x86)/Java/jre7/bin", K){
   
   # stop if number of topics is less than 2
   if (as.integer(K) != K || as.integer(K) < 2) 
@@ -35,7 +36,7 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
   # setup system enviroment for R and MALLET
   # MALLET_HOME <- MALLET # "C:/mallet-2.0.7"                 # location of the bin directory
   # Sys.setenv("MALLET_HOME" = MALLET_HOME)                   # at one point, I needed these to make it work
-  # Sys.setenv(PATH = "C:/Program Files (x86)/Java/jre7/bin") # but now I can't build the package with them...
+    Sys.setenv(PATH = JAVA)                                   # but now I can't build the package with them...
                                                               # and it seems to work fine without them
   # configure variables and filenames for MALLET
   ## here using MALLET's built-in example data 
@@ -61,7 +62,7 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
     alpha <- 50/K # after after Griffiths & Steyvers 2004
     beta  <- 0.01
     # parallel
-    num-threads <- Sys.getenv('NUMBER_OF_PROCESSORS') 
+    # num-threads <- Sys.getenv('NUMBER_OF_PROCESSORS') # difficult to work with because of minus sign...
     
     # set file names for output of model, extensions must be as shown
     outputstate <-     paste("outputstate", i, "gz", sep = ".")
@@ -70,9 +71,9 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
     diagnostics <-     paste("diagnostics", i, "xml", sep = ".")
     
     # combine variables into strings ready for windows command line
-    cd <- "cd C:\\mallet-2.0.7" # location of the bin directory
+    cd <- paste0("cd ", MALLET) # location of the bin directory
     import <- paste("bin\\mallet import-dir --input", importdir, "--output", output, "--keep-sequence --remove-stopwords", sep = " ")
-    train  <- paste("bin\\mallet run cc.mallet.topics.tui.TopicTrainer --input", output, "--num-topics", ntopics, "--alpha", alpha, "--beta", beta, "--num-threads", num-threads, "--optimize-interval",  optint, "--output-state", outputstate, "--output-topic-keys", outputtopickeys, "--output-doc-topics", outputdoctopics, "--diagnostics-file", diagnostics, "--optimize-burn-in 200", sep = " ")
+    train  <- paste("bin\\mallet run cc.mallet.topics.tui.TopicTrainer --input", output, "--num-topics", ntopics, "--alpha", alpha, "--beta", beta, "--optimize-interval",  optint, "--output-state", outputstate, "--output-topic-keys", outputtopickeys, "--output-doc-topics", outputdoctopics, "--diagnostics-file", diagnostics, "--optimize-burn-in 200", sep = " ")
     
     # send commands to the Windows command prompt and run MALLET from there
     # collect console output in a list
@@ -116,5 +117,10 @@ JSTOR_MALLET <- function(corpus, MALLET, K){
   # to assist with interpretation: http://article.gmane.org/gmane.comp.ai.mallet.devel/1483/
   message("done")
   message(paste0("MALLET's output files are in ", getwd()))
+  # pop open the folder for the user to see: 
+  # from http://stackoverflow.com/a/12135823/1036500
+  shell.exec(getwd())
+   
+  
   # After finishing this I noticed Mimno's own R hook to MALLET: http://www.cs.princeton.edu/~mimno/R/
 }

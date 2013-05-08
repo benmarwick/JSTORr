@@ -10,22 +10,35 @@
 
 JSTOR_unpack <- function(){
   #### get data into the R session 
-  # get user to paste in the path to the zipfile
+  # Andrew Goldstone's method: get the user to choose the file
   
-  # from  http://r.789695.n4.nabble.com/url-prep-function-backslash-issue-tp3778530p3779086.html
-  message("please paste in the path to the zip file (no quotes needed):")
-  oldstring1 <- readline() 
-  path <- chartr("\\", "/", oldstring1) 
+  message("Select the zip file downloaded from JSTOR's DfR")
+  ignore <- readline("(press return to open file dialog - it might pop up behind here) ")
+  zipfile <- file.choose()
+  print(zipfile)
   
-  # get user to paste in the name of the zipfile
+#  # get user to paste in the path to the zipfile (don't like this method anymore)
   
-  message("please paste in the name of the zip file (no quotes needed):")
-  oldstring2 <- readline() 
-  zipfile <- oldstring2
+#   # from  http://r.789695.n4.nabble.com/url-prep-function-backslash-issue-tp3778530p3779086.html
+#   message("please paste in the path to the zip file (no quotes needed):")
+#   oldstring1 <- readline() 
+#   path <- chartr("\\", "/", oldstring1) 
+#   
+#   # get user to paste in the name of the zipfile
+#   
+#   message("please paste in the name of the zip file (no quotes needed):")
+#   oldstring2 <- readline() 
+#   zipfile <- oldstring2
   
   
-  # set R's working directory
-  setwd(path) # change this to where you downloaded the data!
+  # Get the user to set R's working directory
+  message("Select the folder to unzip into")
+  path <- setwd(choose.dir())
+  setwd(path)
+  print(path)
+  
+  
+  # setwd(path) # change this to where you downloaded the data
   # Get zip file of CSVs from JSTOR and unzip
   # this may take a few minutes...
   message("unzipping the DfR archive...")

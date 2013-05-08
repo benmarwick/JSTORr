@@ -1,8 +1,9 @@
 \name{JSTOR_MALLET}
 \alias{JSTOR_MALLET}
-\title{Divide documents up into chunks of n words}
+\title{Generate one or more topic models using MALLET}
 \usage{
-  JSTOR_MALLET(corpus, MALLET, K)
+  JSTOR_MALLET(corpus, MALLET = "C:/mallet-2.0.7",
+    JAVA = "C:/Program Files (x86)/Java/jre7/bin", K)
 }
 \arguments{
   \item{corpus}{the object returned by the function
@@ -11,6 +12,8 @@
   \item{MALLET}{the directory containing MALLET's bin
   directory, ideally "C:/mallet-2.0.7" or similarly close
   to C:/ on a Windows computer.}
+
+  \item{JAVA}{the directory containing java.exe}
 
   \item{K}{the number of topics that the model should
   contain. Can also be a vector of numbers of topics, then
@@ -24,11 +27,11 @@
 }
 \description{
   Generates one or more topic models using MALLET and plots
-  diagnostics. For use with JSTOR's Data for Research
-  datasets (http://dfr.jstor.org/).
+  diagnostics. Works only on Windows. For use with JSTOR's
+  Data for Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = 150) # generate a single model
-## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics
+## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = 150) # generate a single model
+## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics
 }
 

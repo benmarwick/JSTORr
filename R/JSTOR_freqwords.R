@@ -1,6 +1,7 @@
 #' Plot the most frequent words by time intervals
 #' 
 #' @description Generates a plot of the top n words in all the documents in ranges of years. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @param x object returned by the function JSTOR_unpack.
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
 #' @param n the number years to aggregate documents by. For example, n = 5 (the default value) will create groups of all documents published in non-overlapping five year ranges.
 #' @param lowfreq An integer for the minimum frequency of a word to be included in the plot. Default is 300.
@@ -8,11 +9,14 @@
 #' @param biggest An integer to control the maximum size of the text in the plot
 #' @return Returns a plot of the most frequent words per year range, with word size scaled to frequency, and a dataframe with words and counts for each year range
 #' @examples 
-#' ## freqwords <- JSTOR_freqwords(corpus, n = 2, biggest = 40, lowfreq = 100, topn = 5)
-#' ## freqwords <- JSTOR_freqwords(corpus)
+#' ## freqwords <- JSTOR_freqwords(unpack, corpus, n = 2, biggest = 40, lowfreq = 100, topn = 5)
+#' ## freqwords <- JSTOR_freqwords(unpack, corpus)
 
 
-JSTOR_freqwords <- function(corpus, n=5, lowfreq=300, topn = 20, biggest = 30){
+JSTOR_freqwords <- function(x, corpus, n=5, lowfreq=300, topn = 20, biggest = 30){
+  
+  # get bibliodata ready
+  bibliodata <- x$bibliodata
 
 require(tm)
 # convert corpus to dtm, keep words that occur in 5 or more docs
@@ -60,7 +64,13 @@ suppressWarnings(print(ggplot(freqterms3, aes(factor(year), rank)) +
   scale_size(range = c(3, biggest), name = "Word count") +
   scale_alpha(range=c(0.5,1), limits=c(min(freqterms3$count),max(freqterms3$count)), guide = 'none') + 
   xlab("Year range") +
-  ylab("Rank order of word")
+  ylab("Rank order of word") +
+  theme(
+    panel.background=element_blank(),
+    panel.border=element_blank(),
+    panel.grid.major=element_blank(),
+    panel.grid.minor=element_blank(),
+    plot.background=element_blank())
   ))
 
 # return the dataframe in case anything else is wanted with it

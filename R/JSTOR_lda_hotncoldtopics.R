@@ -66,24 +66,6 @@ JSTOR_lda_hotncoldtopics <- function(x, lda, pval){
   return(list("top5_positive" = top5_positive_df, "top5_negative" = top5_negative_df, "top5_pos_cor" = pos, "top5_neg_cor" = neg))
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 #   # OLD METHOD
 #   # aggregate topic props to get a mean value per year
 #   topic.props.agg <- aggregate(formula = . ~ year, data = topic.props, FUN = mean)
@@ -111,7 +93,7 @@ JSTOR_lda_hotncoldtopics <- function(x, lda, pval){
 #   dat.m.neg <- melt(top5_negative_df, id.vars='year')
 #   print(ggplot(dat.m.neg , aes(year, value, group=variable)) + geom_line(aes(colour=variable)))
 #   
-  return(list("top5_positive" = top5_positive_df, "top5_negative" = top5_negative_df, "top5_pos_cor" = pos, "top5_neg_cor" = neg))
+#  return(list("top5_positive" = top5_positive_df, "top5_negative" = top5_negative_df, "top5_pos_cor" = pos, "top5_neg_cor" = neg))
   
   
 }

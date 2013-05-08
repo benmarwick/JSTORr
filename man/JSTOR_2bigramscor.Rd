@@ -13,7 +13,7 @@
   \item{bigram2}{One bigram or a vector of bigrams, each
   bigram surrounded by standard quote marks.}
 
-  \item{span}{span of the lowess line (controls the degree
+  \item{span}{span of the loess line (controls the degree
   of smoothing). Default is 0.4}
 }
 \value{

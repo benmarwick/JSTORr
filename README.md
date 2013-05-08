@@ -56,11 +56,17 @@ Third, explore some visualisations of key words over time with `JSTOR_1word`, `J
 
 Fourth, put the documents into a corpus with `JSTOR_corpusofnouns` and explore further with more complex text analysis methods. The corpus can be changed to a Document Term Matrix using the `tm` package which has many advanced text mining methods. 
 
-Fifth, generate topic models with `JSTOR_lda` (using the `lda` package, it's a lot faster than `topicmodels`) and `JSTOR_MALLET`. The latter function requires MALLET to be installed on your computer. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
+Fifth, determine the most frequently used words at various intervals over time with `JSTOR_freqwords`. 
 
-Sixth, visualise and explore the output from the topic models. Identify the hot and cold topics in the corpus
+Sixth, identify and visualise the words most strongly correlated with a word at various intervals over time with `JSTOR_findassocs`
 
-Seventh, determine the most frequently used words at various intervals over time. Identify and visualise the words most strongly correlated with a word at various intervals over time.
+Seventh, generate topic models with `JSTOR_lda` (using the `lda` package, it's a lot faster than `topicmodels`) and `JSTOR_MALLET`. The latter function requires MALLET to be installed on your computer. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
+
+Eighth, identify the hot and cold topics in the corpus with `JSTOR_lda_hotncoldtopics` (if you generated the topic model with `JSTOR_lda`) or `JSTOR_MALLET_hotncoldtopics` (if you used `JSTOR_MALLET` to make the topic model)
+
+
+
+
 
 
 Limitations and Disclaimer

@@ -13,7 +13,7 @@
   \item{word2}{One word or a vector of words, each word
   surrounded by standard quote marks.}
 
-  \item{span}{span of the lowess line (controls the degree
+  \item{span}{span of the loess line (controls the degree
   of smoothing). Default is 0.4}
 }
 \value{

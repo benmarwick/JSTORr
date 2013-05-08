@@ -2,10 +2,12 @@
 \alias{JSTOR_findassocs}
 \title{Plot the words with the strongest correlation with a given word, by time intervals}
 \usage{
-  JSTOR_findassocs(corpus, n = 10, word, corlimit = 0.4,
+  JSTOR_findassocs(x, corpus, word, n = 5, corlimit = 0.4,
     plimit = 0.05, topn = 20, biggest = 5)
 }
 \arguments{
+  \item{x}{object returned by the function JSTOR_unpack.}
+
   \item{corpus}{the object returned by the function
   JSTOR_corpusofnouns. A corpus containing the documents.}
 
@@ -41,7 +43,7 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-## findassocs <- JSTOR_findassocs(corpus, n = 10, "pirates", topn = 100)
-## findassocs <- JSTOR_findassocs(corpus, n = 5, corlimit=0.6, plimit=0.001)
+## findassocs <- JSTOR_findassocs(unpack, corpus, n = 10, "pirates", topn = 100)
+## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, corlimit=0.6, plimit=0.001)
 }
 

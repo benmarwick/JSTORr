@@ -1,6 +1,7 @@
 #' Generate a topic model with K topics using Latent Dirichlet allocation (LDA)
 #' 
 #' @description Generates a topic model with K topics using Latent Dirichlet allocation (LDA, with the lda package) For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @param x object returned by the function JSTOR_unpack.
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
 #' @param K the number of topics that the model should contain
 #' @param alpha The scalar value of the Dirichlet hyperparameter for topic proportions. Higher values lead to more uniform distributions of topics over documents. Default is 50/K
@@ -10,7 +11,11 @@
 
 
 
-JSTOR_lda <- function(corpus, K, alpha = 50/K){ 
+JSTOR_lda <- function(x, corpus, K, alpha = 50/K){ 
+  
+  # prepare bibliodata
+  bibliodata <- x$bibliodata
+  
   # stop if number of topics is less than 2
   if (as.integer(K) != K || as.integer(K) < 2) 
     stop("\nK needs to be an integer of at least 2")

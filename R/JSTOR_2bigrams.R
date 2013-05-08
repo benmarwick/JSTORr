@@ -35,7 +35,7 @@ JSTOR_2bigrams <- function(x, bigram1, bigram2, span = 0.4){
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # vizualise one word over time
   library(ggplot2)
-  suppressWarnings(ggplot(two_bigrams_by_year, aes(year, log(value))) +
+  suppressWarnings(ggplot(two_bigrams_by_year_melt, aes(year, log(value))) +
                      geom_point(subset = .(value > 0), aes(colour = variable)) +
                      geom_smooth( aes(colour = variable), method = "loess", span = span, subset = .(value > 0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +

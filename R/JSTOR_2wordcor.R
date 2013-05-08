@@ -5,7 +5,7 @@
 #' @param x object returned by the function JSTOR_unpack.
 #' @param word1 One word or a vector of words, each word surrounded by standard quote marks.
 #' @param word2  One word or a vector of words, each word surrounded by standard quote marks.
-#' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
+#' @param span span of the loess line (controls the degree of smoothing). Default is 0.4
 #' @return Returns a ggplot object with publication year on the horizontal axis and Pearson's correlation on the vertical axis. Each point represents all the documents of a single year, point size is inversely proportional to p-value of the correlation.
 #' @examples 
 #' ##JSTOR_2wordcor(dat1, word1 = "pearls", word2 = "diamonds"))
@@ -35,11 +35,11 @@ JSTOR_2wordcor <- function(x, word1, word2, span = 0.4){
   library(ggplot2)
   suppressWarnings(ggplot(corrp, aes(year, corr)) +
                      geom_point(aes(size = -pval)) +
-                     geom_smooth(  method = "loess", span = span) +
+                     geom_smooth(  method = "loess", span = span, se = FALSE) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      geom_hline(yintercept=0, colour = "red") + 
-                     ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +
+                     ylab(paste0("correlation between '",cw1, "' and '", cw2,"'")) +
+                     ylim(min(corrp$corr), 1.0) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
-                     ylab(paste0("correlation between '",cw1, "'' and '", cw2,"'")) +
                      scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001)))
 }

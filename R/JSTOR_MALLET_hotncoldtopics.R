@@ -10,25 +10,38 @@
 
 JSTOR_MALLET_hotncoldtopics <- function(x){
   
-  # get user to paste in the path to the MALLET output files
   
-  # from  http://r.789695.n4.nabble.com/url-prep-function-backslash-issue-tp3778530p3779086.html
-  message("please paste in the path to the MALLET output files (no quotes needed):")
-  oldstring1 <- readline() 
-  path <- chartr("\\", "/", oldstring1) 
-  setwd(path)
+  # Andrew Goldstone's method: get the user to choose the file
   
-  # get user to paste in the name of the topic keys file
+  message("Select the topic keys file")
+  ignore <- readline("(press return to open file dialog - it might pop up behind here) ")
+  outputtopickeys <- file.choose()
+  print(outputtopickeys)
   
-  message("please paste in the name of the topic keys file (no quotes needed):")
-  oldstring2 <- readline() 
-  outputtopickeys <- oldstring2
+  message("Select the topic docs file")
+  ignore <- readline("(press return to open file dialog - it might pop up behind here) ")
+  outputdoctopics <- file.choose()
+  print(outputdoctopics)
   
-  # get user to paste in the name of the topic keys file
-  
-  message("please paste in the name of the topic docs file (no quotes needed):")
-  oldstring3 <- readline() 
-  outputdoctopics <- oldstring3
+#   # get user to paste in the path to the MALLET output files
+#   
+#   # from  http://r.789695.n4.nabble.com/url-prep-function-backslash-issue-tp3778530p3779086.html
+#   message("please paste in the path to the MALLET output files (no quotes needed):")
+#   oldstring1 <- readline() 
+#   path <- chartr("\\", "/", oldstring1) 
+#   setwd(path)
+#   
+#   # get user to paste in the name of the topic keys file
+#   
+#   message("please paste in the name of the topic keys file (no quotes needed):")
+#   oldstring2 <- readline() 
+#   outputtopickeys <- oldstring2
+#   
+#   # get user to paste in the name of the topic keys file
+#   
+#   message("please paste in the name of the topic docs file (no quotes needed):")
+#   oldstring3 <- readline() 
+#   outputdoctopics <- oldstring3
   
   outputtopickeysresult <- read.table(outputtopickeys, header=F, sep="\t")
   outputdoctopicsresult <- read.table(outputdoctopics, header=F, sep="\t")

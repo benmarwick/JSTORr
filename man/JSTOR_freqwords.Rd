@@ -2,10 +2,12 @@
 \alias{JSTOR_freqwords}
 \title{Plot the most frequent words by time intervals}
 \usage{
-  JSTOR_freqwords(corpus, n = 5, lowfreq = 300, topn = 20,
-    biggest = 30)
+  JSTOR_freqwords(x, corpus, n = 5, lowfreq = 300,
+    topn = 20, biggest = 30)
 }
 \arguments{
+  \item{x}{object returned by the function JSTOR_unpack.}
+
   \item{corpus}{the object returned by the function
   JSTOR_corpusofnouns. A corpus containing the documents.}
 
@@ -35,7 +37,7 @@
   Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-## freqwords <- JSTOR_freqwords(corpus, n = 2, biggest = 40, lowfreq = 100, topn = 5)
-## freqwords <- JSTOR_freqwords(corpus)
+## freqwords <- JSTOR_freqwords(unpack, corpus, n = 2, biggest = 40, lowfreq = 100, topn = 5)
+## freqwords <- JSTOR_freqwords(unpack, corpus)
 }
 

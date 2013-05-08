@@ -5,7 +5,7 @@
 #' @param x object returned by the function JSTOR_unpack.
 #' @param bigram1 One bigram or a vector of bigrams, each bigram surrounded by standard quote marks.
 #' @param bigram2 One bigram or a vector of bigrams, each bigram surrounded by standard quote marks.
-#' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
+#' @param span span of the loess line (controls the degree of smoothing). Default is 0.4
 #' @return Returns a ggplot object with publication year on the horizontal axis and Pearson's correlation on the vertical axis. Each point represents all the documents of a single year, point size is inversely proportional to p-value of the correlation.
 #' @examples 
 #' ## JSTOR_2bigramscor(dat1, bigram1 = "hot water", bigram2 = "cold water"))
@@ -35,9 +35,10 @@ JSTOR_2bigramscor <- function(x, bigram1, bigram2, span = 0.4){
   library(ggplot2)
   suppressWarnings(ggplot(corrp, aes(year, corr)) +
                      geom_point(aes(size = -pval)) +
-                     geom_smooth(  method = "loess", span = span) +
+                     geom_smooth(  method = "loess", span = span, se = FALSE) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      geom_hline(yintercept=0, colour = "red") + 
+                     ylim(min(corrp$corr), 1.0) +
                      ylab(paste0("correlation between \'", bg1, "\' and \'", bg2, "\'")) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
                      scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001)))
