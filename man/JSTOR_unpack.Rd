@@ -24,7 +24,7 @@
   (include the zip file suffix)
 }
 \examples{
-## dat1 <- JSTOR_unpack() # then follow prompts to paste in path and the name of the zipfile
+## unpack <- JSTOR_unpack() # then follow prompts to navigate to the location of the zipfile
 ## unpack <- JSTOR_unpack() # as above
 }
 

@@ -1,6 +1,6 @@
 \name{JSTOR_lda}
 \alias{JSTOR_lda}
-\title{Generate a topic model with K topics using Latent Dirichlet allocation (LDA)}
+\title{Generate a topic model with K topics using the implementation of Latent Dirichlet allocation (LDA) in the lda package}
 \usage{
   JSTOR_lda(x, corpus, K, alpha = 50/K)
 }

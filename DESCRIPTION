@@ -50,3 +50,4 @@ Collate:
     'JSTOR_freqwords.R'
     'JSTOR_findassocs.R'
     'JSTOR_MALLET_topicsovertime.R'
+    'JSTOR_MALLET_topicinfo.R'
