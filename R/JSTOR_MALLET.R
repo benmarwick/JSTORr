@@ -27,7 +27,7 @@ JSTOR_MALLET <- function(corpus, MALLET="C:/mallet-2.0.7" , JAVA = "C:/Program F
   # convert list of character vectors to text files for MALLET to use
   message("creating text files for MALLET to use...")
   sapply(1:length(corpus),
-         function (x) write.table(corpus[x][[1]], file=paste(x, "txt", sep="."),
+         function (x) write.table(corpus[x][[1]], file=paste(names(corpus)[x], "txt", sep="."),
                                   quote = FALSE, row.names = FALSE, eol = " " ))
   message("done")
   

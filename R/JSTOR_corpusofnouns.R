@@ -4,7 +4,7 @@
 #' @param x object returned by the function JSTOR_unpack.
 #' @return Returns a corpus containing documents, ready for more advanced text mining and topic modelling.  
 #' @examples 
-#' ## mycorpus1 <- JSTOR_corpusofnouns(unpack) 
+#' ## mycorpus <- JSTOR_corpusofnouns(unpack) 
 
 
 
@@ -66,6 +66,7 @@ message("done")
 # put in corpus
 message("converting vectors back into a corpus")
 mycorpus <- Corpus(VectorSource(mycorpus.noun.strings))
+names(mycorpus) <- names(wordcounts)
 message("all done")
 return(mycorpus)
 }

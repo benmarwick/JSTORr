@@ -1,4 +1,4 @@
-#' Generate a topic model with K topics using Latent Dirichlet allocation (LDA)
+#' Generate a topic model with K topics using the implementation of Latent Dirichlet allocation (LDA) in the lda package
 #' 
 #' @description Generates a topic model with K topics using Latent Dirichlet allocation (LDA, with the lda package) For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param x object returned by the function JSTOR_unpack.
