@@ -1,4 +1,3 @@
-
 #' Plot the change over time of the correlation between one set of words and another set of words in a JSTOR DfR dataset
 #' 
 #' @description Function to plot changes in the relative frequency of two set of words (two sets of 1-grams) over time. The relative frequency is the frequency of the set of words in a document divided by the total number of words in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
@@ -39,7 +38,7 @@ JSTOR_2wordcor <- function(x, word1, word2, span = 0.4){
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      geom_hline(yintercept=0, colour = "red") + 
                      ylab(paste0("correlation between '",cw1, "' and '", cw2,"'")) +
-                     ylim(min(corrp$corr), 1.0) +
+                     ylim(-1.0, 1.0) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
                      scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001)))
 }
