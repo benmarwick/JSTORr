@@ -51,3 +51,4 @@ Collate:
     'JSTOR_findassocs.R'
     'JSTOR_MALLET_topicsovertime.R'
     'JSTOR_MALLET_topicinfo.R'
+    'JSTOR_removestopwords.R'

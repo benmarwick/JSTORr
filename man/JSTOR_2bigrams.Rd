@@ -16,6 +16,11 @@
   \item{span}{span of the lowess line (controls the degree
   of smoothing). Default is 0.4}
 }
+\value{
+  Returns a ggplot object with publication year on the
+  horizontal axis and log relative frequency on the
+  vertical axis. Each point represents a single document.
+}
 \description{
   Function to plot changes in the relative frequency of two
   bigrams over time. The relative frequency is the

@@ -40,7 +40,10 @@
   Generates a plot of the top n words in all the documents
   in ranges of years that positively correlate with a given
   word. For use with JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/).
+  (http://dfr.jstor.org/). For best results, repeat the
+  function several times after adding common words to the
+  stopword list and excluding them using the
+  JSTOR_removestopwords function.
 }
 \examples{
 ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 10, "pirates", topn = 100)

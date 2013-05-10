@@ -18,7 +18,7 @@
 #' @references
 #' \url{http://dfr.jstor.org/}
 #' @import plyr reshape2 ggplot2 stringr tm openNLP openNLPmodels.en topicmodels lda XML
-#' @export JSTOR_unpack JSTOR_1word JSTOR_2words JSTOR_1bigram JSTOR_2bigrams JSTOR_2bigramscor JSTOR_2wordcor JSTOR_corpusofnouns JSTOR_chunk JSTOR_lda JSTOR_MALLET JSTOR_MALLET_hotncoldtopics JSTOR_lda_hotncoldtopics JSTOR_freqwords JSTOR_findassocs JSTOR_MALLET_topicsovertime
+#' @export JSTOR_unpack JSTOR_1word JSTOR_2words JSTOR_1bigram JSTOR_2bigrams JSTOR_2bigramscor JSTOR_2wordcor JSTOR_corpusofnouns JSTOR_chunk JSTOR_lda JSTOR_MALLET JSTOR_MALLET_hotncoldtopics JSTOR_lda_hotncoldtopics JSTOR_freqwords JSTOR_findassocs JSTOR_MALLET_topicsovertime JSTOR_removestopwords
 NULL
 
 

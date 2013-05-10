@@ -18,7 +18,10 @@
   characters, stopwords and unusual characters (characters
   not in ISO-8859-1, ie non-latin1-ASCII). For use with
   JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/).
+  (http://dfr.jstor.org/). This function uses the stoplist
+  in the tm package. The location of tm's English stopwords
+  list can be found by entering this at the R prompt:
+  paste0(.libPaths()[1], "/tm/stopwords/english.dat")
 }
 \examples{
 ## mycorpus <- JSTOR_corpusofnouns(unpack)

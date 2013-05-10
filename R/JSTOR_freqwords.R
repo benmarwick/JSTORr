@@ -1,6 +1,6 @@
 #' Plot the most frequent words by time intervals
 #' 
-#' @description Generates a plot of the top n words in all the documents in ranges of years. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @description Generates a plot of the top n words in all the documents in ranges of years. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). For best results, repeat the function several times after adding common words to the stopword list and excluding them using the JSTOR_removestopwords function.
 #' @param x object returned by the function JSTOR_unpack.
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
 #' @param n the number years to aggregate documents by. For example, n = 5 (the default value) will create groups of all documents published in non-overlapping five year ranges.

@@ -34,7 +34,10 @@
 \description{
   Generates a plot of the top n words in all the documents
   in ranges of years. For use with JSTOR's Data for
-  Research datasets (http://dfr.jstor.org/).
+  Research datasets (http://dfr.jstor.org/). For best
+  results, repeat the function several times after adding
+  common words to the stopword list and excluding them
+  using the JSTOR_removestopwords function.
 }
 \examples{
 ## freqwords <- JSTOR_freqwords(unpack, corpus, n = 2, biggest = 40, lowfreq = 100, topn = 5)

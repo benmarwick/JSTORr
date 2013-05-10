@@ -5,7 +5,7 @@
 #' @param bigram1 two words, surrounded by standard quote marks, or a vector of bigrams.
 #' @param bigram2 two words, surrounded by standard quote marks, or a vector of bigrams.
 #' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
-#' @retu rn Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
+#' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ## JSTOR_2bigrams(unpack, "pirate booty", "treasure chest")
 #' ## JSTOR_2bigrams(unpack, c("treasure chest", "musket balls"), c("jolly roger"), span = 0.2)
