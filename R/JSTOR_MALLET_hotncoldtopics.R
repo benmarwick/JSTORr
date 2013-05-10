@@ -2,13 +2,15 @@
 #' 
 #' @description Generates plots and data frames of the top five hot and cold topics. Hot topics are topics with a positive correlation to year of publication, cold topics have a negative correlation. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param x the object returned by the function JSTOR_unpack.
+#' @param pval p-value of the correlation cutoff for topics to include in the top 5 negative/positive list (ie. only topics where p<0.01 or 0.001?). Default is 0.05.
+#' @param ma ma moving average interval, default is five years.
 #' @return Returns a plot of the hot topics and plot of the cold topics and a list of dataframes of the topic proportions per year. Years as rows, topics as columns and posterior probabilities as cell values.
 #' @examples 
 #' ## hotncold <- JSTOR_MALLET_hotncoldtopics(x = unpacked)
 
 
 
-JSTOR_MALLET_hotncoldtopics <- function(x){
+JSTOR_MALLET_hotncoldtopics <- function(x, pval=0.05, ma=5){
   
   
   # Andrew Goldstone's method: get the user to choose the file
@@ -56,35 +58,34 @@ JSTOR_MALLET_hotncoldtopics <- function(x){
   rm(l_dat) # because this is very big but not longer needed
   # end up with table of docs (rows) and columns (topics)   
   
-  # reorder by document number
-  # extract document number from file name
-  topic.props$docnum <- as.numeric(gsub("\\D", "", topic.props$V2))
-  # sort by that number
-  topic.props <- topic.props[with(topic.props, order(topic.props$docnum)), ]
-  
+
   # get bibliodata
   bibliodata <- x$bibliodata
   
-  # add 'year' column from bibliodata to topic.props
-  # they should both be in the same order, unless you've fiddled with them...
-  topic.props$year <- bibliodata$year
-  # aggregate topic props to get a mean value per year (exclude filenames and docnum)
-  topic.props.agg <- aggregate(formula = . ~ year, data = topic.props[, !(colnames(topic.props) %in% c("V2","docnum"))], FUN = mean)
+  # match year from bibliodata to DOI in topic output and get year into topics
+  topic.props$id <- sub("\\.txt", "", basename(as.character(topic.props$V2)))
+  topic.props <- merge(topic.props, cbind.data.frame(year = bibliodata$year, id = bibliodata$x), by = "id")
+
+  topic.props.agg <- aggregate(formula = . ~ year, data = topic.props[, !(colnames(topic.props) %in% c("id","V2"))], FUN = mean)
+  
+  # make a n-year moving average to smooth things out a bit (from http://stackoverflow.com/a/4862334/1036500)
+  # only looking back: a trailing moving average         
+  topic.props.agg <- data.frame(na.omit(apply(topic.props.agg, 2, function(x){filter(x,rep(1/ma,ma), sides=1)})))  
   
   # get pearson correlation between topic and year
   year_cors <- as.numeric(unlist(lapply(1:(ncol(topic.props.agg[,!(colnames(topic.props.agg) %in% "year")])), function(i) cor(as.numeric(topic.props.agg$year), 
-                                                                                                                                       topic.props.agg[,!(colnames(topic.props.agg) %in% "year")][,i]))))
+                                                                                                                              topic.props.agg[,!(colnames(topic.props.agg) %in% "year")][,i]))))
   # get p-value for pearson correlation
   year_cor.pval <- as.numeric(unlist(lapply(1:(ncol(topic.props.agg[,!(colnames(topic.props.agg) %in% "year")])), function(i) cor.test(as.numeric(topic.props.agg$year), 
                                                                                                                                        topic.props.agg[,!(colnames(topic.props.agg) %in% "year")][,i])$p.value)))
-  # get five top-ranked words for each topic to use when plotting
-  topic_string <- unlist(lapply(1:nrow(outputtopickeysresult), function(i) paste(unlist(strsplit(as.character(outputtopickeysresult[i,"V3"]), " "))[1:5], collapse = ".")))
+  # get five top-ranked words for each topic to use when plotting (exclude year)
+  topic_string <- paste0("topic_", gsub("\\D", "", colnames(topic.props.agg)[2:ncol(topic.props.agg)]))
   
   # make a df of correlations, p-values, topic names and numbers
   years_cor_comb <- data.frame(cor = year_cors, pval = year_cor.pval, topic = topic_string, topicnum = seq(1,length(topic_string),1))
   
-  # subset for only topics with p<0.05
-  years_cor_comb <- years_cor_comb[years_cor_comb$pval <= 0.1, ]
+  # subset for only topics with p<0.xx
+  years_cor_comb <- years_cor_comb[years_cor_comb$pval <= pval, ]
   # sort the subset
   years_cor_comb <- years_cor_comb[with(years_cor_comb, order(-cor)),]
   
@@ -95,15 +96,7 @@ JSTOR_MALLET_hotncoldtopics <- function(x){
   pos <- head(years_cor_comb[years_cor_comb$cor > 0, ],5)
   
   # plot top five +ve
-  top5_positive_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% pos$topicnum])
-  # get topic numbers in order of column names
-  tnu <- intersect(gsub("\\D", "", names(top5_positive_df)), pos$topicnum)
-  # get topic names in same order as topic numbers in colnames
-  tna <- rep(NA, length(tnu))
-  for(i in 1:length(tnu)){
-    tna[i] <- as.character(pos[pos$topicnum == tnu[[i]], ]$topic)
-  }
-  names(top5_positive_df) <- c("year", tna)
+  top5_positive_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% paste0("X", pos$topicnum)])
   
   dat.m.pos <- melt(top5_positive_df, id.vars='year')
   library(ggplot2)
@@ -111,15 +104,7 @@ JSTOR_MALLET_hotncoldtopics <- function(x){
     geom_line(aes(colour=variable)) )
   
   # plot top five -ve
-  top5_negative_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% neg$topicnum])
-  # get topic numbers in order of column names
-  tnu <- intersect(gsub("\\D", "", names(top5_negative_df)), neg$topicnum)
-  # get topic names in same order as topic numbers in colnames
-  tna <- rep(NA, length(tnu))
-  for(i in 1:length(tnu)){
-    tna[i] <- as.character(neg[neg$topicnum == tnu[[i]], ]$topic)
-  }
-  names(top5_negative_df) <- c("year", tna)
+  top5_negative_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% paste0("X", neg$topicnum)])
   
   dat.m.neg <- melt(top5_negative_df, id.vars='year')
   print(ggplot(dat.m.neg , aes(year, value, group=variable)) + 

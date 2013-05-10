@@ -2,7 +2,7 @@
 \alias{JSTOR_lda_hotncoldtopics}
 \title{Plot the top five hot and cold topics in the archive}
 \usage{
-  JSTOR_lda_hotncoldtopics(x, lda, pval)
+  JSTOR_lda_hotncoldtopics(x, lda, pval = 0.05, ma = 5)
 }
 \arguments{
   \item{x}{the object returned by the function
@@ -13,13 +13,17 @@
 
   \item{pval}{p-value of the correlation cutoff for topics
   to include in the top 5 negative/positive list (ie. only
-  topics where p<0.01 or 0.001?)}
+  topics where p<0.01 or 0.001?). Default is 0.05.}
+
+  \item{ma}{moving average interval, default is five
+  years.}
 }
 \value{
   Returns a plot of the hot topics and plot of the cold
   topics and a list of dataframes of the topic proportions
   per year. Years as rows, topics as columns and posterior
-  probabilities as cell values.
+  probabilities as cell values. Uses a five year moving
+  average to smooth the plots a bit.
 }
 \description{
   Generates plots and data frames of the top five hot and
@@ -29,6 +33,6 @@
   Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-## hotncold <- JSTOR_lda_hotncoldtopics(x = unpacked, lda = lda150)
+## hotncold <- JSTOR_lda_hotncoldtopics(x = unpacked, lda = lda150, ma = 10)
 }
 

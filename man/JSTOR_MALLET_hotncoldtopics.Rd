@@ -2,11 +2,18 @@
 \alias{JSTOR_MALLET_hotncoldtopics}
 \title{Plot the top five hot and cold topics in the archive}
 \usage{
-  JSTOR_MALLET_hotncoldtopics(x)
+  JSTOR_MALLET_hotncoldtopics(x, pval = 0.05, ma = 5)
 }
 \arguments{
   \item{x}{the object returned by the function
   JSTOR_unpack.}
+
+  \item{pval}{p-value of the correlation cutoff for topics
+  to include in the top 5 negative/positive list (ie. only
+  topics where p<0.01 or 0.001?). Default is 0.05.}
+
+  \item{ma}{ma moving average interval, default is five
+  years.}
 }
 \value{
   Returns a plot of the hot topics and plot of the cold
