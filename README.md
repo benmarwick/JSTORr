@@ -56,9 +56,9 @@ Third, explore some visualisations of key words over time with `JSTOR_1word`, `J
 
 Fourth, put the documents into a corpus with `JSTOR_corpusofnouns` and explore further with more complex text analysis methods. The corpus can be changed to a Document Term Matrix using the `tm` package which has many advanced text mining methods. 
 
-Fifth, determine the most frequently used words at various intervals over time with `JSTOR_freqwords`. 
+Fifth, determine the most frequently used words at various intervals over time with `JSTOR_freqwords`. To optimise the output from this function it might be necessary to add words to the stop word list and run `JSTOR_removestopwords`, then run `JSTOR_freqwords`, and then repeat this process a few times until the results look reasonable. 
 
-Sixth, identify and visualise the words most strongly correlated with a given word at various intervals over time with `JSTOR_findassocs`
+Sixth, identify and visualise the words most strongly correlated with a given word at various intervals over time with `JSTOR_findassocs`. This function may also benefit from optimisation as described above for `JSTOR_freqwords`.
 
 Seventh, generate topic models with `JSTOR_lda` (using the `lda` package, it's a lot faster than `topicmodels`) and `JSTOR_MALLET`. The latter function requires MALLET to be installed on your computer. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
 
