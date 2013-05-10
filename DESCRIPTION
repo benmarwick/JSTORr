@@ -52,3 +52,5 @@ Collate:
     'JSTOR_MALLET_topicsovertime.R'
     'JSTOR_MALLET_topicinfo.R'
     'JSTOR_removestopwords.R'
+    'JSTOR_lda_docdists.R'
+    'JSTOR_lda_topicdists.R'
