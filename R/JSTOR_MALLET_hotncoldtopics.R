@@ -49,13 +49,24 @@ JSTOR_MALLET_hotncoldtopics <- function(x, pval=0.05, ma=5){
   outputdoctopicsresult <- read.table(outputdoctopics, header=F, sep="\t")
   
   # manipulate outputdoctopicsresult to be more useful 
+  # thanks to http://stackoverflow.com/q/8058402/1036500
   dat <- outputdoctopicsresult
-  l_dat <- reshape(dat, idvar=1:2, varying=list(topics=colnames(dat[,seq(3, ncol(dat)-1, 2)]), 
-                                                props=colnames(dat[,seq(4, ncol(dat), 2)])), 
-                   direction="long")
+# slow
+#   l_dat <- reshape(dat, idvar=1:2, varying=list(topics=colnames(dat[,seq(3, ncol(dat)-1, 2)]), 
+#                                                 props=colnames(dat[,seq(4, ncol(dat), 2)])), 
+#                    direction="long")
+#   library(reshape2)
+#   topic.props <- dcast(l_dat, V2 ~ V3)
+  
+  # faster method
+  # make long table
+  l_dat1 <- stats::reshape(dat, idvar=1:2, varying=list(topics=colnames(dat[,seq(3, ncol(dat)-1, 2)]), 
+                                                              props=colnames(dat[,seq(4, ncol(dat), 2)])), direction="long") 
+  # make wide table of docs = rows, and topics = cols, with proportions as cells
   library(reshape2)
-  topic.props <- dcast(l_dat, V2 ~ V3)
-  rm(l_dat) # because this is very big but not longer needed
+  topic.props  <- dcast(l_dat1, l_dat1[,2] ~ l_dat1[,4]) 
+  
+  rm(l_dat1) # because this is very big but not longer needed
   # end up with table of docs (rows) and columns (topics)   
   
 
@@ -63,13 +74,14 @@ JSTOR_MALLET_hotncoldtopics <- function(x, pval=0.05, ma=5){
   bibliodata <- x$bibliodata
   
   # match year from bibliodata to DOI in topic output and get year into topics
-  topic.props$id <- sub("\\.txt", "", basename(as.character(topic.props$V2)))
+  topic.props$id <- sub("\\.txt", "", basename(as.character(topic.props[,1]))) # 1st column contains file names
+  topic.props <- topic.props[,-1] # delete col with filenames, no longer needed now that we've got the ids
   topic.props <- merge(topic.props, cbind.data.frame(year = bibliodata$year, id = bibliodata$x), by = "id")
-
-  topic.props.agg <- aggregate(formula = . ~ year, data = topic.props[, !(colnames(topic.props) %in% c("id","V2"))], FUN = mean)
+  # get mean topic proportions for all docs per year...
+  topic.props.agg <- aggregate(formula = . ~ year, data = topic.props[, !(colnames(topic.props) %in% c("id"))], FUN = mean)
   
   # make a n-year moving average to smooth things out a bit (from http://stackoverflow.com/a/4862334/1036500)
-  # only looking back: a trailing moving average         
+  # only looking back: a trailing moving average, ma = years to trail      
   topic.props.agg <- data.frame(na.omit(apply(topic.props.agg, 2, function(x){filter(x,rep(1/ma,ma), sides=1)})))  
   
   # get pearson correlation between topic and year
@@ -84,7 +96,12 @@ JSTOR_MALLET_hotncoldtopics <- function(x, pval=0.05, ma=5){
   # make a df of correlations, p-values, topic names and numbers
   years_cor_comb <- data.frame(cor = year_cors, pval = year_cor.pval, topic = topic_string, topicnum = seq(1,length(topic_string),1))
   
-  # subset for only topics with p<0.xx
+  # stick on the top five words per topic for a bit more information
+  words.list <- data.frame(topic = keys.frame$topic, keywords = sapply(strsplit(keys.frame$keywords, split=" "), function (words) paste(words[1:5],collapse=" ")))
+  
+  years_cor_comb$keywords <-  words.list$keywords[match(years_cor_comb$topicnum, words.list$topic)]
+  
+  # subset for only topics with p < pval
   years_cor_comb <- years_cor_comb[years_cor_comb$pval <= pval, ]
   # sort the subset
   years_cor_comb <- years_cor_comb[with(years_cor_comb, order(-cor)),]
@@ -99,16 +116,19 @@ JSTOR_MALLET_hotncoldtopics <- function(x, pval=0.05, ma=5){
   top5_positive_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% paste0("X", pos$topicnum)])
   
   dat.m.pos <- melt(top5_positive_df, id.vars='year')
+  dat.m.pos$topic <- words.list$keywords[match(gsub("\\D", "", dat.m.pos$variable), words.list$topic)]
   library(ggplot2)
-  print(ggplot(dat.m.pos , aes(year, value, group=variable)) + 
-    geom_line(aes(colour=variable)) )
+  print(ggplot(dat.m.pos , aes(year, value, group=topic)) + 
+    geom_line(aes(colour=topic)) )
   
   # plot top five -ve
   top5_negative_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% paste0("X", neg$topicnum)])
   
   dat.m.neg <- melt(top5_negative_df, id.vars='year')
-  print(ggplot(dat.m.neg , aes(year, value, group=variable)) + 
-          geom_line(aes(colour=variable)) )
+  dat.m.neg$topic <- words.list$keywords[match(gsub("\\D", "", dat.m.neg$variable), words.list$topic)]
+  
+  print(ggplot(dat.m.neg , aes(year, value, group=topic)) + 
+          geom_line(aes(colour=topic)) )
   
   return(list("top5_positive" = top5_positive_df, "top5_negative" = top5_negative_df, "top5_pos_cor" = pos, "top5_neg_cor" = neg))
   

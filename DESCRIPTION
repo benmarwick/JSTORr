@@ -54,3 +54,4 @@ Collate:
     'JSTOR_removestopwords.R'
     'JSTOR_lda_docdists.R'
     'JSTOR_lda_topicdists.R'
+    'JSTOR_clusterbywords.R'
