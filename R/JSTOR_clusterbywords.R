@@ -14,11 +14,9 @@ JSTOR_clusterbywords <- function(x, corpus, word){
 library(tm)
 message("converting corpus to document term matrix...")
 dtm <- DocumentTermMatrix(corpus)
+message("done")
 # get only docs with a certain word
 dtm_mat <- as.matrix(dtm)
-# vector of words to subset dtm by
-# ie. keep only docs with these words
-word <- c("gender")
 
 # get doc numbers that contain the word of interest
 docs <- unname(which(dtm_mat[, intersect(colnames(dtm_mat), word) ] >= 1))
@@ -31,8 +29,9 @@ dtm_subset_mat <- as.matrix(dtm_subset)
 
 # explore some clustering
 # inspect distribution of document lengths
+message("making a histogram of words per document...")
 hist(apply(dtm_subset_mat, 1, sum), xlab="Number of Terms in Term-Document Matrix",
-     main="Number of Terms Per Article")
+     main="Number of Words Per Document")
 # Because the lengths of our documents vary so wildly 
 #we may want to row-standardize our document matrix 
 # (divide each entry by the number of terms in that document).
@@ -46,24 +45,25 @@ rownames(input) <- names(corpus_subset)
 # get a sense of how many clusters suit the data
 # using Affinity propagation (AP) clustering
 # see http://dx.doi.org/10.1126/science.1136800
-library(apcluster)
+require(apcluster)
 d.apclus <- apcluster(negDistMat(r=2), input)
 k <-  length(d.apclus@clusters)
 
 aggres1 <- aggExCluster(x=d.apclus)
-
-cl_plot <- plot(aggres1, showSamples=TRUE, main = "Document clusters", nodePar=list(pch=NA, lab.cex=0.4))
+message("making a cluster dendrogram...")
+cl_plot <- plot(aggres1, showSamples=TRUE, main = "Document clusters")
 # how to get DOI as names here?
 
-library(ggplot2)
-library(ggdendro)
+require(ggplot2)
+require(ggdendro)
 
 #convert cluster object to use with ggplot
 dendr <- dendro_data(cl_plot, type="rectangle") 
 
 labs <- names(unlist(aggres1@clusters[[1]]))
 #your own labels are supplied in geom_text() and label=labs
-ggplot() + 
+message("making another cluster dendrogram...")
+print(ggplot() + 
   geom_segment(data=segment(dendr), aes(x=x, y=y, xend=xend, yend=yend)) + 
   geom_text(data=label(dendr), aes(x=x, y=y, label=labs, hjust=0), size=3) +
   coord_flip() + 
@@ -73,7 +73,7 @@ ggplot() +
         axis.text.y=element_blank(),
         axis.title.y=element_blank(),
         panel.background=element_rect(fill="white"),
-        panel.grid=element_blank())
+        panel.grid=element_blank()))
 
 
 # k-means
@@ -84,6 +84,7 @@ cl <- kmeans(input,           # Our input term document matrix
 
 # get the top twenty words in each cluster, using the k-means output
 # from Brandon M. Stewart
+message("calculating top words per k-means cluster...")
 for (i in 1:length(cl$withinss)) {
   #For each cluster, this defines the documents in that cluster
   inGroup <- which(cl$cluster==i)
@@ -103,7 +104,7 @@ for (i in 1:length(cl$withinss)) {
 }
 
 # PCA
-library(FactoMineR)
+require(FactoMineR)
 res.pca <- PCA(input, graph = FALSE)
 # extract some parts for plotting
 PC1 <- res.pca$ind$coord[,1]
@@ -142,6 +143,7 @@ pv <- pv + geom_segment(data=vPCs, aes(x = 0, y = 0, xend = vPC1*0.9, yend = vPC
 
 # plot docs and words side by side
 library(gridExtra)
+message("plotting PCA output...")
 grid.arrange(p,pv,nrow=1)
 
 }
