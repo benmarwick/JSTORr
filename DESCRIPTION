@@ -20,7 +20,14 @@ Depends:
     openNLP,
     openNLPmodels.en,
     topicmodels,
-    lda
+    lda,
+    XML,
+    cluster,
+    apcluster,
+    ggdendro,
+    FactoMineR,
+    gridExtra,
+    grid
 Imports:
     ggplot2,
     reshape2,
@@ -31,7 +38,13 @@ Imports:
     openNLPmodels.en,
     topicmodels,
     lda,
-    XML
+    XML,
+    cluster,
+    apcluster,
+    ggdendro,
+    FactoMineR,
+    gridExtra,
+    grid
 Collate:
     'JSTOR_1word.R'
     'JSTOR_2wordcor.R'

@@ -60,20 +60,29 @@ require(ggdendro)
 #convert cluster object to use with ggplot
 dendr <- dendro_data(cl_plot, type="rectangle") 
 
-labs <- names(unlist(aggres1@clusters[[1]]))
+# labs1 <- names(unlist(aggres1@clusters[[1]]))
 #your own labels are supplied in geom_text() and label=labs
 message("making another cluster dendrogram...")
-print(ggplot() + 
-  geom_segment(data=segment(dendr), aes(x=x, y=y, xend=xend, yend=yend)) + 
-  geom_text(data=label(dendr), aes(x=x, y=y, label=labs, hjust=0), size=3) +
-  coord_flip() + 
-  scale_y_reverse(expand=c(0.2, 0)) + 
-  theme(axis.line.y=element_blank(),
-        axis.ticks.y=element_blank(),
-        axis.text.y=element_blank(),
-        axis.title.y=element_blank(),
-        panel.background=element_rect(fill="white"),
-        panel.grid=element_blank()))
+print(ggdendrogram(dendr, rotate=TRUE))
+
+# this doesn't seem to work... 
+# p <- ggplot() + 
+#   geom_segment(data=segment(dendr), aes(x=x, y=y, xend=xend, yend=yend)) + 
+#   geom_text(data=label(dendr), aes(x=x, y=y, label=labs1, hjust=0), size=3) +
+#   coord_flip() + 
+#   scale_y_reverse(expand=c(0.2, 0)) + 
+#   theme(axis.line.y=element_blank(),
+#         axis.ticks.y=element_blank(),
+#         axis.text.y=element_blank(),
+#         axis.title.y=element_blank(),
+#         panel.background=element_rect(fill="white"),
+#         panel.grid=element_blank())
+# print(p)
+
+
+
+
+#
 
 
 # k-means
@@ -85,7 +94,7 @@ cl <- kmeans(input,           # Our input term document matrix
 # get the top twenty words in each cluster, using the k-means output
 # from Brandon M. Stewart
 message("calculating top words per k-means cluster...")
-for (i in 1:length(cl$withinss)) {
+  for (i in 1:length(cl$withinss)) {
   #For each cluster, this defines the documents in that cluster
   inGroup <- which(cl$cluster==i)
   within <- dtm_subset[inGroup,]
@@ -103,7 +112,8 @@ for (i in 1:length(cl$withinss)) {
   }
 }
 
-# PCA
+
+PCA
 require(FactoMineR)
 res.pca <- PCA(input, graph = FALSE)
 # extract some parts for plotting
@@ -111,11 +121,11 @@ PC1 <- res.pca$ind$coord[,1]
 PC2 <- res.pca$ind$coord[,2]
 labs <- rownames(res.pca$ind$coord)
 PCs <- data.frame(cbind(PC1,PC2))
-rownames(PCs) <- labs
+rownames(PCs) <- gsub("[[:punct:]]", "", labs)
 #
 # Just showing the individual samples...
 library(ggplot2)
-p <- ggplot(PCs, aes(PC1,PC2, label=rownames(PCs))) + 
+p <- ggplot(PCs, aes_string(PC1,PC2, label=rownames(PCs))) + 
   geom_text(size = 2) +
   theme(aspect.ratio=1) + theme_bw(base_size = 20)
 # Now extract variables
@@ -124,7 +134,7 @@ vPC1 <- res.pca$var$coord[,1]
 vPC2 <- res.pca$var$coord[,2]
 vlabs <- rownames(res.pca$var$coord)
 vPCs <- data.frame(cbind(vPC1,vPC2))
-rownames(vPCs) <- vlabs
+rownames(vPCs) <- gsub("[[:punct:]]", "", vlabs)
 colnames(vPCs) <- colnames(PCs)
 #
 # and plot them
@@ -138,12 +148,13 @@ pv <- pv + geom_path(aes(x, y), data = df, colour="grey70")
 #
 # add on arrows and variable labels
 library(grid)
-pv <- pv + geom_text(data=vPCs, aes(x=vPC1,y=vPC2,label=rownames(vPCs)), size=4) + xlab("PC1") + ylab("PC2") 
-pv <- pv + geom_segment(data=vPCs, aes(x = 0, y = 0, xend = vPC1*0.9, yend = vPC2*0.9), arrow = arrow(length = unit(1/2, 'picas')), color = "grey30")
+pv <- pv + geom_text(data=vPCs, aes_string(x=vPC1,y=vPC2,label=rownames(vPCs)), size=4) + xlab("PC1") + ylab("PC2") 
+pv <- pv + geom_segment(data=vPCs, aes_string(x = 0, y = 0, xend = vPC1*0.9, yend = vPC2*0.9), arrow = arrow(length = unit(1/2, 'picas')), color = "grey30")
 
 # plot docs and words side by side
 library(gridExtra)
 message("plotting PCA output...")
 grid.arrange(p,pv,nrow=1)
+message("done")
 
 }
