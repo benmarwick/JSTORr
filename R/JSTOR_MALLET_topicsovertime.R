@@ -4,6 +4,7 @@
 #' @param x the object returned by the function JSTOR_unpack.
 #' @param topics a range of topic numbers to plot, Default is 1 to 56 (ie. the first 56 topics in the model). A mimimum of two topics must be specified.
 #' @return Returns a plot of topics over time and a list of dataframes of the topic proportions per document for further analysis.
+#' @author Ben Marwick with substantial contributions from Andrew Goldstone
 #' @examples 
 #' ## tot <- JSTOR_MALLET_topicsovertime(x = unpack, topics = 1:100)
 
