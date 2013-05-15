@@ -4,13 +4,14 @@
 #' @param x object returned by the function JSTOR_unpack.
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents with stopwords removed.
 #' @param word The word to subset the documents by, ie. use only documents containing this word in the cluster analysis
-#' @return Returns plots of clusters of documents, and dataframes of k-means and PCA output
+#' @param f A scalar value to filter the total number of words used in the cluster analyses. For each document, the count of each word is divided by the total number of words in that document, expressing a word's frequency as a proportion of all words in that document. This parameter corresponds to the summed proportions of a word in all documents (ie. the column sum for the document term matrix). If f = 0.01 then only words that constitute at least 1.0% of all words in all documents will be used for the cluster analyses.
+#' @return Returns plots of clusters of documents, and dataframes of affinity propogation clustering, k-means and PCA outputs
 #' @examples 
 #' ## cl1 <- JSTOR_clusterbywords(unpack, corpus, "pirates")
 #' ## cl2 <- JSTOR_clusterbywords(unpack, corpus, c("pirates", "privateers"))
 
 
-JSTOR_clusterbywords <- function(x, corpus, word){ 
+JSTOR_clusterbywords <- function(x, corpus, word, f = 0.01){ 
 library(tm)
 message("converting corpus to document term matrix...")
 dtm <- DocumentTermMatrix(corpus)
@@ -33,12 +34,12 @@ dtm_subset_mat <- as.matrix(dtm_subset)
 # hist(apply(dtm_subset_mat, 1, sum), xlab="Number of Terms in Term-Document Matrix",
 #     main="Number of Words Per Document")
 # Because the lengths of our documents vary so wildly 
-#we may want to row-standardize our document matrix 
+# we may want to row-standardize our document matrix 
 # (divide each entry by the number of terms in that document).
 # We can perform this in R using the following code:
-rowTotals <- apply(dtm_subset_mat, 1, sum) # Find the sum of words in each Document
-input <- dtm_subset_mat/rowTotals          # Divide each row by those totals
-input <- input[, which(colSums(input) > 0.01)] # subset in a arbitrary way...
+rowTotals <- apply(dtm_subset_mat, 1, sum)  # Find the sum of words in each Document
+input <- dtm_subset_mat/rowTotals           # Divide each row by those totals
+input <- input[, which(colSums(input) > f)] # subset in a arbitrary way...
 rownames(input) <- names(corpus_subset)
 
 ### Various clustering methods
@@ -50,38 +51,23 @@ d.apclus <- apcluster(negDistMat(r=2), input)
 k <-  length(d.apclus@clusters)
 
 aggres1 <- aggExCluster(x=d.apclus)
-message("making a cluster dendrogram...")
-cl_plot <- plot(aggres1, showSamples=TRUE, main = "Document clusters")
-# how to get DOI as names here?
+message("making a cluster dendrogram of clusters...")
+cl_plot <- plot(aggres1, showSamples=F, main = "Document clusters")
+message("done")
 
 require(ggplot2)
 require(ggdendro)
 
 #convert cluster object to use with ggplot
-dendr <- dendro_data(cl_plot, type="rectangle") 
-
-# labs1 <- names(unlist(aggres1@clusters[[1]]))
-#your own labels are supplied in geom_text() and label=labs
-message("making another cluster dendrogram...")
-print(ggdendrogram(dendr, rotate=TRUE))
-
-# this doesn't seem to work... 
-# p <- ggplot() + 
-#   geom_segment(data=segment(dendr), aes(x=x, y=y, xend=xend, yend=yend)) + 
-#   geom_text(data=label(dendr), aes(x=x, y=y, label=labs1, hjust=0), size=3) +
-#   coord_flip() + 
-#   scale_y_reverse(expand=c(0.2, 0)) + 
-#   theme(axis.line.y=element_blank(),
-#         axis.ticks.y=element_blank(),
-#         axis.text.y=element_blank(),
-#         axis.title.y=element_blank(),
-#         panel.background=element_rect(fill="white"),
-#         panel.grid=element_blank())
-# print(p)
-
-
+message("making a cluster dendrogram of documents...")
+dendr <- dendro_data(as.dendrogram(aggres1), showSamples=TRUE, main = "Document clusters", type="rectangle")
+print(ggdendrogram(dendr, rotate=TRUE, size = 3) + 
+        labs(title="Document clusters") + 
+        # not 100% sure these are the correct labels... best to inspect the cluster output...
+        geom_text(data=label(dendr), aes(x=x, y=y), label=names(unlist(aggres1@clusters[[1]])), hjust=0, size=3))
+message("done")
 # k-means
-cl <- kmeans(input,           # Our input term document matrix
+cl <- kmeans(input,      # Our input term document matrix
              centers=k,  # The number of clusters
              nstart=25)  # The number of starts chosen by the algorithm
 
@@ -109,9 +95,9 @@ x3 <- vector("list", 4)
   }
   x4 <- c(x2,x3)
 }
+message("done")
 
-
-
+message("calculating PCA...")
 # PCA
 require(FactoMineR,quietly = TRUE)
 res.pca <- PCA(input, graph = FALSE)
@@ -125,43 +111,52 @@ rownames(PCs) <- PClabs #gsub("[[:punct:]]", "", labs)
 # Just showing the individual samples...
 library(ggplot2)
 fun <- function(PCs, PClabs){
-p <- ggplot(PCs, aes(PC1,PC2, label=PClabs)) + 
-  geom_text(size = 2) +
+p <- ggplot(PCs, aes(PC1,PC2)) + 
+  geom_text(size = 2, label = PClabs) +
   theme(aspect.ratio=1) + theme_bw(base_size = 20)
+p
 }
 p <- fun(PCs, PClabs)
+print(p)
 
-
-# Now extract variables
 #
-vPC1 <- res.pca$var$coord[,1]
-vPC2 <- res.pca$var$coord[,2]
-vlabs <- rownames(res.pca$var$coord)
-vPCs <- data.frame(cbind(vPC1,vPC2))
-rownames(vPCs) <- vlabs  #gsub("[[:punct:]]", "", vlabs)
-colnames(vPCs) <- colnames(PCs)
-#
-# and plot them
-#
+fun <- function(df){
 pv <- ggplot() + theme(aspect.ratio=1) + theme_bw(base_size = 20) 
 # no data so there's nothing to plot
 # put a faint circle there, as is customary
+pv <- pv + geom_path(aes(x, y), data = df, colour="grey70") 
+pv
+}
 angle <- seq(-pi, pi, length = 50) 
 df <- data.frame(x = sin(angle), y = cos(angle)) 
-pv <- pv + geom_path(aes(x, y), data = df, colour="grey70") 
+pv <- fun(df)
+print(pv)
 #
 # add on arrows and variable labels
 library(grid)
-fun <- function(VPCs, vPC1, vPC2){
-pv <- pv + geom_text(data=vPCs, aes(x=vPC1,y=vPC2,label=rownames(vPCs)), size=4) + xlab("PC1") + ylab("PC2") 
+fun <- function(res.pca){
+  
+  # Now extract variables
+  #
+  vPC1 <- res.pca$var$coord[,1]
+  vPC2 <- res.pca$var$coord[,2] 
+  vPCs <- data.frame(vPC1=vPC1,vPC2=vPC2)
+  rownames(vPCs) <- rownames(res.pca$var$coord) 
+ 
+  #
+  # and plot them
+  
+pv <- pv + geom_text(data=vPCs, aes(x=vPC1,y=vPC2), label=rownames(vPCs), size=4) + xlab("PC1") + ylab("PC2") 
 pv <- pv + geom_segment(data=vPCs, aes(x = 0, y = 0, xend = vPC1*0.9, yend = vPC2*0.9), arrow = arrow(length = unit(1/2, 'picas')), color = "grey30")
+pv
 }
-pv <- fun(VPCs, vPC1, vPC2)
+pv <- fun(res.pca)
+print(pv)
 # plot docs and words side by side
 library(gridExtra)
 message("plotting PCA output...")
 grid.arrange(p,pv,nrow=1)
-return(list(kmeans = x4, PCA = res.pca))
+return(list(cluster = aggres1, kmeans = x4, PCA = res.pca))
 message("done")
 
 }

@@ -50,7 +50,7 @@ Here's one way to make use of this package:
 
 First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). No need to unzip, that's done by the package.
 
-Second, start `R` and run something like `unpack <- JSTOR_unpack()` and paste in the directory and zip file name when prompted. Then you'll get a data object `unpack`, containing 1-grams, 2-grams and bibliographic data.
+Second, start `R` and run something like `unpack <- JSTOR_unpack()` and watch the console for prompts to locate the zip file. Then you'll get a data object `unpack`, containing 1-grams, 2-grams and bibliographic data.
 
 Third, explore some visualisations of key words over time with `JSTOR_1word`, `JSTOR_2words`, `JSTOR_1bigram`, `JSTOR_2bigrams`, and correlations of words over time with `JSTOR_2wordcor` and `JSTOR_2bigramscor`
 
@@ -67,7 +67,7 @@ Eighth, identify the hot and cold topics in the corpus with `JSTOR_lda_hotncoldt
 
 Limitations and Disclaimer
 ----
-Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal or on one subject. It may be useful for other types of DfR archives, but has not yet been widely tested. Also, I am not a programmer, computer scientist, statistician, lawyer, etc. This is a work in progress and there is currently very little custom error handling (the more cryptic errors are usually due to a search for a word or bigram that does not exist in the archive). Use at your own risk, and fork and share as you like. 
+Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal or on one subject. It may be useful for other types of DfR archives, but has not yet been widely tested. Also, I am not a programmer, computer scientist, linguist, statistician, lawyer, etc. This is a work in progress and there is currently very little custom error handling (the more cryptic errors are usually due to a search for a word or bigram that does not exist in the archive). Use at your own risk, and fork and share as you like. 
 
 Acknowledgements
 ----
