@@ -29,9 +29,9 @@ dtm_subset_mat <- as.matrix(dtm_subset)
 
 # explore some clustering
 # inspect distribution of document lengths
-message("making a histogram of words per document...")
-hist(apply(dtm_subset_mat, 1, sum), xlab="Number of Terms in Term-Document Matrix",
-     main="Number of Words Per Document")
+# message("making a histogram of words per document...")
+# hist(apply(dtm_subset_mat, 1, sum), xlab="Number of Terms in Term-Document Matrix",
+#     main="Number of Words Per Document")
 # Because the lengths of our documents vary so wildly 
 #we may want to row-standardize our document matrix 
 # (divide each entry by the number of terms in that document).
@@ -80,11 +80,6 @@ print(ggdendrogram(dendr, rotate=TRUE))
 # print(p)
 
 
-
-
-#
-
-
 # k-means
 cl <- kmeans(input,           # Our input term document matrix
              centers=k,  # The number of clusters
@@ -92,49 +87,58 @@ cl <- kmeans(input,           # Our input term document matrix
 
 
 # get the top twenty words in each cluster, using the k-means output
-# from Brandon M. Stewart
+# modified from Brandon M. Stewart
 message("calculating top words per k-means cluster...")
-  for (i in 1:length(cl$withinss)) {
+x2 <- vector("list", k)
+x3 <- vector("list", 4)
+   for (i in 1:length(cl$withinss)) {
   #For each cluster, this defines the documents in that cluster
   inGroup <- which(cl$cluster==i)
   within <- dtm_subset[inGroup,]
   if(length(inGroup)==1) within <- t(as.matrix(within))
   out <- dtm_subset[-inGroup,]
   words <- apply(within,2,mean) - apply(out,2,mean) #Take the difference in means for each term
-  print(c("Cluster", i), quote=F)
+  names(x2)[i] <- paste0("Cluster_", i)
   labels <- order(words, decreasing=T)[1:20] #Take the top 20 Labels
-  print(names(words)[labels], quote=F) #From here down just labels
+  x2[[i]] <- paste0((names(words)[labels]) )#From here down just labels
   if(i==length(cl$withinss)) {
-    print("Cluster Membership")
-    print(table(cl$cluster))
-    print("Within cluster sum of squares by cluster")
-    print(cl$withinss)
+    x3[[1]] <- ("Cluster Membership")
+    x3[[2]] <- (table(cl$cluster))
+    x3[[3]] <- ("Within cluster sum of squares by cluster")
+    x3[[4]] <- (cl$withinss)
   }
+  x4 <- c(x2,x3)
 }
 
 
-PCA
-require(FactoMineR)
+
+# PCA
+require(FactoMineR,quietly = TRUE)
 res.pca <- PCA(input, graph = FALSE)
 # extract some parts for plotting
 PC1 <- res.pca$ind$coord[,1]
 PC2 <- res.pca$ind$coord[,2]
-labs <- rownames(res.pca$ind$coord)
+PClabs <- rownames(res.pca$ind$coord)
 PCs <- data.frame(cbind(PC1,PC2))
-rownames(PCs) <- gsub("[[:punct:]]", "", labs)
+rownames(PCs) <- PClabs #gsub("[[:punct:]]", "", labs)
 #
 # Just showing the individual samples...
 library(ggplot2)
-p <- ggplot(PCs, aes_string(PC1,PC2, label=rownames(PCs))) + 
+fun <- function(PCs, PClabs){
+p <- ggplot(PCs, aes(PC1,PC2, label=PClabs)) + 
   geom_text(size = 2) +
   theme(aspect.ratio=1) + theme_bw(base_size = 20)
+}
+p <- fun(PCs, PClabs)
+
+
 # Now extract variables
 #
 vPC1 <- res.pca$var$coord[,1]
 vPC2 <- res.pca$var$coord[,2]
 vlabs <- rownames(res.pca$var$coord)
 vPCs <- data.frame(cbind(vPC1,vPC2))
-rownames(vPCs) <- gsub("[[:punct:]]", "", vlabs)
+rownames(vPCs) <- vlabs  #gsub("[[:punct:]]", "", vlabs)
 colnames(vPCs) <- colnames(PCs)
 #
 # and plot them
@@ -148,13 +152,16 @@ pv <- pv + geom_path(aes(x, y), data = df, colour="grey70")
 #
 # add on arrows and variable labels
 library(grid)
-pv <- pv + geom_text(data=vPCs, aes_string(x=vPC1,y=vPC2,label=rownames(vPCs)), size=4) + xlab("PC1") + ylab("PC2") 
-pv <- pv + geom_segment(data=vPCs, aes_string(x = 0, y = 0, xend = vPC1*0.9, yend = vPC2*0.9), arrow = arrow(length = unit(1/2, 'picas')), color = "grey30")
-
+fun <- function(VPCs, vPC1, vPC2){
+pv <- pv + geom_text(data=vPCs, aes(x=vPC1,y=vPC2,label=rownames(vPCs)), size=4) + xlab("PC1") + ylab("PC2") 
+pv <- pv + geom_segment(data=vPCs, aes(x = 0, y = 0, xend = vPC1*0.9, yend = vPC2*0.9), arrow = arrow(length = unit(1/2, 'picas')), color = "grey30")
+}
+pv <- fun(VPCs, vPC1, vPC2)
 # plot docs and words side by side
 library(gridExtra)
 message("plotting PCA output...")
 grid.arrange(p,pv,nrow=1)
+return(list(kmeans = x4, PCA = res.pca))
 message("done")
 
 }
