@@ -47,6 +47,6 @@
 }
 \examples{
 ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 10, "pirates", topn = 100)
-## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, corlimit=0.6, plimit=0.001)
+## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, "marines", corlimit=0.6, plimit=0.001)
 }
 

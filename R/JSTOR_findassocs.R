@@ -12,7 +12,7 @@
 #' @return Returns a plot of the most frequent words per year range, with word size scaled to frequency, and a dataframe with words and counts for each year range
 #' @examples 
 #' ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 10, "pirates", topn = 100)
-#' ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, corlimit=0.6, plimit=0.001)
+#' ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, "marines", corlimit=0.6, plimit=0.001)
 
 
 JSTOR_findassocs <- function(x, corpus, word, n=5, corlimit=0.4, plimit=0.05, topn=20, biggest=5){
