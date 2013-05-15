@@ -22,9 +22,9 @@
   a proportion of all words in that document. This
   parameter corresponds to the summed proportions of a word
   in all documents (ie. the column sum for the document
-  term matrix). If f = 0.001 then only words that
-  constitute at least 0.1% of all words in all documents
-  will be used for the cluster analyses.}
+  term matrix). If f = 0.01 then only words that constitute
+  at least 1.0% of all words in all documents will be used
+  for the cluster analyses.}
 }
 \value{
   Returns plots of clusters of documents, and dataframes of
