@@ -65,7 +65,14 @@ for(i in 1:length(dtmlist)){
   x.cor <- rbind(x.cor, p)
   # make sorted dataframe with highest cor values at top
   x.cor1 <- data.frame(round(x.cor[, which(x.cor[1, ]  > corlimit & x.cor[2, ] < plimit)],4), row.names = c("r","p"))
-  wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn])
+  # deal with dtms where there is zero correlation
+  result <- try(wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn]));
+  ifelse(class(result) == "try-error",    
+    # pad out with zeros if there is zero cor
+    wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL),
+    # or get the cor and pvals if nonzero cor
+    wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn])                           
+   )
   }
 
 # combine list of dataframes into one big dataframe with word, freq and year-range
