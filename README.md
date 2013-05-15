@@ -74,7 +74,7 @@ Currently this package is intended for the exploration of a single journal archi
 
 Acknowledgements
 ----
-Many of the best ideas for these functions have come directly from the prolific and creative research of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. Comments throughout the code in this package indicate where code has been borrowed from these folks. None of them are responsible for the consequences of use of this package, no matter how awful, even if they arise from flaws in it (of course I take full responsibility for the flaws). 
+Many of the best ideas for these functions have come directly from the prolific and creative research and coding of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. None of them are responsible for the consequences of use of this package, no matter how awful, even if they arise from flaws in it (of course I take full responsibility for the flaws). 
   
   [dfr]:http://dfr.jstor.org/
   [SOrJava]:http://stackoverflow.com/a/7604469/1036500
