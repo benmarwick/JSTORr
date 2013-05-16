@@ -4,7 +4,7 @@
 #' @return Returns a list of three items. First is "wordcounts", a list of character vectors where each vector contains the words of one article,  second is 'bigrams', as for 'wordcounts' but with 2-grams instead of 1-grams, and third is 'bibliodata', a data frame of bibliographic information for all articles. 
 #' @examples 
 #' ## unpack <- JSTOR_unpack() # then follow prompts to navigate to the location of the zipfile
-#' ## unpack <- JSTOR_unpack() # as above
+
 
 
 
@@ -33,8 +33,19 @@ JSTOR_unpack <- function(){
   
   # Get the user to set R's working directory
   message("Select the folder to unzip into")
-  path <- setwd(choose.dir())
-  setwd(path)
+  # have to adapt to different OS for this  
+    if (.Platform['OS.type'] == "windows"){
+      # windows directory chooser
+      setwd( choose.dir() )
+    } else {
+      # linux directory chooser
+      require( tcltk )
+      setwd(tk_choose.dir())
+    }
+
+  
+  # both
+  path <- getwd()
   print(path)
   
   
@@ -62,7 +73,9 @@ JSTOR_unpack <- function(){
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
   # read CSV files into a R data object
   library(plyr)
-  aawc <-  llply(myfiles, read.csv, .progress = "text", .inform = FALSE)
+  # specify the options for read.csv for a ~4x speed up...
+  aawc <-  llply(myfiles, read.csv,  comment.char = "", as.is = TRUE, colClasses = c("character", "integer"), .progress = "text", .inform = FALSE)
+  
   # assign file names to each dataframe in the list
   names(aawc) <- myfiles
   message("done")
@@ -115,7 +128,7 @@ JSTOR_unpack <- function(){
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
   # read CSV files into a R data object
   library(plyr)
-  aawc2 <-  llply(myfiles, read.csv, .progress = "text", .inform = FALSE)
+  aawc2 <-  llply(myfiles, read.csv, comment.char = "", as.is = TRUE, colClasses = c("character", "integer"), .progress = "text", .inform = FALSE)
   # assign file names to each dataframe in the list
   names(aawc2) <- myfiles
   message("done")

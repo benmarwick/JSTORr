@@ -11,6 +11,7 @@
 #' @param biggest An integer to control the maximum size of the text in the plot
 #' @return Returns a plot of the most frequent words per year range, with word size scaled to frequency, and a dataframe with words and counts for each year range
 #' @examples 
+#' ## findassocs <- JSTOR_findassocs(unpack, corpus, "rouges")
 #' ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 10, "pirates", topn = 100)
 #' ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, "marines", corlimit=0.6, plimit=0.001)
 
