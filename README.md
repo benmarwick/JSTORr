@@ -70,7 +70,7 @@ Nineth, identify the hot and cold topics in the corpus with `JSTOR_lda_hotncoldt
 
 Limitations and Disclaimer
 ----
-Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal or on one subject. It may be useful for other types of DfR archives, but has not yet been widely tested. Also, I am not a programmer, computer scientist, linguist, statistician, lawyer, etc. This is a work in progress and there is currently very little custom error handling (the more cryptic errors are usually due to a search for a word or bigram that does not exist in the archive). Use at your own risk, and fork and share as you like. 
+Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal or on one subject. It may be useful for other types of DfR archives, but has not yet been widely tested. Also, I am not a programmer, computer scientist, linguist, statistician, lawyer, etc. This software is provided as-is, in the hope that it may be useful, but without any warranty or support, whatsoever. This is a work in progress and there is currently very little custom error handling (the more cryptic errors are usually due to a search for a word or bigram that does not exist in the archive). Use at your own risk, and fork and share as you like. 
 
 Acknowledgements
 ----

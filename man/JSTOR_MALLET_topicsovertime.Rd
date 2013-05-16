@@ -25,4 +25,8 @@
 \examples{
 ## tot <- JSTOR_MALLET_topicsovertime(x = unpack, topics = 1:100)
 }
+\author{
+  Ben Marwick with substantial contributions from Andrew
+  Goldstone
+}
 
