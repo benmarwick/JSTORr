@@ -46,6 +46,7 @@
   JSTOR_removestopwords function.
 }
 \examples{
+## findassocs <- JSTOR_findassocs(unpack, corpus, "rouges")
 ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 10, "pirates", topn = 100)
 ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, "marines", corlimit=0.6, plimit=0.001)
 }

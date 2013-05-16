@@ -25,6 +25,5 @@
 }
 \examples{
 ## unpack <- JSTOR_unpack() # then follow prompts to navigate to the location of the zipfile
-## unpack <- JSTOR_unpack() # as above
 }
 
