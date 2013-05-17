@@ -27,7 +27,8 @@ Depends:
     ggdendro,
     FactoMineR,
     gridExtra,
-    grid
+    grid,
+    data.table
 Imports:
     ggplot2,
     reshape2,
@@ -44,7 +45,8 @@ Imports:
     ggdendro,
     FactoMineR,
     gridExtra,
-    grid
+    grid,
+    data.table
 Collate:
     'JSTOR_1word.R'
     'JSTOR_2wordcor.R'

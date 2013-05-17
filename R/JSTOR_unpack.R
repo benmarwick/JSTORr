@@ -75,7 +75,7 @@ JSTOR_unpack <- function(){
   # fread is 10x faster than read.csv...
   aawc <-  plyr::llply(myfiles, data.table::fread, .progress = "text", .inform = FALSE)
 
-  aawc <- 
+  
   # assign file names to each dataframe in the list
   names(aawc) <- myfiles
   message("done")
