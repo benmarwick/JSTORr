@@ -87,10 +87,12 @@ wordcor1$years <- unlist(lapply(1:length(dtmlist), function(i) rep(names(dtmlist
 require(ggplot2)
 suppressWarnings(print(
   ggplot(wordcor1, aes(factor(years), r)) + 
-        geom_text(aes(label = word, size = r, alpha = r), position=position_jitter(h=0.1,w=0.2)) +
+        geom_text(aes(label = word, size = r, alpha = r), position=position_jitter(h=0.1,w=0.2), subset = .(r > 0)) +
         scale_size(range = c(3, biggest), name = paste0("Correlation value with the word '", word, "'")) +
         scale_alpha(range=c(0.5,1), limits=c(min(wordcor1$r), max(wordcor1$r)), guide = 'none') + 
         xlab("Year range") +
+    # inspect bibliodata$year to see min and max year to set axis limits
+    scale_x_discrete(limits=c(unique(wordcor1$years)), breaks = c(unique(wordcor1$years))) +
         ylab(paste0("Pearson correlation with '", word, "'"))  +
         ylim(0,1)  +
     theme(
