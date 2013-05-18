@@ -88,7 +88,7 @@ JSTOR_unpack <- function(){
   names(aawc1) <- myfiles
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
-  aawc1 <- plyr:llply(aawc1, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
+  aawc1 <- plyr::llply(aawc1, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
   message("done")
   
   #### bring in citations file with biblio data for each paper
