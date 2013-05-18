@@ -73,7 +73,8 @@ JSTOR_unpack <- function(){
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
   # read CSV files into a R data object
   # fread is 10x faster than read.csv...
-  aawc <-  plyr::llply(myfiles, data.table::fread, .progress = "text", .inform = FALSE)
+  aawc <-  plyr::llply(myfiles, data.table::fread, sep = ",",                    
+                       stringsAsFactors=FALSE, .progress = "text", .inform = FALSE)
   
 
   # assign file names to each dataframe in the list
@@ -127,7 +128,8 @@ JSTOR_unpack <- function(){
   message("reading the 2-grams into R...")
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
   # read CSV files into a R data object
-  aawc2 <-  plyr::llply(myfiles, data.table::fread,  .progress = "text", .inform = FALSE)
+  aawc2 <-  plyr::llply(myfiles, data.table::fread,  sep = ",",                    
+                        stringsAsFactors=FALSE, .progress = "text", .inform = FALSE)
   # assign file names to each dataframe in the list
   names(aawc2) <- myfiles
   message("done")
