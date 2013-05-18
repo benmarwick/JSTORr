@@ -74,8 +74,8 @@ JSTOR_unpack <- function(){
   # read CSV files into a R data object
   # fread is 10x faster than read.csv...
   aawc <-  plyr::llply(myfiles, data.table::fread, .progress = "text", .inform = FALSE)
-
   
+
   # assign file names to each dataframe in the list
   names(aawc) <- myfiles
   message("done")
@@ -87,7 +87,7 @@ JSTOR_unpack <- function(){
   names(aawc1) <- myfiles
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
-  aawc1 <- lapply(aawc1, function(i) sample(i, length(i)))
+  aawc1 <- plyr:llply(aawc1, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
   message("done")
   
   #### bring in citations file with biblio data for each paper
@@ -139,7 +139,7 @@ JSTOR_unpack <- function(){
   names(aawc2) <- myfiles
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
-  aawc2 <- lapply(aawc2, function(i) sample(i, length(i)))
+  aawc2 <- plyr::llply(aawc2, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
   message("done")
   
   #### bring in citations file with biblio data for each paper
