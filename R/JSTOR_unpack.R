@@ -1,6 +1,7 @@
 #' Unpack JSTOR journal articles and bibliographic data 
 #' 
 #' @description Unzip, import and reshape journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). Function prompts for full path name of the directory containing the zip file obtained from JSTOR's Data for Research tool and for the name of the zip file obtained from JSTOR's Data for Research tool (include the zip file suffix)
+#' @param parallel if TRUE, apply function in parallel, using the parallel library
 #' @return Returns a list of three items. First is "wordcounts", a list of character vectors where each vector contains the words of one article,  second is 'bigrams', as for 'wordcounts' but with 2-grams instead of 1-grams, and third is 'bibliodata', a data frame of bibliographic information for all articles. 
 #' @examples 
 #' ## unpack <- JSTOR_unpack() # then follow prompts to navigate to the location of the zipfile
@@ -8,7 +9,7 @@
 
 
 
-JSTOR_unpack <- function(){
+JSTOR_unpack <- function(parallel=TRUE){
   #### get data into the R session 
   # Andrew Goldstone's method: get the user to choose the file
   
@@ -17,18 +18,6 @@ JSTOR_unpack <- function(){
   zipfile <- file.choose()
   print(zipfile)
   
-#  # get user to paste in the path to the zipfile (don't like this method anymore)
-  
-#   # from  http://r.789695.n4.nabble.com/url-prep-function-backslash-issue-tp3778530p3779086.html
-#   message("please paste in the path to the zip file (no quotes needed):")
-#   oldstring1 <- readline() 
-#   path <- chartr("\\", "/", oldstring1) 
-#   
-#   # get user to paste in the name of the zipfile
-#   
-#   message("please paste in the name of the zip file (no quotes needed):")
-#   oldstring2 <- readline() 
-#   zipfile <- oldstring2
   
   
   # Get the user to set R's working directory
@@ -71,10 +60,12 @@ JSTOR_unpack <- function(){
   #### get list of data, the CSV files of wordcounts in dropbox folder
   message("reading 1-grams into R...")
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
-  # read CSV files into a R data object
+  # read CSV files into a R data.table object
   # fread is 10x faster than read.csv...
-  aawc <-  plyr::llply(myfiles, data.table::fread, sep = ",",                    
-                       stringsAsFactors=FALSE, .progress = "text", .inform = FALSE)
+  library(data.table)
+  library(plyr)
+  read_csv2dt <- function(x) data.table(fread(x, sep = ",", stringsAsFactors=FALSE))
+  aawc <-  llply(myfiles, read_csv2dt, .progress = "text", .inform = FALSE)
   
 
   # assign file names to each dataframe in the list
@@ -83,12 +74,38 @@ JSTOR_unpack <- function(){
   
   #### reshape data
   message("reshaping the 1-grams...")
+  if(parallel) {
+    
+    # do in parallel
+    library(parallel)
+    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
+    
+    clusterExport(cl=cl, varlist=c("aawc"), envir=environment())
+    # `untable' each CSV file into a list of data frames, one data frame per file
+    aawc1 <- parLapply(cl, aawc, function(x) {rep(x$WORDCOUNTS, times = x$WEIGHT)})
+    names(aawc1) <- names(myfiles)
+    stopCluster(cl); rm("aawc"); rm(cl)
+    
+    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
+    clusterExport(cl=cl, varlist=c("aawc1"), envir=environment())
+    # go through each item of the list and randomise the order of the words
+    # so they are not in alpha order (which distorts the topic modelling)
+    aawc1 <- parLapply(cl, aawc1, function(i) sample(i, length(i)))
+    stopCluster(cl)
+    names(aawc1) <- myfiles
+    
+  } else { 
+  
+  # do not do in parallel
   # `untable' each CSV file into a list of data frames, one data frame per file
-  aawc1 <- sapply(1:length(aawc), function(x) {rep(aawc[[x]]$WORDCOUNTS, times = aawc[[x]]$WEIGHT)})
+  aawc1 <- llply(aawc, function(x) {rep(x$WORDCOUNTS, times = x$WEIGHT)}, .progress = "text", .inform = FALSE)
   names(aawc1) <- myfiles
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
-  aawc1 <- plyr::llply(aawc1, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
+  aawc1 <- llply(aawc1, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
+
+  }
+  
   message("done")
   
   #### bring in citations file with biblio data for each paper
@@ -127,22 +144,45 @@ JSTOR_unpack <- function(){
   #### get list of data, the CSV files of bigrams in dropbox folder
   message("reading the 2-grams into R...")
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
-  # read CSV files into a R data object
-  aawc2 <-  plyr::llply(myfiles, data.table::fread,  sep = ",",                    
-                        stringsAsFactors=FALSE, .progress = "text", .inform = FALSE)
+  # read CSV files into a R data.table object
+  # fread is 10x faster than read.csv...
+  aawc2 <- llply(myfiles, read_csv2dt, .progress = "text", .inform = FALSE)
   # assign file names to each dataframe in the list
   names(aawc2) <- myfiles
   message("done")
   
   #### reshape data
   message("reshaping the 2-grams...")
+  if(parallel) {
+    
+    library(parallel)
+    
+    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))    
+    clusterExport(cl=cl, varlist=c("aawc2"), envir=environment())    
+    # `untable' each CSV file into a list of data frames, one data frame per file
+    aawc2 <- parLapply(cl,  aawc2, function(x) {rep(x$BIGRAMS, times = x$WEIGHT)})
+    stopCluster(cl)
+    names(aawc2) <- myfiles
+    
+    
+    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))  
+    clusterExport(cl=cl, varlist=c("aawc2"), envir=environment())   
+    # go through each item of the list and randomise the order of the words
+    # so they are not in alpha order (which distorts the topic modelling
+    # if the docs are broken into chunks later on)
+    aawc2 <- parLapply(cl, aawc2, function(i) sample(i, length(i)))
+    stopCluster(cl)
+    message("done")
+    
+  } else { 
   # `untable' each CSV file into a list of data frames, one data frame per file
-  aawc2 <- sapply(1:length(aawc2), function(x) {rep(aawc2[[x]]$BIGRAMS, times = aawc2[[x]]$WEIGHT)})
+  aawc2 <- lapply(aawc2, function(x) {rep(x$BIGRAMS, times = x$WEIGHT)})
   names(aawc2) <- myfiles
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
-  aawc2 <- plyr::llply(aawc2, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
+  aawc2 <- llply(aawc2, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
   message("done")
+  }
   
   #### bring in citations file with biblio data for each paper
   message("reshaping bibliographics data...")

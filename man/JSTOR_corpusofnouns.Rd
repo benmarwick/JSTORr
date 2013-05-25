@@ -2,10 +2,13 @@
 \alias{JSTOR_corpusofnouns}
 \title{Build corpus and remove all words except non-name nouns}
 \usage{
-  JSTOR_corpusofnouns(x)
+  JSTOR_corpusofnouns(x, parallel = TRUE)
 }
 \arguments{
   \item{x}{object returned by the function JSTOR_unpack.}
+
+  \item{parallel}{if TRUE, apply function in parallel,
+  using the parallel library}
 }
 \value{
   Returns a corpus containing documents, ready for more
@@ -21,9 +24,17 @@
   (http://dfr.jstor.org/). This function uses the stoplist
   in the tm package. The location of tm's English stopwords
   list can be found by entering this at the R prompt:
-  paste0(.libPaths()[1], "/tm/stopwords/english.dat")
+  paste0(.libPaths()[1], "/tm/stopwords/english.dat") Note
+  that the part-of-speech tagging can result in the removal
+  of words of interest. To prevent the POS tagger from
+  removing these words, edit the tagdict file and add the
+  word(s) with a NN tag. To find the tagdict file, enter
+  this at the R prompt: at the R prompt:
+  paste0(.libPaths()[1],
+  "/openNLPmodels.en/models/parser/tagdict") and edit with
+  a text editor.
 }
 \examples{
-## mycorpus <- JSTOR_corpusofnouns(unpack)
+## mycorpus <- JSTOR_corpusofnouns(unpack, parallel = TRUE)
 }
 

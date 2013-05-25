@@ -2,7 +2,11 @@
 \alias{JSTOR_unpack}
 \title{Unpack JSTOR journal articles and bibliographic data}
 \usage{
-  JSTOR_unpack()
+  JSTOR_unpack(parallel = TRUE)
+}
+\arguments{
+  \item{parallel}{if TRUE, apply function in parallel,
+  using the parallel library}
 }
 \value{
   Returns a list of three items. First is "wordcounts", a
