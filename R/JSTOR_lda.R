@@ -22,8 +22,26 @@ JSTOR_lda <- function(x, corpus, K, alpha = 50/K){
   
 library(tm) # needed to convert corpus to dtm
 library(lda)
-library(topicmodels) # needed for dtm2ldaformat function
+
 message("converting corpus to document term matrix and then to doclines format...")
+  # this dtm2ldaformat function is copied directly from the topicmodels library to avoid loading that library
+  # and the GNU Scientific Library for Linux...
+  dtm2ldaformat <-  function (x, omit_empty = TRUE) 
+  {
+    split.matrix <- function(x, f, drop = FALSE, ...) lapply(split(seq_len(ncol(x)), 
+                                                                   f, drop = drop, ...), function(ind) x[, ind, drop = FALSE])
+    documents <- vector(mode = "list", length = nrow(x))
+    names(documents) <- rownames(x)
+    documents[row_sums(x) > 0] <- split(rbind(as.integer(x$j) - 
+                                                1L, as.integer(x$v)), as.integer(x$i))
+    if (omit_empty) 
+      documents[row_sums(x) == 0] <- NULL
+    else documents[row_sums(x) == 0] <- rep(list(matrix(integer(), 
+                                                        ncol = 0, nrow = 2)), sum(row_sums(x) == 0))
+    list(documents = documents, vocab = colnames(x))
+  }
+  
+  
 dtm <- DocumentTermMatrix(corpus)
 message("done")
 ldafmt <- dtm2ldaformat(dtm)

@@ -23,11 +23,13 @@ JSTOR_findassocs <- function(x, corpus, word, n=5, corlimit=0.4, plimit=0.05, to
   
 require(tm)
 # convert corpus to dtm, keep words that occur in 5 or more docs
+# this is quite slow...
 dtm <- DocumentTermMatrix(corpus, control = list(bounds = list(global = c(5,Inf))))
 # put year and title fragment as document names
 # get first five words of title (without any punctuation marks)
-titlefrag <- lapply(1:nrow(bibliodata), function(i) paste(unlist(strsplit(as.character(gsub('[[:punct:]]','', bibliodata$doi)[i]), " "))[1:5], collapse = "."))
-dtm$dimnames$Docs <- paste0(bibliodata$year, "_", titlefrag)
+# # also rather slow... don't actually need this here
+# titlefrag <- lapply(1:nrow(bibliodata), function(i) paste(unlist(strsplit(as.character(gsub('[[:punct:]]','', bibliodata$doi)[i]), " "))[1:5], collapse = "."))
+# dtm$dimnames$Docs <- paste0(bibliodata$year, "_", titlefrag)
 
 bibliodata$year <- as.numeric(as.character(bibliodata$year))
 uniqueyears <- sort(unique(bibliodata$year))
@@ -39,11 +41,14 @@ years <- split(uniqueyears, ceiling(xx/as.numeric(n)))
 # create list of dtms by subsetting the full dtm into seperate
 # dtms of documents where publication year matches the chunks
 # of years
-dtmlist <- vector("list", length = length(years))
-for(i in 1:length(years)){
-  dtmlist[[i]] <- dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(years[i]))]
-}
-  
+# dtmlist <- vector("list", length = length(years))
+#   for(i in 1:length(years)){
+#   dtmlist[[i]] <- dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(years[i]))]
+# }
+
+list_dtms <- function(x) dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(x))]
+dtmlist <- lapply(years,  list_dtms) 
+
   
 # dtmlist <- lapply(1:length(years), function(i) dtm1[[i]] <- dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(years[i]))])
 # put names on the list of dtm so we can see the years represented by each dtm
@@ -51,29 +56,48 @@ names(dtmlist) <- lapply(years, function(i) paste0(min(i),"_",max(i) ))
 # Here's the heavy lifting...
 # find most correlation and p-value between the keyword and all other words in the chunk
 wordcor <- vector("list", length = length(dtmlist))
-for(i in 1:length(dtmlist)){
-  x <- dtmlist[[i]]
-  ind <- word == Terms(x)
+for(i in 1:length(dtmlist)){ 
+  j <- dtmlist[[i]]
+  ind <- word == Terms(j)
   # get Pearson correlation values
-  suppressWarnings(x.cor <- cor(as.matrix(x[, ind]), as.matrix(x[, !ind])))
+  suppressWarnings(x.cor <- cor(as.matrix(j[, ind]), as.matrix(j[, !ind])))
   # get p-values for correlation: http://r.789695.n4.nabble.com/Very-slow-using-double-apply-and-cor-test-to-compute-correlation-p-values-for-2-matrices-tp871312p871316.html
   # massively faster than using cor.test with lapply...
   r  <- x.cor
-  df <- nrow(as.matrix(x[, !ind])) - 2 
+  df <- nrow(as.matrix(j[, !ind])) - 2 
   t <- sqrt(df) * r / sqrt(1 - r ^ 2) 
   p <- pt(t, df) 
   p <- 2 * pmin(p, 1 - p) 
   x.cor <- rbind(x.cor, p)
   # make sorted dataframe with highest cor values at top
-  x.cor1 <- data.frame(round(x.cor[, which(x.cor[1, ]  > corlimit & x.cor[2, ] < plimit)],4), row.names = c("r","p"))
-  # deal with dtms where there is zero correlation
-  result <- try(wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn]));
-  ifelse(class(result) == "try-error",    
-    # pad out with zeros if there is zero cor
-    wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL),
-    # or get the cor and pvals if nonzero cor
-    wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn])                           
+   # if only one word is returned, count it as no words
+   ifelse(
+     # if there are no words that correlate
+     nrow(x.cor) == 0, # test
+     # make df of zeros
+     wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL), # test true
+     # if there are one or more words that correlate
+    ifelse( # if test false
+      # if just one word...
+      ncol(data.frame(round(x.cor[, which(x.cor[1, ]  > corlimit & x.cor[2, ] < plimit)],4), row.names = c("r","p"))) == 1,  # test
+      # or just one word in the dtm has a cor value, then skip that dtm with a df of zeros
+      wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL), # test true
+      # otherwise get the two or more words that have cor values
+      x.cor1 <- data.frame(round(x.cor[, which(x.cor[1, ]  > corlimit & x.cor[2, ] < plimit)],4), row.names = c("r","p"))) # test false
    )
+  # deal with dtms where there is zero correlation
+ifelse(
+  # if there are no words that correlate at all, then...
+  nrow(x.cor) == 0, # test
+  # pad out with zeros 
+  wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL), # if true
+  # otherwise test to see if correlation is non-zero
+  ifelse(class(try(wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn]))) == "try-error",  # test
+    # pad out with zeros if there is zero cor
+    wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL), # test true
+    # or get the cor and pvals if nonzero cor
+    wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn]) # test false                         
+   ))
   }
 
 # combine list of dataframes into one big dataframe with word, freq and year-range

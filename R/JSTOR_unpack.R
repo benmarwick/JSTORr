@@ -74,25 +74,28 @@ JSTOR_unpack <- function(parallel=TRUE){
   
   #### reshape data
   message("reshaping the 1-grams...")
+  untable <- function(x) rep(x$WORDCOUNTS, times = x$WEIGHT)
   if(parallel) {
     
     # do in parallel
     library(parallel)
-    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
+    library(snowfall)
+    sfInit( parallel=TRUE, cpus=detectCores() )
+    sfExport( 'aawc', 'untable' )
     
-    clusterExport(cl=cl, varlist=c("aawc"), envir=environment())
     # `untable' each CSV file into a list of data frames, one data frame per file
-    aawc1 <- parLapply(cl, aawc, function(x) {rep(x$WORDCOUNTS, times = x$WEIGHT)})
+    aawc1 <- sfClusterApplyLB(aawc, untable)
     names(aawc1) <- names(myfiles)
-    stopCluster(cl); rm("aawc"); rm(cl)
+    sfStop(); rm("aawc"); invisible(gc(verbose = FALSE))
     
-    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
-    clusterExport(cl=cl, varlist=c("aawc1"), envir=environment())
+    sfInit( parallel=TRUE, cpus=detectCores() )
+    sfExport( 'aawc1')
     # go through each item of the list and randomise the order of the words
     # so they are not in alpha order (which distorts the topic modelling)
-    aawc1 <- parLapply(cl, aawc1, function(i) sample(i, length(i)))
-    stopCluster(cl)
+    aawc1 <- sfClusterApplyLB(aawc1, function(i) sample(i, length(i)))
+    sfStop()
     names(aawc1) <- myfiles
+    invisible(gc(verbose = FALSE))
     
   } else { 
   
@@ -100,10 +103,12 @@ JSTOR_unpack <- function(parallel=TRUE){
   # `untable' each CSV file into a list of data frames, one data frame per file
   aawc1 <- llply(aawc, function(x) {rep(x$WORDCOUNTS, times = x$WEIGHT)}, .progress = "text", .inform = FALSE)
   names(aawc1) <- myfiles
+  invisible(gc(verbose = FALSE))
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
   aawc1 <- llply(aawc1, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
-
+  names(aawc1) <- myfiles
+  invisible(gc(verbose = FALSE))
   }
   
   message("done")
@@ -156,31 +161,37 @@ JSTOR_unpack <- function(parallel=TRUE){
   if(parallel) {
     
     library(parallel)
+    library(snowfall)
     
-    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))    
-    clusterExport(cl=cl, varlist=c("aawc2"), envir=environment())    
+    sfInit( parallel=TRUE, cpus=detectCores() )
+    sfExport( 'aawc2')   
     # `untable' each CSV file into a list of data frames, one data frame per file
-    aawc2 <- parLapply(cl,  aawc2, function(x) {rep(x$BIGRAMS, times = x$WEIGHT)})
-    stopCluster(cl)
+    aawc2 <- sfClusterApplyLB(aawc2, function(x) {rep(x$BIGRAMS, times = x$WEIGHT)})
+    sfStop()
     names(aawc2) <- myfiles
+    invisible(gc(verbose = FALSE))    
     
-    
-    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))  
-    clusterExport(cl=cl, varlist=c("aawc2"), envir=environment())   
+    sfInit( parallel=TRUE, cpus=detectCores() )
+    sfExport( 'aawc2')  
     # go through each item of the list and randomise the order of the words
     # so they are not in alpha order (which distorts the topic modelling
     # if the docs are broken into chunks later on)
-    aawc2 <- parLapply(cl, aawc2, function(i) sample(i, length(i)))
-    stopCluster(cl)
+    aawc2 <- sfClusterApplyLB(aawc2, function(i) sample(i, length(i)))
+    sfStop()
+    names(aawc2) <- myfiles
+    invisible(gc(verbose = FALSE))
     message("done")
     
   } else { 
   # `untable' each CSV file into a list of data frames, one data frame per file
-  aawc2 <- lapply(aawc2, function(x) {rep(x$BIGRAMS, times = x$WEIGHT)})
+  aawc2 <- llply(aawc2, function(x) {rep(x$BIGRAMS, times = x$WEIGHT)}, .progress = "text", .inform = FALSE)
   names(aawc2) <- myfiles
+  invisible(gc(verbose = FALSE))
   # go through each item of the list and randomise the order of the words
   # so they are not in alpha order (which distorts the topic modelling)
   aawc2 <- llply(aawc2, function(i) sample(i, length(i)), .progress = "text", .inform = FALSE)
+  names(aawc2) <- myfiles
+  invisible(gc(verbose = FALSE))
   message("done")
   }
   
@@ -215,7 +226,7 @@ JSTOR_unpack <- function(parallel=TRUE){
   bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]+{4}")
   # now we have a table of citations with a unique ID for each article
   # that is linked to the year of publication. We can come back to this
-  invisible(gc())
+  invisible(gc(verbose = FALSE))
   message("done")
   return(list("wordcounts" = wordcounts, "bigrams" = bigrams, "bibliodata" = bibliodata))
  
