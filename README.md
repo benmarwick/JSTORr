@@ -54,11 +54,11 @@ Here's one way to make use of this package:
 
 First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: `unzip("2013.6.4.usytW8LZ.zip")`).
 
-Second, start `R` and run something like `unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")`, change the path value to suit your system and watch the console progress bars. Then you'll get a data object `unpack1grams`, containing a document term matrix of 1-grams and a data frame of bibliographic data.
+Second, start `RStudio` and run something like `unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")`, change the path value to suit your system and watch the console progress bars. Then you'll get a data object `unpack1grams`, containing a document term matrix of 1-grams and a data frame of bibliographic data.
 
 Third, explore some visualisations of key words over time with `JSTOR_1word`, `JSTOR_2words`, and correlations of words over time with `JSTOR_2wordcor`.
 
-Fourth, use the `JSTOR_dtmofnouns` function to create a document term matrix of nouns only, then investigate the most frequent words over time with `JSTOR_freqwords` and analyse correlations over time of all words with a word of interest with `JSTOR_findassocs`. To optimise the output from this function it will be necessary to add words to the stop word list repeat these functions a few times until the results look reasonable. See the documentation for those functions for instructions on how to edit the stop word list.
+Fourth, run `nouns <- JSTOR_dtmofnouns(unpack1grams)` to create a document term matrix of nouns only, then investigate the most frequent words over time with `JSTOR_freqwords` and analyse correlations over time of all words with a word of interest with `JSTOR_findassocs`. To optimise the output from this function you must add words to the stop word list and then repeat these functions a few times until the results look reasonable. See the documentation for those functions for instructions on how to edit the stop word list.
 
 Fifth, explore document clusters using `JSTOR_clusterbywords` to calculate Affinity Propagation Clustering, K-means Clustering and Principal Components Analysis on a document term matrix.
 
@@ -74,7 +74,7 @@ Currently this package is intended for the exploration of a single journal archi
 
 Acknowledgements
 ----
-Many of the best ideas for these functions have come directly from the prolific and creative research and coding of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. None of them are responsible for the consequences of use of this package, no matter how awful, even if they arise from flaws in it (of course I take full responsibility for the flaws). 
+Many of the best ideas for these functions have come directly from the prolific and creative research and coding of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. None of them are responsible for the consequences of use of this package, no matter how awful, even if they arise from flaws in it (of course I take full responsibility for the flaws). Thanks to Ian Kretzler and Jiun-Yu Liu and Joss Whittaker for intensive testing and many useful suggestions.
   
   [dfr]:http://dfr.jstor.org/
   [SOrJava]:http://stackoverflow.com/a/7604469/1036500
