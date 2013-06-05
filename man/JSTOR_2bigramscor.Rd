@@ -2,10 +2,11 @@
 \alias{JSTOR_2bigramscor}
 \title{Plot the change over time of the correlation between one bigram (or set of bigrams) and another bigram (or set of bigrams) in a JSTOR DfR dataset}
 \usage{
-  JSTOR_2bigramscor(x, bigram1, bigram2, span = 0.4)
+  JSTOR_2bigramscor(unpack2, bigram1, bigram2, span = 0.4)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
+  \item{unpack2}{object returned by the function
+  JSTOR_unpack2.}
 
   \item{bigram1}{One bigram or a vector of bigrams, each
   bigram surrounded by standard quote marks.}
@@ -33,7 +34,7 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-## JSTOR_2bigramscor(dat1, bigram1 = "hot water", bigram2 = "cold water"))
-## JSTOR_2bigramscor(dat1, c("hot water", "warm water", "tepid water"), c("cold water", "ice water"))
+## JSTOR_2bigramscor(unpack2, bigram1 = "hot water", bigram2 = "cold water")
+## JSTOR_2bigramscor(unpack2, c("hot water", "warm water", "tepid water"), c("cold water", "ice water"))
 }
 

@@ -1,19 +1,22 @@
-#' Build corpus and remove all words except non-name nouns
+#' Remove all words except non-name nouns
 #' 
 #' @description This function does part-of-speech tagging and removes all parts of speech that are not non-name nouns. It also removes punctuation, numbers, words with less than three characters, stopwords and unusual characters (characters not in ISO-8859-1, ie non-latin1-ASCII). For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). This function uses the stoplist in the tm package. The location of tm's English stopwords list can be found by entering this at the R prompt: paste0(.libPaths()[1], "/tm/stopwords/english.dat") Note that the part-of-speech tagging can result in the removal of words of interest. To prevent the POS tagger from removing these words, edit the tagdict file and add the word(s) with a NN tag. To find the tagdict file, enter this at the R prompt: at the R prompt: paste0(.libPaths()[1], "/openNLPmodels.en/models/parser/tagdict") and edit with a text editor.
 #' @param x object returned by the function JSTOR_unpack.
 #' @param parallel if TRUE, apply function in parallel, using the parallel library
-#' @return Returns a corpus containing documents, ready for more advanced text mining and topic modelling.  
+#' @return Returns a Document Term Matrix containing documents, ready for more advanced text mining and topic modelling.  
 #' @examples 
-#' ## mycorpus <- JSTOR_corpusofnouns(unpack, parallel = TRUE) 
+#' ## nouns <- JSTOR_corpusofnouns(unpack, parallel = TRUE) 
 
 
 
 
-JSTOR_corpusofnouns <- function(x, parallel=TRUE){
+JSTOR_corpusofnouns <- function(x, parallel=FALSE){
 
 wordcounts <- x$wordcounts
-# bibliodata <- x$bibliodata
+
+  
+# Full-text method
+bibliodata <- x$bibliodata
 library(tm)
 message("converting vectors to a corpus...")
 mycorpus <-  Corpus(VectorSource(wordcounts))
@@ -192,6 +195,8 @@ message("done")
 message("converting vectors back into a corpus...")
 mycorpus <- Corpus(VectorSource(mycorpus.noun.strings))
 names(mycorpus) <- names(wordcounts)
+
+
 # clean up
 invisible(gc())
 message("all done")

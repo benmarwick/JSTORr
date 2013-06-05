@@ -2,10 +2,11 @@
 \alias{JSTOR_1bigram}
 \title{Plot the frequency of one word over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_1bigram(x, bigram, span = 0.4)
+  JSTOR_1bigram(unpack2, bigram, span = 0.4)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
+  \item{unpack2}{object returned by the function
+  JSTOR_unpack.}
 
   \item{bigram}{two words, surrounded by standard quote
   marks, or a vector of bigrams.}
@@ -26,7 +27,7 @@
   Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-## JSTOR_1bigram(unpack, "pirate booty")
-## JSTOR_1bigram(unpack, c("treasure chest", "musket balls", "jolly roger"), span = 0.7)
+## JSTOR_1bigram(unpack2, "pirate booty")
+## JSTOR_1bigram(unpack2, c("treasure chest", "musket balls", "jolly roger"), span = 0.7)
 }
 

@@ -2,13 +2,14 @@
 \alias{JSTOR_lda}
 \title{Generate a topic model with K topics using the implementation of Latent Dirichlet allocation (LDA) in the lda package}
 \usage{
-  JSTOR_lda(x, corpus, K, alpha = 50/K)
+  JSTOR_lda(unpack1grams, nouns, K, alpha = 50/K)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
+  \item{unpack1grams}{object returned by the function
+  JSTOR_unpack1grams.}
 
-  \item{corpus}{the object returned by the function
-  JSTOR_corpusofnouns. A corpus containing the documents.}
+  \item{nouns}{the object returned by the function
+  JSTOR_dtmtonouns.}
 
   \item{K}{the number of topics that the model should
   contain}
@@ -29,6 +30,6 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-## lda1 <- JSTOR_lda(x = unpacked, corpus = corpus, K = 150)
+## lda1 <- JSTOR_lda(unpack1grams, nouns, K = 150)
 }
 

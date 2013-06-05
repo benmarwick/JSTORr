@@ -1,133 +1,227 @@
 #' Plot the words with the strongest correlation with a given word, by time intervals
 #' 
 #' @description Generates a plot of the top n words in all the documents in ranges of years that positively correlate with a given word. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). For best results, repeat the function several times after adding common words to the stopword list and excluding them using the JSTOR_removestopwords function.
-#' @param x object returned by the function JSTOR_unpack.
-#' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
+#' @param unpack1grams object returned by the function JSTOR_unpack1grams.
+#' @param nouns the object returned by the function JSTOR_dtmofnouns. A Document Term Matrix containing the documents.
 #' @param n the number years to aggregate documents by. For example, n = 5 (the default value) will create groups of all documents published in non-overlapping five year ranges.
 #' @param word The word to calculate the correlations with
 #' @param corlimit The lower threshold value of the Pearson correlation statistic (default is 0.4).
 #' @param plimit The lower threshold value of the Pearson correlation statistic (default is 0.05).
 #' @param topn An integer for the number of top ranking words to plot. For example, topn = 20 (the default value) will plot the top 20 words for each range of years.
 #' @param biggest An integer to control the maximum size of the text in the plot
+#' @param parallel logical.  If TRUE attempts to run the function on multiple 
+#' cores.  Note that this may actually be slower if you have one core, limited memory or if 
+#' the data set is small due to communication of data between the cores.
 #' @return Returns a plot of the most frequent words per year range, with word size scaled to frequency, and a dataframe with words and counts for each year range
 #' @examples 
-#' ## findassocs <- JSTOR_findassocs(unpack, corpus, "rouges")
-#' ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 10, "pirates", topn = 100)
-#' ## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, "marines", corlimit=0.6, plimit=0.001)
+#' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, "rouges")
+#' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, n = 10, "pirates", topn = 100)
+#' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, n = 5, "marines", corlimit=0.6, plimit=0.001)
 
 
-JSTOR_findassocs <- function(x, corpus, word, n=5, corlimit=0.4, plimit=0.05, topn=20, biggest=5){
-
+JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimit=0.05, topn=20, biggest=5, parallel=FALSE){
+  
+  # alert if word is not present
+  if ( length( nouns[, dimnames(nouns)$Terms == word ]$dimnames$Terms) == 0  )  {
+    stop("This word is not present in the document term matrix, so this function cannot be completed") 
+  } else {
+  
+  
   # get bibliodata ready
-  bibliodata <- x$bibliodata
+  bibliodata <- unpack1grams$bibliodata
+
+  bibliodata$year <- as.numeric(as.character(bibliodata$year))
+  uniqueyears <- sort(unique(bibliodata$year))
   
-require(tm)
-# convert corpus to dtm, keep words that occur in 5 or more docs
-# this is quite slow...
-dtm <- DocumentTermMatrix(corpus, control = list(bounds = list(global = c(5,Inf))))
-# put year and title fragment as document names
-# get first five words of title (without any punctuation marks)
-# # also rather slow... don't actually need this here
-# titlefrag <- lapply(1:nrow(bibliodata), function(i) paste(unlist(strsplit(as.character(gsub('[[:punct:]]','', bibliodata$doi)[i]), " "))[1:5], collapse = "."))
-# dtm$dimnames$Docs <- paste0(bibliodata$year, "_", titlefrag)
-
-bibliodata$year <- as.numeric(as.character(bibliodata$year))
-uniqueyears <- sort(unique(bibliodata$year))
-
-# split the years vector into chunks that are n years big
-xx <- seq_along(uniqueyears)
-# get list of chunks, each chunk has n years in it
-years <- split(uniqueyears, ceiling(xx/as.numeric(n)))
-# create list of dtms by subsetting the full dtm into seperate
-# dtms of documents where publication year matches the chunks
-# of years
-# dtmlist <- vector("list", length = length(years))
-#   for(i in 1:length(years)){
-#   dtmlist[[i]] <- dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(years[i]))]
-# }
-
-list_dtms <- function(x) dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(x))]
-dtmlist <- lapply(years,  list_dtms) 
+  # split the years vector into chunks that are n years big
+  xx <- seq_along(uniqueyears)
+  # get list of chunks, each chunk has n years in it
+  years <- split(uniqueyears, ceiling(xx/as.numeric(n)))
+  # clean up a little
+  rm(xx, uniqueyears)
 
   
-# dtmlist <- lapply(1:length(years), function(i) dtm1[[i]] <- dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(years[i]))])
-# put names on the list of dtm so we can see the years represented by each dtm
-names(dtmlist) <- lapply(years, function(i) paste0(min(i),"_",max(i) ))
-# Here's the heavy lifting...
-# find most correlation and p-value between the keyword and all other words in the chunk
-wordcor <- vector("list", length = length(dtmlist))
-for(i in 1:length(dtmlist)){ 
-  j <- dtmlist[[i]]
-  ind <- word == Terms(j)
-  # get Pearson correlation values
-  suppressWarnings(x.cor <- cor(as.matrix(j[, ind]), as.matrix(j[, !ind])))
-  # get p-values for correlation: http://r.789695.n4.nabble.com/Very-slow-using-double-apply-and-cor-test-to-compute-correlation-p-values-for-2-matrices-tp871312p871316.html
-  # massively faster than using cor.test with lapply...
-  r  <- x.cor
-  df <- nrow(as.matrix(j[, !ind])) - 2 
-  t <- sqrt(df) * r / sqrt(1 - r ^ 2) 
-  p <- pt(t, df) 
-  p <- 2 * pmin(p, 1 - p) 
-  x.cor <- rbind(x.cor, p)
-  # make sorted dataframe with highest cor values at top
-   # if only one word is returned, count it as no words
-   ifelse(
-     # if there are no words that correlate
-     nrow(x.cor) == 0, # test
-     # make df of zeros
-     wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL), # test true
-     # if there are one or more words that correlate
-    ifelse( # if test false
-      # if just one word...
-      ncol(data.frame(round(x.cor[, which(x.cor[1, ]  > corlimit & x.cor[2, ] < plimit)],4), row.names = c("r","p"))) == 1,  # test
-      # or just one word in the dtm has a cor value, then skip that dtm with a df of zeros
-      wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL), # test true
-      # otherwise get the two or more words that have cor values
-      x.cor1 <- data.frame(round(x.cor[, which(x.cor[1, ]  > corlimit & x.cor[2, ] < plimit)],4), row.names = c("r","p"))) # test false
-   )
-  # deal with dtms where there is zero correlation
-ifelse(
-  # if there are no words that correlate at all, then...
-  nrow(x.cor) == 0, # test
-  # pad out with zeros 
-  wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL), # if true
-  # otherwise test to see if correlation is non-zero
-  ifelse(class(try(wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn]))) == "try-error",  # test
-    # pad out with zeros if there is zero cor
-    wordcor[[i]] <- data.frame(r = rep(0, topn), p = rep(0, topn), row.names = NULL), # test true
-    # or get the cor and pvals if nonzero cor
-    wordcor[[i]] <- t(x.cor1[,order(-x.cor1[which(rownames(x.cor1) == 'r'),])][1:topn]) # test false                         
-   ))
+  
+  # get years of publication on to dtm as doc names
+  nouns$dimnames$Docs <- as.character(bibliodata$year[match(nouns$dimnames$Docs, bibliodata$x)])
+  # make list of dtms, with each dtm containing docs spanning n years
+  message("dividing documents up into groups...")
+  
+  
+  
+  # create a list of dtms to iterate over 
+  library(plyr)
+  dtmlist <- llply(years,  function(x) nouns[ (nouns$dimnames$Docs %in% as.character(x)), ], .progress = "text", .inform = FALSE ) 
+  message("done")
+  
+  # dtmlist <- lapply(1:length(years), function(i) dtm1[[i]] <- dtm[as.numeric(substring(dtm$dimnames$Docs, 1, 4)) %in% unname(unlist(years[i]))])
+  # put names on the list of dtm so we can see the years represented by each dtm
+  names(dtmlist) <- lapply(years, function(i) paste0(min(i),"-",max(i) ))
+  # Here's the heavy lifting...
+  
+  
+  # function from gamlr::corr to calculate correlation between simple triplet matrix
+  # and matrix, to avoid filling memory with a giant regular matrix
+  cor_slam <- function (x, y)
+  {
+    if (!inherits(x, "simple_triplet_matrix")) {
+      return(cor(x, y))
+    }
+    n <- nrow(x)
+    v <- t(normalize(y))
+    r <- tcrossprod_simple_triplet_matrix(t(x)/sdev(x), v)/(nrow(x) - 
+                                                              1)
+    dimnames(r) <- list(dimnames(x)[[2]], dimnames(y)[[2]])
+    return(r)
+  }  
+  # this one also comes from gamlr...
+  normalize <-  function (x, m = NULL, s = sdev(x)) 
+  {
+    if (!is.null(ncol(x))) 
+      if (length(s) != ncol(x)) 
+        stop("length(s)!=ncol(x)")
+    s[s == 0] <- 1
+    if (is.simple_triplet_matrix(x)) {
+      x$v <- x$v/s[x$j]
+      return(x)
+    }
+    x <- as.matrix(x)
+    if (is.null(m)) 
+      m <- col_means(x)
+    return(t((t(x) - m)/s))
   }
-
-# combine list of dataframes into one big dataframe with word, freq and year-range
-suppressWarnings(wordcor1 <- data.frame(do.call(rbind, wordcor), word = row.names(do.call(rbind, wordcor))))
-# add column of year ranges for each row
-wordcor1$years <- unlist(lapply(1:length(dtmlist), function(i) rep(names(dtmlist[i]), topn)))
-
-
-# plot in a word-cloud-y kind of way, but with more useful information in the 
-# structure of the visualiation... 
-require(ggplot2)
-suppressWarnings(print(
-  ggplot(wordcor1, aes(factor(years), r)) + 
-        geom_text(aes(label = word, size = r, alpha = r), position=position_jitter(h=0.1,w=0.2), subset = .(r > 0)) +
-        scale_size(range = c(3, biggest), name = paste0("Correlation value with the word '", word, "'")) +
-        scale_alpha(range=c(0.5,1), limits=c(min(wordcor1$r), max(wordcor1$r)), guide = 'none') + 
-        xlab("Year range") +
-    # inspect bibliodata$year to see min and max year to set axis limits
-    scale_x_discrete(limits=c(unique(wordcor1$years)), breaks = c(unique(wordcor1$years))) +
-        ylab(paste0("Pearson correlation with '", word, "'"))  +
-        ylim(0,1)  +
-    theme(
-      panel.background=element_blank(),
-      panel.border=element_blank(),
-      panel.grid.major=element_blank(),
-      panel.grid.minor=element_blank(),
-      plot.background=element_blank())
-        ))
+  
+  # and this one also...
+  sdev <- function (x) 
+  {
+    if (!inherits(x, "simple_triplet_matrix")) {
+      return(apply(as.matrix(x), 2, sd))
+    }
+    n <- nrow(x)
+    sqrt(col_sums(x^2)/(n - 1) - col_sums(x)^2/(n^2 - n))
+    return(sqrt(col_sums(x^2)/(n - 1) - col_sums(x)^2/(n^2 - 
+                                                         n)))
+  }
+  
+  # need a function from this one also... can't be bothered copy-pasting...
+  library(slam)
+  
+  # here they are all wrapped up: calculate the correlation, subset by corlimit and put in order
+  findAssocsBig <- function(u, word, corlimit){
+    suppressWarnings(x.cor <-  cor_slam(          u[ ,!u$dimnames$Terms == word],        
+                                                  as.matrix(u[  ,u$dimnames$Terms == word ])  )  )  
+    x <- sort(round(x.cor[ (x.cor[ ,word ] > corlimit), ], 3), decreasing = TRUE)
+    return(x)
+  }
+  
+  
+  # find most correlation and p-value between the keyword and all other words in the chunk
+  message("calculating correlations and p-values...")
+  filler <- data.table( x.cor = rep(0, topn),  p = rep(0, topn), words = rep("", topn) )
+  suppressMessages(library(data.table))
+  # function to calculate p and r values of correlation
+  # supply list of dtms as u
+  pandr <- function(u) { 
+    # check to see if word is present
+    if (length(u$dimnames$Terms == word) == 0) {
+      # if the word isn't in the dtm, make a table of zeros
+      wordcor <- filler
+    } else { 
+      # if the word is present, carry on with calculations...    
+      # get Pearson correlation values
+      x.cor <- findAssocsBig(u, word, corlimit)
+      
+      # get p-values
+      df <- nrow(u[, !u$dimnames$Terms == word]) - 2 
+      t <- sqrt(df) * x.cor / sqrt(1 - x.cor ^ 2) 
+      p <- pt(t, df) 
+      p <- 2 * pmin(p, 1 - p) # get p-value
+      x.cor <- (cbind(x.cor, p)) # combine r and p-values
+      rm(p,t); invisible(gc())  # clean up on the way...
+      
+      ## branching logic...
+      # if there are no words that meet the corlimit...
+      if (length(x.cor) == 0) {
+        wordcor <- filler
+      } else {
         
-return("findassocs" = wordcor1)
-
+        # if there are no words that meet the plimit...
+        if (nrow(x.cor[x.cor[2,] < plimit  , ]) == 0) {
+          wordcor <- filler
+        } else {
+          
+          # if the number of words returned is less than topn...
+          if (nrow(x.cor) < topn) {
+            # just return all the words...
+            wordcor <-  data.table(x.cor[x.cor[2,] < plimit  , ])
+            words <- row.names(x.cor)[1:nrow(wordcor)] 
+            wordcor[, words := words ]
+            
+          } else {
+            # otherwise get the topn words
+            wordcor <-  data.table( x.cor[x.cor[2,] < plimit  , ][1:topn,])
+            words <- row.names(x.cor)[1:nrow(wordcor)][1:topn]
+            wordcor[, words := words ]
+          }
+          
+        }
+      }  
+    }
+    setnames(wordcor, c("r", "p", "words"))
+    invisible(gc())
+    return(wordcor)
+  }
+  
+  
+  if(parallel) {
+    
+    # parallel version
+    require(parallel)
+    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
+    clusterEvalQ(cl, library(slam))
+    clusterExport(cl, varlist = c("dtmlist", "pandr", "cor_slam", "sdev", "normalize"), envir=environment())
+    
+    wordcor1 <- parLapply(cl, dtmlist, pandr)    
+    
+    stopCluster(cl)
+    
+    
+  } else { # non-parallel method
+    
+    wordcor1  <- llply(dtmlist, pandr, .progress = "text", .inform = FALSE )  
+    
+  }
+  
+  
+  
+  # combine list of dataframes into one big dataframe with word, freq and year-range
+  suppressWarnings(wordcor1 <- data.table(do.call(rbind, wordcor1)))
+  # add column of year ranges for each row
+  wordcor1$years <- unlist(lapply(1:length(dtmlist), function(i) rep(names(dtmlist[i]), topn)))
+  message("done")
+  
+  # plot in a word-cloud-y kind of way, but with more useful information in the 
+  # structure of the visualiation... 
+  suppressMessages(require(ggplot2)); library("plyr")
+  suppressWarnings(print(
+    ggplot(wordcor1, aes(factor(years), r)) + 
+      geom_text(aes(label = words, size = r, alpha = r), position=position_jitter(h=0.1,w=0.2), subset = .(r > 0)) +
+      scale_size(range = c(3, biggest), name = paste0("Correlation value with the word '", word, "'")) +
+      scale_alpha(range=c(0.5,1), limits=c(min(wordcor1$r), max(wordcor1$r)), guide = 'none') + 
+      xlab("Year range") +
+      # inspect bibliodata$year to see min and max year to set axis limits
+      scale_x_discrete(limits=c(unique(wordcor1$years)), breaks = c(unique(wordcor1$years))) +
+      ylab(paste0("Pearson correlation with '", word, "'"))  +
+      ylim(0,1)  +
+      theme(
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        plot.background=element_blank())
+  ))
+  
+  return("findassocs" = wordcor1)
+  
 }
-
+}

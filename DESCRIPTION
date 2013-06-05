@@ -8,8 +8,8 @@ Maintainer: Ben Marwick <bmarwick@gmail.com>
 Description: Simple exploratory text mining of journal articles from JSTOR's
     Data for Research service. Go to http://dfr.jstor.org/, make a request for
     data (specify CSV as outout format and Word Counts as data type), then once
-    you get a zip file, start with the function JSTOR_unpack() and then you're
-    ready to go with any of the other functions.
+    you get a zip file, unzip it and start with one of the unpack functions and
+    then you're ready to go with any of the other functions.
 License: MIT
 Depends:
     ggplot2,
@@ -27,7 +27,13 @@ Depends:
     gridExtra,
     grid,
     data.table,
-    snowfall
+    snowfall,
+    slam,
+    digest,
+    igraph,
+    snow,
+    devtools,
+    openNLPmodels.en
 Imports:
     ggplot2,
     reshape2,
@@ -44,7 +50,13 @@ Imports:
     gridExtra,
     grid,
     data.table,
-    snowfall
+    snowfall,
+    slam,
+    digest,
+    igraph,
+    snow,
+    devtools,
+    openNLPmodels.en
 Collate:
     'JSTOR_1word.R'
     'JSTOR_2wordcor.R'
@@ -52,7 +64,6 @@ Collate:
     'JSTOR_unpack.R'
     'JSTORr-package.r'
     'JSTOR_corpusofnouns.R'
-    'JSTOR_chunk.R'
     'JSTOR_1bigram.R'
     'JSTOR_2bigrams.R'
     'JSTOR_2bigramscor.R'
@@ -68,3 +79,6 @@ Collate:
     'JSTOR_lda_docdists.R'
     'JSTOR_lda_topicdists.R'
     'JSTOR_clusterbywords.R'
+    'JSTOR_dtmofnouns.R'
+    'JSTOR_unpack1grams.R'
+    'JSTOR_unpack2grams.R'

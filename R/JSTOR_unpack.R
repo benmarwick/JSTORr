@@ -1,57 +1,32 @@
 #' Unpack JSTOR journal articles and bibliographic data 
 #' 
-#' @description Unzip, import and reshape journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). Function prompts for full path name of the directory containing the zip file obtained from JSTOR's Data for Research tool and for the name of the zip file obtained from JSTOR's Data for Research tool (include the zip file suffix)
+#' @description Import and reshape journal articles and bibliographic data from the downloaded zipfile and reshape ready for the MALLET functions. This is only useful for smaller collections because it generates large data objects. As a rough guide, <5000 articles should be ok. 
 #' @param parallel if TRUE, apply function in parallel, using the parallel library
+#' @param path to directory containing 'wordcounts' and 'bigrams' folders and the citations.CSV file. These are obtained after unzipping the file downloaded from DfR (you should unzip the file before running this function).
 #' @return Returns a list of three items. First is "wordcounts", a list of character vectors where each vector contains the words of one article,  second is 'bigrams', as for 'wordcounts' but with 2-grams instead of 1-grams, and third is 'bibliodata', a data frame of bibliographic information for all articles. 
 #' @examples 
-#' ## unpack <- JSTOR_unpack() # then follow prompts to navigate to the location of the zipfile
+#' ## unpack <- JSTOR_unpack(path = "C:/Users/marwick/Downloads/JSTOR") 
 
 
 
 
-JSTOR_unpack <- function(parallel=TRUE){
+JSTOR_unpack <- function(parallel=TRUE, path){
   #### get data into the R session 
-  # Andrew Goldstone's method: get the user to choose the file
+  ## trim off the last forward slash, if there was one.
+  if  (substr(path, nchar(path), nchar(path)) == "/") {
+    
+    path <- substr(path, 1, nchar(path)-1) # trim last char
+    
+  } else {
+    
+    path <- path # don't trim
+    
+  }
   
-  message("Select the zip file downloaded from JSTOR's DfR")
-  ignore <- readline("(press return to open file dialog - it might pop up behind here) ")
-  zipfile <- file.choose()
-  print(zipfile)
-  
-  
-  
-  # Get the user to set R's working directory
-  message("Select the folder to unzip into")
-  # have to adapt to different OS for this  
-    if (.Platform['OS.type'] == "windows"){
-      # windows directory chooser
-      setwd( choose.dir() )
-    } else {
-      # linux directory chooser
-      require( tcltk )
-      setwd(tk_choose.dir())
-    }
-
-  
-  # both
-  path <- getwd()
-  print(path)
+  # change directory to 1-gram CSV files    
+  setwd(paste0(path,"/wordcounts"))
   
   
-  # setwd(path) # change this to where you downloaded the data
-  # Get zip file of CSVs from JSTOR and unzip
-  # this may take a few minutes...
-  message("unzipping the DfR archive...")
-  
-       ifelse((tail(strsplit(as.character(zipfile), "\\.")[[1]], 1)  !=  "zip"),   # test
-         stop("the zip file name must end in '.zip'"),                  # yes
-         
-         
-       ifelse(!is.character(zipfile) || length(zipfile) != 1L || !nzchar(zipfile),  # no   # test
-         stop("the zip file name must be a single character string"),                      # yes
-         unzip(zipfile)))                                                                  # no
-  
-  message("done")
   #### Deal with wordcounts (ie. 1-grams) first
   # set working directory to newly created folder
   # (within working directory) with lots of CSV files

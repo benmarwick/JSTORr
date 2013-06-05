@@ -1,14 +1,28 @@
-\name{JSTOR_corpusofnouns}
-\alias{JSTOR_corpusofnouns}
-\title{Remove all words except non-name nouns}
+\name{JSTOR_dtmofnouns}
+\alias{JSTOR_dtmofnouns}
+\title{Make a Document Term Matrix containing only nouns}
 \usage{
-  JSTOR_corpusofnouns(x, parallel = FALSE)
+  JSTOR_dtmofnouns(unpack1grams, parallel = FALSE,
+    sparse = 0.999)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
+  \item{unpack1grams}{object returned by the function
+  JSTOR_unpack1grams.}
 
-  \item{parallel}{if TRUE, apply function in parallel,
-  using the parallel library}
+  \item{sparse}{A numeric for the maximal allowed sparsity,
+  default is 0.999. Removes sparse terms from a
+  term-document matrix, see help(removeSparseTerms) for
+  more details. Values close to 1 result in a sparse
+  matrix, values close to zero result in a dense matrix. It
+  may be useful to reduce sparseness if the matrix is too
+  big to manipulate in memory or if processing times are
+  long.}
+
+  \item{parallel}{logical.  If TRUE attempts to run the
+  function on multiple cores.  Note that this may actually
+  be slower if you have one core, limited memory or if the
+  data set is small due to communication of data between
+  the cores.}
 }
 \value{
   Returns a Document Term Matrix containing documents,
@@ -35,6 +49,6 @@
   a text editor.
 }
 \examples{
-## nouns <- JSTOR_corpusofnouns(unpack, parallel = TRUE)
+## nouns <- JSTOR_dtmofnouns(unpack1grams)
 }
 

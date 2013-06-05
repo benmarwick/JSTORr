@@ -2,12 +2,9 @@
 \alias{JSTOR_lda_hotncoldtopics}
 \title{Plot the top five hot and cold topics in the archive}
 \usage{
-  JSTOR_lda_hotncoldtopics(x, lda, pval = 0.05, ma = 5)
+  JSTOR_lda_hotncoldtopics(lda, pval = 0.05, ma = 5)
 }
 \arguments{
-  \item{x}{the object returned by the function
-  JSTOR_unpack.}
-
   \item{lda}{the object returned by the function
   JSTOR_lda.}
 
@@ -33,6 +30,6 @@
   Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-## hotncold <- JSTOR_lda_hotncoldtopics(x = unpacked, lda = lda150, ma = 10)
+## hotncold <- JSTOR_lda_hotncoldtopics(lda = lda150, ma = 10)
 }
 

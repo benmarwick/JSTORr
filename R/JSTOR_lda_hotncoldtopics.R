@@ -1,17 +1,16 @@
 #' Plot the top five hot and cold topics in the archive
 #' 
 #' @description Generates plots and data frames of the top five hot and cold topics. Hot topics are topics with a positive correlation to year of publication, cold topics have a negative correlation. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
-#' @param x the object returned by the function JSTOR_unpack.
 #' @param lda the object returned by the function JSTOR_lda.
 #' @param pval p-value of the correlation cutoff for topics to include in the top 5 negative/positive list (ie. only topics where p<0.01 or 0.001?). Default is 0.05.
 #' @param ma moving average interval, default is five years.
 #' @return Returns a plot of the hot topics and plot of the cold topics and a list of dataframes of the topic proportions per year. Years as rows, topics as columns and posterior probabilities as cell values. Uses a five year moving average to smooth the plots a bit.
 #' @examples 
-#' ## hotncold <- JSTOR_lda_hotncoldtopics(x = unpacked, lda = lda150, ma = 10) 
+#' ## hotncold <- JSTOR_lda_hotncoldtopics(lda = lda150, ma = 10) 
 
 
 
-JSTOR_lda_hotncoldtopics <- function(x, lda, pval=0.05, ma=5){
+JSTOR_lda_hotncoldtopics <- function(lda, pval=0.05, ma=5){
   
   # unpack output from JSTOR_lda
   topic.props <- lda[[1]]

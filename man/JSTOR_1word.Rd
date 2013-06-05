@@ -2,16 +2,20 @@
 \alias{JSTOR_1word}
 \title{Plot the frequency of one word over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_1word(x, oneword, span = 0.5)
+  JSTOR_1word(unpack1grams, oneword, span = 0.5, se = TRUE)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
+  \item{unpack1grams}{object returned by the function
+  JSTOR_unpack1grams.}
 
   \item{oneword}{One word, surrounded by standard quote
   marks, or a vector of words}
 
   \item{span}{span of the lowess line (controls the degree
   of smoothing). Default is 0.4}
+
+  \item{se}{logical, show or hide standard error region of
+  smoother line, Default is TRUE.}
 }
 \value{
   Returns a ggplot object with publication year on the
@@ -26,7 +30,7 @@
   Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-##JSTOR_1word(unpack, "diamonds")
-##JSTOR_1word(unpack, c("diamonds", pearls"), span = 0.8)
+## JSTOR_1word(unpack1grams, "diamonds")
+## JSTOR_1word(unpack1grams, c("diamonds", "pearls"), span = 0.8, se = FALSE)
 }
 

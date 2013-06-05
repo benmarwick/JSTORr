@@ -1,30 +1,47 @@
 #' Plot the frequency of one word over time in a JSTOR DfR dataset
 #' 
 #' @description Function to plot changes in the relative frequency of a bigram over time. The relative frequency is the frequency of the bigram in a document divided by the total number of bigrams in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
-#' @param x object returned by the function JSTOR_unpack.
+#' @param unpack2 object returned by the function JSTOR_unpack.
 #' @param bigram two words, surrounded by standard quote marks, or a vector of bigrams.
 #' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
-#' ## JSTOR_1bigram(unpack, "pirate booty")
-#' ## JSTOR_1bigram(unpack, c("treasure chest", "musket balls", "jolly roger"), span = 0.7)
+#' ## JSTOR_1bigram(unpack2, "pirate booty")
+#' ## JSTOR_1bigram(unpack2, c("treasure chest", "musket balls", "jolly roger"), span = 0.7)
 
 
 
-JSTOR_1bigram <- function(x, bigram, span = 0.4){
+JSTOR_1bigram <- function(unpack2, bigram, span = 0.4){
   #### investigate change in use of certain bigrams of interest over time
   # set working directory to where the bigrams are
   # (within working directory) with lots of CSV files
-  bigrams <- x$bigrams
-  bibliodata <- x$bibliodata
+  y <- unpack2$bigrams
+  bibliodata <- unpack2$bibliodata
+  
+  # using dtm
+  # y <- as.matrix(bigrams)
   # Get total number of word in the article to standarise for different article lengths
-  leng <- sapply(1:length(bigrams), function(i) length(bigrams[[i]]))
-  # now word of interest (always lower case)
-  bigram1 <- sapply(1:length(bigrams), function(i) sum(bigrams[[i]] %in% bigram ))
+  library(slam)
+  leng <- row_sums(y)
+  # now get total number of word of interest (always lower case)
+  bigram1 <- as.matrix(y[,dimnames(y)$Terms %in% bigram])
   # calculate ratio
   bigram_ratio <- bigram1/leng
+  
+  
+#   # full-text method
+#   # Get total number of word in the article to standarise for different article lengths
+#   leng <- sapply(1:length(bigrams), function(i) length(bigrams[[i]]))
+#   # now word of interest (always lower case)
+#   bigram1 <- sapply(1:length(bigrams), function(i) sum(bigrams[[i]] %in% bigram ))
+#   # calculate ratio
+#   bigram_ratio <- bigram1/leng
+  
+  
   # get years for each article
-  bigram_by_year <- data.frame(bigram_ratio, year = as.numeric(as.character(bibliodata$year)))
+  suppressMessages(library(data.table))
+  bigram_by_year <- data.table(bigram_ratio, year = as.numeric(as.character(bibliodata$year)))
+  setnames(bigram_by_year, c("bigram_ratio", "year"))
   lim_min <- as.numeric(as.character(min(bibliodata$year)))
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # vizualise one word over time

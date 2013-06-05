@@ -2,14 +2,15 @@
 \alias{JSTOR_freqwords}
 \title{Plot the most frequent words by time intervals}
 \usage{
-  JSTOR_freqwords(x, corpus, n = 5, lowfreq = 300,
-    topn = 20, biggest = 30)
+  JSTOR_freqwords(unpack1grams, nouns, n = 5,
+    lowfreq = 300, topn = 20, biggest = 10)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
+  \item{unpack1grams}{object returned by the function
+  JSTOR_unpack1grams.}
 
-  \item{corpus}{the object returned by the function
-  JSTOR_corpusofnouns. A corpus containing the documents.}
+  \item{nouns}{the object returned by the function
+  JSTOR_dtmofnouns. A Document Term Matrix of nouns.}
 
   \item{n}{the number years to aggregate documents by. For
   example, n = 5 (the default value) will create groups of
@@ -36,11 +37,14 @@
   in ranges of years. For use with JSTOR's Data for
   Research datasets (http://dfr.jstor.org/). For best
   results, repeat the function several times after adding
-  common words to the stopword list and excluding them
-  using the JSTOR_removestopwords function.
+  common words to the stopword list and excluding them by
+  re-running the JSTOR_dtmofnouns function. The location of
+  the English stopwords list can be found by entering this
+  at the R prompt: paste0(.libPaths()[1],
+  "/tm/stopwords/english.dat")
 }
 \examples{
-## freqwords <- JSTOR_freqwords(unpack, corpus, n = 2, biggest = 40, lowfreq = 100, topn = 5)
-## freqwords <- JSTOR_freqwords(unpack, corpus)
+## freqwords <- JSTOR_freqwords(unpack1grams, nouns, n = 2, biggest = 5, lowfreq = 100, topn = 5)
+## freqwords <- JSTOR_freqwords(unpack1grams, nouns)
 }
 

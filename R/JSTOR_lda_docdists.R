@@ -32,7 +32,7 @@ JSTOR_lda_docdists <- function(lda){
   g <- as.undirected(graph.adjacency(doc.props.dists1))
   layout1 <- layout.fruchterman.reingold(g, niter=500)
   plot(g, layout=layout1, edge.curved = TRUE, vertex.size = 1,  vertex.color= "grey", edge.arrow.size = 0.1, vertex.label.dist=0.5, vertex.label = NA)
-  return(topic.props.dists1)
+  return(doc.props.dists1)
   write.graph(g, file="docs.graphml", format="graphml") 
   message(paste0("The docs.graphml file for Gephi can be found in ", getwd()))
 }

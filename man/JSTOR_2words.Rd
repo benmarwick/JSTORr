@@ -2,16 +2,17 @@
 \alias{JSTOR_2words}
 \title{Plot the frequencies of one word against another word over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_2words(x, word1, word2, span = 0.4)
+  JSTOR_2words(unpack1grams, word1, word2, span = 0.4)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
+  \item{unpack1grams}{object returned by the function
+  JSTOR_unpack1grams.}
 
-  \item{word1}{One word, surrounded by standard quote
-  marks.}
+  \item{word1}{One word (or vector of words), surrounded by
+  standard quote marks.}
 
-  \item{word2}{One word, surrounded by standard quote
-  marks.}
+  \item{word2}{One word (or vector of words), surrounded by
+  standard quote marks.}
 
   \item{span}{span of the lowess line (controls the degree
   of smoothing). Default is 0.4}
@@ -29,7 +30,7 @@
   Data for Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-##JSTOR_2words(dat1, "diamonds", "pearls")
-##JSTOR_2words(dat1, word1 = "milk", word2 = "sugar"), span = 0.8
+## JSTOR_2words(unpack1grams, "diamonds", "pearls")
+## JSTOR_2words(unpack1grams, word1 = "milk", word2 = "sugar"), span = 0.8
 }
 

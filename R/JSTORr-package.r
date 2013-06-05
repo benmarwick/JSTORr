@@ -17,8 +17,8 @@
 #' @author Ben Marwick \email{benmarwick@@gmail.com}
 #' @references
 #' \url{http://dfr.jstor.org/}
-#' @import plyr reshape2 ggplot2 stringr tm openNLP lda XML cluster apcluster ggdendro FactoMineR gridExtra grid data.table snowfall
-#' @export JSTOR_unpack JSTOR_1word JSTOR_2words JSTOR_1bigram JSTOR_2bigrams JSTOR_2bigramscor JSTOR_2wordcor JSTOR_corpusofnouns JSTOR_chunk JSTOR_lda JSTOR_MALLET JSTOR_MALLET_hotncoldtopics JSTOR_lda_hotncoldtopics JSTOR_freqwords JSTOR_findassocs JSTOR_MALLET_topicsovertime JSTOR_removestopwords JSTOR_lda_topicdists JSTOR_lda_docdists JSTOR_clusterbywords JSTOR_MALLET_topicinfo
+#' @import plyr reshape2 ggplot2 stringr tm openNLP lda XML cluster apcluster ggdendro FactoMineR gridExtra grid data.table snowfall slam igraph digest 
+#' @export JSTOR_unpack JSTOR_1word JSTOR_2words JSTOR_1bigram JSTOR_2bigrams JSTOR_2bigramscor JSTOR_2wordcor JSTOR_corpusofnouns JSTOR_lda JSTOR_MALLET JSTOR_MALLET_hotncoldtopics JSTOR_lda_hotncoldtopics JSTOR_freqwords JSTOR_findassocs JSTOR_MALLET_topicsovertime JSTOR_removestopwords JSTOR_lda_topicdists JSTOR_lda_docdists JSTOR_clusterbywords JSTOR_MALLET_topicinfo  JSTOR_dtmofnouns JSTOR_unpack1grams JSTOR_unpack2grams
 NULL
 
 

@@ -1,0 +1,34 @@
+\name{JSTOR_unpack1grams}
+\alias{JSTOR_unpack1grams}
+\title{Unpack JSTOR journal articles and bibliographic data to a Document Term Matrix of 1-grams}
+\usage{
+  JSTOR_unpack1grams(parallel = FALSE, path)
+}
+\arguments{
+  \item{path}{full path to directory containing
+  'wordcounts' folder and the citations.CSV file. These are
+  obtained after unzipping the file downloaded from DfR
+  (you should unzip the file before running this
+  function).}
+
+  \item{parallel}{if TRUE, apply function in parallel,
+  using the parallel library. Default is FALSE as this is
+  typically faster for smaller datasets (ie. ~5000
+  articles) due to communication overhead.}
+}
+\value{
+  Returns a list of two items. First is "wordcounts", a
+  Document Term Matrix of 1-grams, and second is
+  'bibliodata', a data frame of bibliographic information
+  for all articles.
+}
+\description{
+  Import journal articles and bibliographic data from the
+  downloaded zipfile and reshape ready for simple text
+  mining. For use with JSTOR's Data for Research datasets
+  (http://dfr.jstor.org/).
+}
+\examples{
+## unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")
+}
+

@@ -2,11 +2,17 @@
 \alias{JSTOR_unpack}
 \title{Unpack JSTOR journal articles and bibliographic data}
 \usage{
-  JSTOR_unpack(parallel = TRUE)
+  JSTOR_unpack(parallel = TRUE, path)
 }
 \arguments{
   \item{parallel}{if TRUE, apply function in parallel,
   using the parallel library}
+
+  \item{path}{to directory containing 'wordcounts' and
+  'bigrams' folders and the citations.CSV file. These are
+  obtained after unzipping the file downloaded from DfR
+  (you should unzip the file before running this
+  function).}
 }
 \value{
   Returns a list of three items. First is "wordcounts", a
@@ -17,17 +23,13 @@
   information for all articles.
 }
 \description{
-  Unzip, import and reshape journal articles and
-  bibliographic data from the downloaded zipfile and
-  reshape ready for simple text mining. For use with
-  JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/). Function prompts for full path
-  name of the directory containing the zip file obtained
-  from JSTOR's Data for Research tool and for the name of
-  the zip file obtained from JSTOR's Data for Research tool
-  (include the zip file suffix)
+  Import and reshape journal articles and bibliographic
+  data from the downloaded zipfile and reshape ready for
+  the MALLET functions. This is only useful for smaller
+  collections because it generates large data objects. As a
+  rough guide, <5000 articles should be ok.
 }
 \examples{
-## unpack <- JSTOR_unpack() # then follow prompts to navigate to the location of the zipfile
+## unpack <- JSTOR_unpack(path = "C:/Users/marwick/Downloads/JSTOR")
 }
 

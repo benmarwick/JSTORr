@@ -2,14 +2,17 @@
 \alias{JSTOR_findassocs}
 \title{Plot the words with the strongest correlation with a given word, by time intervals}
 \usage{
-  JSTOR_findassocs(x, corpus, word, n = 5, corlimit = 0.4,
-    plimit = 0.05, topn = 20, biggest = 5)
+  JSTOR_findassocs(unpack1grams, nouns, word, n = 5,
+    corlimit = 0.4, plimit = 0.05, topn = 20, biggest = 5,
+    parallel = FALSE)
 }
 \arguments{
-  \item{x}{object returned by the function JSTOR_unpack.}
+  \item{unpack1grams}{object returned by the function
+  JSTOR_unpack1grams.}
 
-  \item{corpus}{the object returned by the function
-  JSTOR_corpusofnouns. A corpus containing the documents.}
+  \item{nouns}{the object returned by the function
+  JSTOR_dtmofnouns. A Document Term Matrix containing the
+  documents.}
 
   \item{n}{the number years to aggregate documents by. For
   example, n = 5 (the default value) will create groups of
@@ -30,6 +33,12 @@
 
   \item{biggest}{An integer to control the maximum size of
   the text in the plot}
+
+  \item{parallel}{logical.  If TRUE attempts to run the
+  function on multiple cores.  Note that this may actually
+  be slower if you have one core, limited memory or if the
+  data set is small due to communication of data between
+  the cores.}
 }
 \value{
   Returns a plot of the most frequent words per year range,
@@ -46,8 +55,8 @@
   JSTOR_removestopwords function.
 }
 \examples{
-## findassocs <- JSTOR_findassocs(unpack, corpus, "rouges")
-## findassocs <- JSTOR_findassocs(unpack, corpus, n = 10, "pirates", topn = 100)
-## findassocs <- JSTOR_findassocs(unpack, corpus, n = 5, "marines", corlimit=0.6, plimit=0.001)
+## findassocs <- JSTOR_findassocs(unpack1grams, nouns, "rouges")
+## findassocs <- JSTOR_findassocs(unpack1grams, nouns, n = 10, "pirates", topn = 100)
+## findassocs <- JSTOR_findassocs(unpack1grams, nouns, n = 5, "marines", corlimit=0.6, plimit=0.001)
 }
 
