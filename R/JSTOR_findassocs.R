@@ -146,20 +146,20 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
       } else {
         
         # if there are no words that meet the plimit...
-        if (nrow(x.cor[x.cor[2,] < plimit  , ]) == 0) {
+        if (nrow(x.cor[x.cor[,2] < plimit  , ]) == 0) {
           wordcor <- filler
         } else {
           
           # if the number of words returned is less than topn...
           if (nrow(x.cor) < topn) {
             # just return all the words...
-            wordcor <-  data.table(x.cor[x.cor[2,] < plimit  , ])
+            wordcor <-  data.table(x.cor[x.cor[,2] < plimit  , ])
             words <- row.names(x.cor)[1:nrow(wordcor)] 
             wordcor[, words := words ]
             
           } else {
             # otherwise get the topn words
-            wordcor <-  data.table( x.cor[x.cor[2,] < plimit  , ][1:topn,])
+            wordcor <-  data.table( x.cor[x.cor[,2] < plimit  , ][1:topn,])
             words <- row.names(x.cor)[1:nrow(wordcor)][1:topn]
             wordcor[, words := words ]
           }
@@ -168,7 +168,6 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
       }  
     }
     setnames(wordcor, c("r", "p", "words"))
-    invisible(gc())
     return(wordcor)
   }
   
