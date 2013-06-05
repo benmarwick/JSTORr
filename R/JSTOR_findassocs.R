@@ -180,7 +180,7 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
     clusterEvalQ(cl, library(slam))
     clusterExport(cl, varlist = c("dtmlist", "pandr", "cor_slam", "sdev", "normalize"), envir=environment())
     
-    wordcor1 <- parLapply(cl, dtmlist, pandr)    
+    wordcor1 <- parLapplyLB(cl, dtmlist, pandr)    
     
     stopCluster(cl)
     
@@ -196,7 +196,9 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
   # combine list of dataframes into one big dataframe with word, freq and year-range
   suppressWarnings(wordcor1 <- data.table(do.call(rbind, wordcor1)))
   # add column of year ranges for each row
+  # get a warning here because sometimes the dtmlist item does not have topn rows...
   wordcor1$years <- unlist(lapply(1:length(dtmlist), function(i) rep(names(dtmlist[i]), topn)))
+                                        
   message("done")
   
   # plot in a word-cloud-y kind of way, but with more useful information in the 
