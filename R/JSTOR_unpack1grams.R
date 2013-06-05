@@ -110,7 +110,7 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path){
 
   
  
-  
+  message("arranging bibliographic data...")
   #### bring in citations file with biblio data for each paper
   setwd(path) # change this to the location of the citations.csv file
   
