@@ -2,13 +2,14 @@
 \alias{JSTOR_unpack2grams}
 \title{Unpack JSTOR journal articles and bibliographic data to a Document Term Matrix of 2-grams}
 \usage{
-  JSTOR_unpack2grams(parallel = FALSE, path)
+  JSTOR_unpack2grams(parallel = FALSE, path = getwd())
 }
 \arguments{
   \item{path}{full path to directory containing 'bigrams'
   folder and the citations.CSV file. These are obtained
   after unzipping the file downloaded from DfR (you should
-  unzip the file before running this function).}
+  unzip the file before running this function). Default is
+  the working directory.}
 
   \item{parallel}{if TRUE, apply function in parallel,
   using the parallel library. Default is FALSE as this is

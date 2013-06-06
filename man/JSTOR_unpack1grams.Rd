@@ -2,14 +2,14 @@
 \alias{JSTOR_unpack1grams}
 \title{Unpack JSTOR journal articles and bibliographic data to a Document Term Matrix of 1-grams}
 \usage{
-  JSTOR_unpack1grams(parallel = FALSE, path)
+  JSTOR_unpack1grams(parallel = FALSE, path = getwd())
 }
 \arguments{
   \item{path}{full path to directory containing
   'wordcounts' folder and the citations.CSV file. These are
   obtained after unzipping the file downloaded from DfR
-  (you should unzip the file before running this
-  function).}
+  (you should unzip the file before running this function).
+  Default is the working directory.}
 
   \item{parallel}{if TRUE, apply function in parallel,
   using the parallel library. Default is FALSE as this is
