@@ -14,7 +14,7 @@
 #' the data set is small due to communication of data between the cores.
 #' @return Returns a plot of the most frequent words per year range, with word size scaled to frequency, and a dataframe with words and counts for each year range
 #' @examples 
-#' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, "rouges")
+#' ## 
 #' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, n = 10, "pirates", topn = 100)
 #' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, n = 5, "marines", corlimit=0.6, plimit=0.001)
 
@@ -117,11 +117,14 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
   
   # find most correlation and p-value between the keyword and all other words in the chunk
   message("calculating correlations and p-values...")
-  filler <- data.table( x.cor = rep(0, topn),  p = rep(0, topn), words = rep("", topn) )
   suppressMessages(library(data.table))
   # function to calculate p and r values of correlation
   # supply list of dtms as u
   pandr <- function(u) { 
+    # seems like I have to make and delete this each time because
+    # it's getting the 'years' col evern when I don't explicitly assign it!
+    filler <- data.table( x.cor = rep(0, topn),  p = rep(0, topn), words = rep("", topn) )
+    
     # check to see if word is present
     if (length(u$dimnames$Terms == word) == 0) {
       # if the word isn't in the dtm, make a table of zeros
@@ -168,6 +171,9 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
       }  
     }
     setnames(wordcor, c("r", "p", "words"))
+    years <- paste0(min(as.numeric(u$dimnames$Docs)), "-", max(as.numeric(u$dimnames$Docs)) )
+    rm(filler)
+    wordcor[, years := years ]
     return(wordcor)
   }
   
@@ -197,8 +203,14 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
   suppressWarnings(wordcor1 <- data.table(do.call(rbind, wordcor1)))
   # add column of year ranges for each row
   # get a warning here because sometimes the dtmlist item does not have topn rows...
-  wordcor1$years <- unlist(lapply(1:length(dtmlist), function(i) rep(names(dtmlist[i]), topn)))
-                                        
+  # wordcor1$years <- unlist(lapply(1:length(dtmlist), function(i) rep(names(dtmlist[i]), topn)))
+   
+  
+  
+  
+  
+  
+  
   message("done")
   
   # plot in a word-cloud-y kind of way, but with more useful information in the 

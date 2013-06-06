@@ -15,6 +15,8 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
   # set working directory to newly created folder
   # (within working directory) with lots of CSV files
   
+
+  
   
   ## trim off the last forward slash, if there was one.
   if  (substr(path, nchar(path), nchar(path)) == "/") {
