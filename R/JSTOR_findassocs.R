@@ -1,9 +1,9 @@
 #' Plot the words with the strongest correlation with a given word, by time intervals
 #' 
-#' @description Generates a plot of the top n words in all the documents in ranges of years that positively correlate with a given word. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). For best results, repeat the function several times after adding common words to the stopword list and excluding them using the JSTOR_removestopwords function.
+#' @description Generates a plot of the top n words in all the documents in ranges of years that positively correlate with a given word. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). For best results, repeat the function after adding common words to the stopword list. To learn more about editing the stopword list, see the help for the JSTOR_dtmofnouns function. 
 #' @param unpack1grams object returned by the function JSTOR_unpack1grams.
 #' @param nouns the object returned by the function JSTOR_dtmofnouns. A Document Term Matrix containing the documents.
-#' @param n the number years to aggregate documents by. For example, n = 5 (the default value) will create groups of all documents published in non-overlapping five year ranges.
+#' @param n the number years to aggregate documents by. For example, n = 5 (the default value) will create groups of all documents published in non-overlapping five year ranges. Note that high n values combined with high plimit and corlimit values will severly filter the output. For exploratory data analysis it's recommended to start with low n values and work up.
 #' @param word The word to calculate the correlations with
 #' @param corlimit The lower threshold value of the Pearson correlation statistic (default is 0.4).
 #' @param plimit The lower threshold value of the Pearson correlation statistic (default is 0.05).
@@ -149,14 +149,14 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
       } else {
         
         # if there are no words that meet the plimit...
-        if (nrow(x.cor[x.cor[,2] < plimit  , ]) == 0) {
+        if (nrow(x.cor[x.cor[,2] < plimit  , , drop=FALSE]) == 0) {
           wordcor <- filler
         } else {
           
           # if the number of words returned is less than topn...
           if (nrow(x.cor) < topn) {
             # just return all the words...
-            wordcor <-  data.table(x.cor[x.cor[,2] < plimit  , ])
+            wordcor <-  data.table(x.cor[x.cor[,2] < plimit  , , drop=FALSE])
             words <- row.names(x.cor)[1:nrow(wordcor)] 
             wordcor[, words := words ]
             
