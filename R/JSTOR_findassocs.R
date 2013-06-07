@@ -231,7 +231,8 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
         panel.border=element_blank(),
         panel.grid.major=element_blank(),
         panel.grid.minor=element_blank(),
-        plot.background=element_blank())
+        plot.background=element_blank(), 
+        axis.text.x=element_text(angle = 90, hjust = 0))
   ))
   
   return("findassocs" = wordcor1)
