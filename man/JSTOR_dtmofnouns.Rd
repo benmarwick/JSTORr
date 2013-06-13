@@ -2,12 +2,17 @@
 \alias{JSTOR_dtmofnouns}
 \title{Make a Document Term Matrix containing only nouns}
 \usage{
-  JSTOR_dtmofnouns(unpack1grams, parallel = FALSE,
-    sparse = 0.999)
+  JSTOR_dtmofnouns(unpack1grams, word = NULL,
+    parallel = FALSE, sparse = 0.999)
 }
 \arguments{
   \item{unpack1grams}{object returned by the function
   JSTOR_unpack1grams.}
+
+  \item{word}{Optional word or vector of words to subset
+  the documents by, ie. make a document term matrix
+  containing only documents in which this word (or words)
+  appears at least once.}
 
   \item{sparse}{A numeric for the maximal allowed sparsity,
   default is 0.999. Removes sparse terms from a
