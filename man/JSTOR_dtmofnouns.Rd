@@ -3,7 +3,7 @@
 \title{Make a Document Term Matrix containing only nouns}
 \usage{
   JSTOR_dtmofnouns(unpack1grams, word = NULL,
-    parallel = FALSE, sparse = 0.999)
+    parallel = FALSE, sparse = 1, POStag = TRUE)
 }
 \arguments{
   \item{unpack1grams}{object returned by the function
@@ -15,13 +15,13 @@
   appears at least once.}
 
   \item{sparse}{A numeric for the maximal allowed sparsity,
-  default is 0.999. Removes sparse terms from a
-  term-document matrix, see help(removeSparseTerms) for
-  more details. Values close to 1 result in a sparse
-  matrix, values close to zero result in a dense matrix. It
-  may be useful to reduce sparseness if the matrix is too
-  big to manipulate in memory or if processing times are
-  long.}
+  default is one (ie. no sparsing applied). Removes sparse
+  terms from a term-document matrix, see
+  help(removeSparseTerms) for more details. Values close to
+  1 result in a sparse matrix, values close to zero result
+  in a dense matrix. It may be useful to reduce sparseness
+  if the matrix is too big to manipulate in memory or if
+  processing times are long.}
 
   \item{parallel}{logical.  If TRUE attempts to run the
   function on multiple cores.  Note that this may actually

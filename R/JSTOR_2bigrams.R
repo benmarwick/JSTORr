@@ -1,23 +1,23 @@
 #' Plot the frequency of one bigram against bigram over time in a JSTOR DfR dataset
 #' 
 #' @description Function to plot changes in the relative frequency of two bigrams over time. The relative frequency is the frequency of the bigram in a document divided by the total number of bigrams in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
-#' @param unpack2 object returned by the function JSTOR_unpack2.
+#' @param unpack2grams object returned by the function JSTOR_unpack2grams.
 #' @param bigram1 two words, surrounded by standard quote marks, or a vector of bigrams.
 #' @param bigram2 two words, surrounded by standard quote marks, or a vector of bigrams.
 #' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
-#' ## JSTOR_2bigrams(unpack2, "pirate booty", "treasure chest")
-#' ## JSTOR_2bigrams(unpack2, c("treasure chest", "musket balls"), c("jolly roger"), span = 0.2)
+#' ## JSTOR_2bigrams(unpack2grams, "pirate booty", "treasure chest")
+#' ## JSTOR_2bigrams(unpack2grams, c("treasure chest", "musket balls"), c("jolly roger"), span = 0.2)
 
 
 
-JSTOR_2bigrams <- function(unpack2, bigram1, bigram2, span = 0.4){
+JSTOR_2bigrams <- function(unpack2grams, bigram1, bigram2, span = 0.4){
   #### investigate change in use of certain bigrams of interest over time
   # set working directory to where the bigrams are
   # (within working directory) with lots of CSV files
-  y <- unpack2$bigrams
-  bibliodata <- unpack2$bibliodata
+  y <- unpack2grams$bigrams
+  bibliodata <- unpack2grams$bibliodata
   
   # using dtm
   # y <- as.matrix(bigrams)

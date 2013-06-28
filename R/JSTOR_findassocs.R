@@ -219,7 +219,7 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
   suppressWarnings(print(
     ggplot(wordcor1, aes(factor(years), r)) + 
       geom_text(aes(label = words, size = r, alpha = r), position=position_jitter(h=0.1,w=0.2), subset = .(r > 0)) +
-      scale_size(range = c(3, biggest), name = paste0("Correlation value with the word '", word, "'")) +
+      scale_size(range = c(3, biggest), name = paste0("Correlation value \nwith the word\n '", word, "'")) +
       scale_alpha(range=c(0.5,1), limits=c(min(wordcor1$r), max(wordcor1$r)), guide = 'none') + 
       xlab("Year range") +
       # inspect bibliodata$year to see min and max year to set axis limits

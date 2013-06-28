@@ -2,11 +2,12 @@
 \alias{JSTOR_2bigrams}
 \title{Plot the frequency of one bigram against bigram over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_2bigrams(unpack2, bigram1, bigram2, span = 0.4)
+  JSTOR_2bigrams(unpack2grams, bigram1, bigram2,
+    span = 0.4)
 }
 \arguments{
-  \item{unpack2}{object returned by the function
-  JSTOR_unpack2.}
+  \item{unpack2grams}{object returned by the function
+  JSTOR_unpack2grams.}
 
   \item{bigram1}{two words, surrounded by standard quote
   marks, or a vector of bigrams.}
@@ -31,7 +32,7 @@
   (http://dfr.jstor.org/).
 }
 \examples{
-## JSTOR_2bigrams(unpack2, "pirate booty", "treasure chest")
-## JSTOR_2bigrams(unpack2, c("treasure chest", "musket balls"), c("jolly roger"), span = 0.2)
+## JSTOR_2bigrams(unpack2grams, "pirate booty", "treasure chest")
+## JSTOR_2bigrams(unpack2grams, c("treasure chest", "musket balls"), c("jolly roger"), span = 0.2)
 }
 
