@@ -43,7 +43,7 @@ message("done")
 
 message("building x-axis labels...")
 # put names on the list of dtm so we can see the years represented by each dtm
-names(dtmlist) <- llply(years, function(i) paste0(min(i),"_",max(i) ),.progress = "text", .inform = FALSE)
+names(dtmlist) <- llply(years, function(i) paste0(min(i),"-",max(i) ),.progress = "text", .inform = FALSE)
 message("done")
  
 message(paste0("calculating most frequent words in each ", n, " year chunk..."))
@@ -82,7 +82,8 @@ suppressWarnings(print(ggplot(freqterms3, aes(factor(year), rank)) +
     panel.border=element_blank(),
     panel.grid.major=element_blank(),
     panel.grid.minor=element_blank(),
-    plot.background=element_blank())
+    plot.background=element_blank(),
+    axis.text.x=element_text(angle = 90, hjust = 0))
   ))
 
 # return the dataframe in case anything else is wanted with it

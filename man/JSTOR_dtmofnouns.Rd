@@ -28,6 +28,11 @@
   be slower if you have one core, limited memory or if the
   data set is small due to communication of data between
   the cores.}
+
+  \item{POStag}{logical Do part-of-speech tagging to
+  identify and remove non-nouns. Default is True, but the
+  option is here to speed things up when working
+  interactively with large numbers of documents.}
 }
 \value{
   Returns a Document Term Matrix containing documents,
