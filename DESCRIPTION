@@ -13,7 +13,7 @@ Description: Simple exploratory text mining and document clustering of journal
     with any of the other functions. For more details on installation and
     usage, see https://github.com/UW-ARCHY-textual-macroanalysis-lab/JSTORr
 License: MIT
- Depends:
+Depends:
      ggplot2,
      reshape2,
      plyr,
@@ -36,7 +36,7 @@ License: MIT
      snow,
      devtools,
      openNLPmodels.en
- Imports:
+Imports:
      ggplot2,
      reshape2,
      plyr,
@@ -59,7 +59,7 @@ License: MIT
      snow,
      devtools,
      openNLPmodels.en
- Collate:
+Collate:
      'JSTOR_1word.R'
      'JSTOR_2wordcor.R'
      'JSTOR_2words.R'
