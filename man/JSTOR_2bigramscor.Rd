@@ -25,13 +25,10 @@
   the correlation.
 }
 \description{
-  Function to plot changes in the relative frequency of two
-  sets of bigrams (two sets of 2-grams, or two sets of
-  multiple bigrams) over time. The relative frequency is
-  the frequency of bigrams in a document divided by the
-  total number of bigrams in a document. For use with
-  JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/).
+  Function to plot changes in the correlation of two sets
+  of bigrams (two sets of 2-grams, or two sets of multiple
+  bigrams) over time. For use with JSTOR's Data for
+  Research datasets (http://dfr.jstor.org/).
 }
 \examples{
 ## JSTOR_2bigramscor(unpack2, bigram1 = "hot water", bigram2 = "cold water")

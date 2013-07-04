@@ -1,4 +1,4 @@
-#' Plot the frequency of one word over time in a JSTOR DfR dataset
+#' Plot the frequency of one bigram over time in a JSTOR DfR dataset
 #' 
 #' @description Function to plot changes in the relative frequency of a bigram over time. The relative frequency is the frequency of the bigram in a document divided by the total number of bigrams in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param unpack2grams object returned by the function JSTOR_unpack2grams.

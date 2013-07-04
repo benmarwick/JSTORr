@@ -1,7 +1,7 @@
 JSTORr
 ======
 
-Simple exploratory text mining of journal articles from JSTOR's Data for Research service.
+Simple exploratory text mining and document clustering of journal articles from JSTOR's Data for Research service.
 
 Objective
 ----
@@ -15,7 +15,7 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - the most frequent words by n-year ranges
 - the top n words correlated a word by n-year ranges of documents (ie. the top 20 words associated with the word 'pirate' in 5 year ranges)
 - various methods (k-means, PCA, affinity propagation) to detect clusters in a set of documents containing a word or set of words
-- topic models with the `lda` package for full `R` solution or the MALLET Java-based program (if installing that is an option)
+- topic models with the `lda` package for full `R` solution or the Java-based MALLET program (if installing that is an option)
 - most frequent words by n-year ranges of documents (ie. top words in all documents published in 2-5-10 year ranges, whatever you like)
 
 

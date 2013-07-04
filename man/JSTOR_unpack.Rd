@@ -25,9 +25,10 @@
 \description{
   Import and reshape journal articles and bibliographic
   data from the downloaded zipfile and reshape ready for
-  the MALLET functions. This is only useful for smaller
-  collections because it generates large data objects. As a
-  rough guide, <5000 articles should be ok.
+  the MALLET functions. Currently this is only useful for
+  smaller collections because it generates large data
+  objects in memory. As a rough guide, <5000 articles
+  should be ok.
 }
 \examples{
 ## unpack <- JSTOR_unpack(path = "C:/Users/marwick/Downloads/JSTOR")

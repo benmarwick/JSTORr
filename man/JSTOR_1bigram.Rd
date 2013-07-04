@@ -1,6 +1,6 @@
 \name{JSTOR_1bigram}
 \alias{JSTOR_1bigram}
-\title{Plot the frequency of one word over time in a JSTOR DfR dataset}
+\title{Plot the frequency of one bigram over time in a JSTOR DfR dataset}
 \usage{
   JSTOR_1bigram(unpack2grams, bigram, span = 0.4)
 }

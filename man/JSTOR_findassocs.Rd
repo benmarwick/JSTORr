@@ -50,8 +50,8 @@
 }
 \description{
   Generates a plot of the top n words in all the documents
-  in ranges of years that positively correlate with a given
-  word. For use with JSTOR's Data for Research datasets
+  that positively correlate with a given word, in ranges of
+  years. For use with JSTOR's Data for Research datasets
   (http://dfr.jstor.org/). For best results, repeat the
   function after adding common words to the stopword list.
   To learn more about editing the stopword list, see the

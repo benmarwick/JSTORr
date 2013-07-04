@@ -1,6 +1,6 @@
 #' Plot the change over time of the correlation between one set of words and another set of words in a JSTOR DfR dataset
 #' 
-#' @description Function to plot changes in the relative frequency of two set of words (two sets of 1-grams) over time. The relative frequency is the frequency of the set of words in a document divided by the total number of words in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @description Function to plot changes in the correlation of two set of words (two sets of 1-grams) over time. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param unpack1grams object returned by the function JSTOR_unpack1grams.
 #' @param word1 One word or a vector of words, each word surrounded by standard quote marks.
 #' @param word2  One word or a vector of words, each word surrounded by standard quote marks.

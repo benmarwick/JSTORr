@@ -29,11 +29,12 @@
   affinity propogation clustering, k-means and PCA outputs
 }
 \description{
-  Generates plots visualizing a clustering of the
-  documents. For use with JSTOR's Data for Research
-  datasets (http://dfr.jstor.org/). For best results,
-  repeat the function several times after adding common
-  words to the stopword list and excluding them using the
+  Generates plots visualizing the results of different
+  clustering methods applied to the documents. For use with
+  JSTOR's Data for Research datasets
+  (http://dfr.jstor.org/). For best results, repeat the
+  function several times after adding common words to the
+  stopword list and excluding them using the
   JSTOR_removestopwords function.
 }
 \examples{

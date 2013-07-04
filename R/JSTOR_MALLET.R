@@ -1,6 +1,6 @@
 #' Generate one or more topic models using MALLET's implementation of Latent Dirichlet allocation (LDA) 
 #' 
-#' @description Generates one or more topic models using MALLET and plots diagnostics. This is a very basic R wrapper for MALLET on Windows. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @description Generates one or more topic models using MALLET and plots diagnostics. This is a very basic R wrapper for MALLET on Windows, see here for something better: http://www.cs.princeton.edu/~mimno/R/ For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param corpus the object returned by the function JSTOR_corpusofnouns. A corpus containing the documents.
 #' @param MALLET the directory containing MALLET's bin directory, ideally "C:/mallet-2.0.7" or similarly close to C:/ on a Windows computer.
 #' @param JAVA the directory containing java.exe. To find this directory, type at the R prompt: Sys.getenv("JAVA_HOME")

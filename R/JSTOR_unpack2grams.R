@@ -122,7 +122,7 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   
   # now read in file
   cit <- read.csv("citations.CSV", row.names = NULL, comment.char = "", header = TRUE, 
-                  stringsAsFactors = FALSE, colClasses=headclasses)
+                  stringsAsFactors = FALSE, colClasses=headclasses, quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
   library(stringr)

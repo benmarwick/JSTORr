@@ -30,7 +30,9 @@
 \description{
   Generates one or more topic models using MALLET and plots
   diagnostics. This is a very basic R wrapper for MALLET on
-  Windows. For use with JSTOR's Data for Research datasets
+  Windows, see here for something better:
+  http://www.cs.princeton.edu/~mimno/R/ For use with
+  JSTOR's Data for Research datasets
   (http://dfr.jstor.org/).
 }
 \examples{

@@ -25,11 +25,9 @@
   the correlation.
 }
 \description{
-  Function to plot changes in the relative frequency of two
-  set of words (two sets of 1-grams) over time. The
-  relative frequency is the frequency of the set of words
-  in a document divided by the total number of words in a
-  document. For use with JSTOR's Data for Research datasets
+  Function to plot changes in the correlation of two set of
+  words (two sets of 1-grams) over time. For use with
+  JSTOR's Data for Research datasets
   (http://dfr.jstor.org/).
 }
 \examples{

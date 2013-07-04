@@ -143,7 +143,7 @@ hr {
 <body>
 <h1>JSTORr</h1>
 
-<p>Simple exploratory text mining of journal articles from JSTOR&#39;s Data for Research service.</p>
+<p>Simple exploratory text mining and document clustering of journal articles from JSTOR&#39;s Data for Research service.</p>
 
 <h2>Objective</h2>
 
@@ -187,7 +187,7 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macr
 <li><code>Word Counts</code> <strong>and</strong> <code>bigrams</code> as the &#39;Data Type&#39;</li>
 </ul>
 
-<p>Second, once you&#39;ve downloaded and unzipped the zip file that is the &#39;full dataset&#39; from DfR then you can start <code>R</code> (highly recommended to use <a href="http://www.rstudio.com/ide/download/">RStudio</a> when working with this package), install this package and run this function: </p>
+<p>Second, once you&#39;ve downloaded and unzipped the zip file that is the &#39;full dataset&#39; from DfR then you can start <code>R</code> (it&#39;s highly recommended to use <a href="http://www.rstudio.com/ide/download/">RStudio</a> when working with this package, much easier to manage the plot output), install this package and run these lines: </p>
 
 <pre><code>library(JSTORr)
 unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JSTOR&quot;) # change the path to suit your system
@@ -201,11 +201,11 @@ unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JS
 
 <p>First, go to <a href="http://dfr.jstor.org/">Data for Research service</a> and request data as specified above and download the zip file when it&#39;s available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: <code>unzip(&quot;2013.6.4.usytW8LZ.zip&quot;)</code>).</p>
 
-<p>Second, start <code>R</code> and run something like <code>unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JSTOR&quot;)</code>, change the path value to suit your system and watch the console progress bars. Then you&#39;ll get a data object <code>unpack1grams</code>, containing a document term matrix of 1-grams and a data frame of bibliographic data.</p>
+<p>Second, start <code>RStudio</code> and run something like <code>unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JSTOR&quot;)</code>, change the path value to suit your system and watch the console progress bars. Then you&#39;ll get a data object <code>unpack1grams</code>, containing a document term matrix of 1-grams and a data frame of bibliographic data.</p>
 
 <p>Third, explore some visualisations of key words over time with <code>JSTOR_1word</code>, <code>JSTOR_2words</code>, and correlations of words over time with <code>JSTOR_2wordcor</code>.</p>
 
-<p>Fourth, use the <code>JSTOR_dtmofnouns</code> function to create a document term matrix of nouns only, then investigate the most frequent words over time with <code>JSTOR_freqwords</code> and analyse correlations over time of all words with a word of interest with <code>JSTOR_findassocs</code>. To optimise the output from this function it will be necessary to add words to the stop word list repeat these functions a few times until the results look reasonable. See the documentation for those functions for instructions on how to edit the stop word list.</p>
+<p>Fourth, run <code>nouns &lt;- JSTOR_dtmofnouns(unpack1grams)</code> to create a document term matrix of nouns only, then investigate the most frequent words over time with <code>JSTOR_freqwords</code> and analyse correlations over time of all words with a word of interest with <code>JSTOR_findassocs</code>. To optimise the output from this function you must add words to the stop word list and then repeat these functions a few times until the results look reasonable. See the documentation for those functions for instructions on how to edit the stop word list.</p>
 
 <p>Fifth, explore document clusters using <code>JSTOR_clusterbywords</code> to calculate Affinity Propagation Clustering, K-means Clustering and Principal Components Analysis on a document term matrix.</p>
 
@@ -219,7 +219,7 @@ unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JS
 
 <h2>Acknowledgements</h2>
 
-<p>Many of the best ideas for these functions have come directly from the prolific and creative research and coding of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. None of them are responsible for the consequences of use of this package, no matter how awful, even if they arise from flaws in it (of course I take full responsibility for the flaws). </p>
+<p>Many of the best ideas for these functions have come directly from the prolific and creative research and coding of Andrew Goldstone, Jonathan Goodwin, Shawn Graham, Matt Jockers, David Mimno, Ben Schmidt and Ted Underwood. None of them are responsible for the consequences of use of this package, no matter how awful, even if they arise from flaws in it (of course I take full responsibility for the flaws). Magdalena Balazinska provided access to computing resources for development and testing, for which I&#39;m most grateful. Thanks to Ian Kretzler, Jiun-Yu Liu and Joss Whittaker for intensive testing and many useful suggestions.</p>
 
 </body>
 

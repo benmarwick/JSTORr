@@ -1,7 +1,7 @@
 
 #' Plot the change over time of the correlation between one bigram (or set of bigrams) and another bigram (or set of bigrams) in a JSTOR DfR dataset
 #' 
-#' @description Function to plot changes in the relative frequency of two sets of bigrams (two sets of 2-grams, or two sets of multiple bigrams) over time. The relative frequency is the frequency of bigrams in a document divided by the total number of bigrams in a document. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+#' @description Function to plot changes in the correlation of two sets of bigrams (two sets of 2-grams, or two sets of multiple bigrams) over time. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 #' @param unpack2 object returned by the function JSTOR_unpack2.
 #' @param bigram1 One bigram or a vector of bigrams, each bigram surrounded by standard quote marks.
 #' @param bigram2 One bigram or a vector of bigrams, each bigram surrounded by standard quote marks.

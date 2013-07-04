@@ -1,6 +1,6 @@
 #' Plot the words with the strongest correlation with a given word, by time intervals
 #' 
-#' @description Generates a plot of the top n words in all the documents in ranges of years that positively correlate with a given word. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). For best results, repeat the function after adding common words to the stopword list. To learn more about editing the stopword list, see the help for the JSTOR_dtmofnouns function. 
+#' @description Generates a plot of the top n words in all the documents that positively correlate with a given word, in ranges of years. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). For best results, repeat the function after adding common words to the stopword list. To learn more about editing the stopword list, see the help for the JSTOR_dtmofnouns function. 
 #' @param unpack1grams object returned by the function JSTOR_unpack1grams.
 #' @param nouns the object returned by the function JSTOR_dtmofnouns. A Document Term Matrix containing the documents.
 #' @param n the number years to aggregate documents by. For example, n = 5 (the default value) will create groups of all documents published in non-overlapping five year ranges. Note that high n values combined with high plimit and corlimit values will severly filter the output. For exploratory data analysis it's recommended to start with low n values and work up.

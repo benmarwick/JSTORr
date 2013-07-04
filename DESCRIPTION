@@ -1,84 +1,17 @@
 Package: JSTORr
 Type: Package
-Title: Simple text mining of JSTOR journals
+Title: Simple text mining and document clustering of JSTOR journal articles
 Version: 1.0
 Date: 2013-04-25
 Author: Ben Marwick
 Maintainer: Ben Marwick <bmarwick@gmail.com>
-Description: Simple exploratory text mining of journal articles from JSTOR's
-    Data for Research service. Go to http://dfr.jstor.org/, make a request for
-    data (specify CSV as outout format and Word Counts as data type), then once
-    you get a zip file, unzip it and start with one of the unpack functions and
-    then you're ready to go with any of the other functions.
+Description: Simple exploratory text mining and document clustering of journal
+    articles from JSTOR's Data for Research service. Go to
+    http://dfr.jstor.org/, make a request for data (specify CSV as outout
+    format and Word Counts as data type), then once you get a zip file, unzip
+    it and start with one of the unpack functions and then you're ready to go
+    with any of the other functions. For more details on installation and
+    usage, see https://github.com/UW-ARCHY-textual-macroanalysis-lab/JSTORr
 License: MIT
-Depends:
-    ggplot2,
-    reshape2,
-    plyr,
-    stringr,
-    tm,
-    openNLP,
-    lda,
-    XML,
-    cluster,
-    apcluster,
-    ggdendro,
-    FactoMineR,
-    gridExtra,
-    grid,
-    data.table,
-    snowfall,
-    slam,
-    digest,
-    igraph,
-    snow,
-    devtools,
-    openNLPmodels.en
-Imports:
-    ggplot2,
-    reshape2,
-    plyr,
-    stringr,
-    tm,
-    openNLP,
-    lda,
-    XML,
-    cluster,
-    apcluster,
-    ggdendro,
-    FactoMineR,
-    gridExtra,
-    grid,
-    data.table,
-    snowfall,
-    slam,
-    digest,
-    igraph,
-    snow,
-    devtools,
-    openNLPmodels.en
-Collate:
-    'JSTOR_1word.R'
-    'JSTOR_2wordcor.R'
-    'JSTOR_2words.R'
-    'JSTOR_unpack.R'
-    'JSTORr-package.r'
-    'JSTOR_corpusofnouns.R'
-    'JSTOR_1bigram.R'
-    'JSTOR_2bigrams.R'
-    'JSTOR_2bigramscor.R'
-    'JSTOR_lda.R'
-    'JSTOR_MALLET.R'
-    'JSTOR_lda_hotncoldtopics.R'
-    'JSTOR_MALLET_hotncoldtopics.R'
-    'JSTOR_freqwords.R'
-    'JSTOR_findassocs.R'
-    'JSTOR_MALLET_topicsovertime.R'
-    'JSTOR_MALLET_topicinfo.R'
-    'JSTOR_removestopwords.R'
-    'JSTOR_lda_docdists.R'
-    'JSTOR_lda_topicdists.R'
-    'JSTOR_clusterbywords.R'
-    'JSTOR_dtmofnouns.R'
-    'JSTOR_unpack1grams.R'
-    'JSTOR_unpack2grams.R'
+Depends: ggplot2, reshape2, plyr, stringr, tm, openNLP, lda, XML, cluster, apcluster, ggdendro, FactoMineR, gridExtra, grid, data.table, snowfall, slam, digest, igraph, snow, devtools, openNLPmodels.en 
+Imports: ggplot2, reshape2, plyr, stringr, tm, openNLP, lda, XML, cluster, apcluster, ggdendro, FactoMineR, gridExtra, grid, data.table, snowfall, slam, digest, igraph, snow, devtools, openNLPmodels.en 
