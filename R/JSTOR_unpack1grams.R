@@ -115,16 +115,10 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
   message("arranging bibliographic data...")
   #### bring in citations file with biblio data for each paper
   setwd(path) # change this to the location of the citations.csv file
-  
-  # get the colclasses to speed up the reading of a large CSV
-  # this comes from http://rforwork.info/2012/10/11/know-your-dataset-ffdf/
-  headset = read.csv("citations.CSV", header = TRUE, nrows = 50)
-  headclasses = sapply(headset, class)
-  headclasses[grep("factor", headclasses)] = "character"
-  
+    
   # now read in file
   cit <- read.csv("citations.CSV", row.names = NULL, comment.char = "", header = TRUE, 
-                  stringsAsFactors = FALSE, colClasses=headclasses, quote = "")
+                  stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
   library(stringr)
