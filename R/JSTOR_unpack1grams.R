@@ -142,7 +142,7 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
   bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]+{4}")
   
   # clean up a little
-  rm(aawc1, cit, citfla, myfiles, headclasses); invisible(gc(verbose = FALSE))
+  rm(aawc1, cit, citfla, myfiles); invisible(gc(verbose = FALSE))
   
   # make one giant dtm with all docs (rather slow...)
   
