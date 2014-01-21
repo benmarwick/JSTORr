@@ -39,7 +39,6 @@ JSTOR_MALLET <- function(corpus, MALLET="C:/mallet-2.0.7" , JAVA = "C:/Program F
     Sys.setenv(PATH = JAVA)                                   # but now I can't build the package with them...
                                                               # and it seems to work fine without them
   # configure variables and filenames for MALLET
-  ## here using MALLET's built-in example data 
   
   # create list to store output of loop
   loop <- vector("list", length(K))
@@ -83,39 +82,39 @@ JSTOR_MALLET <- function(corpus, MALLET="C:/mallet-2.0.7" , JAVA = "C:/Program F
   message("done")
   
   
-  # Output files are in inspect the diagnostics files to see which number of topics is best. 
-  message("preparing diagnostics...")
-  library(XML)
-  setwd(MALLET)
-  diagnosticfiles <- list.files(pattern="(diagnostics).*\\.xml$")
-  diagnostics <- lapply(1:length(K), function(j) xmlParse(diagnosticfiles[[j]], useInternal = TRUE))
-  # function to get topic diagnostics from XML files
-  makediagnosticsdataframe <- function(x){
-    tmp <-  t(xmlSApply(xmlRoot(x), xmlAttrs))[, -1]
-    df <- as.data.frame(tmp, stringsAsFactors = FALSE, row.names = 1:nrow(tmp))
-  }
-  # apply function to diagnostic files from topic models with different numbers of topics
-  # thanks to https://stat.ethz.ch/pipermail/r-help/2009-May/199076.html
-  listofdiagnostics <- lapply(1:length(diagnostics), function(i) makediagnosticsdataframe(diagnostics[[i]]))
-  # attach topic numbers to the list so we know what data are associated with what number of topics
-  names(listofdiagnostics) <- as.numeric(gsub("\\D", "", diagnosticfiles))
-  message("done")
-  
-  # explore diagnostics
-  message("plotting diagnostics...")
-  library(reshape2)
-  suppressWarnings(df <- melt(listofdiagnostics))
-  # convert character dataframe to numeric
-  df <- data.frame(sapply(df,function(x)as.numeric(as.character(x)))) 
-  suppressWarnings(df <- melt(df, id.vars = "L1"))
-  # visualize
-  library(ggplot2)
-  print(ggplot(df, aes(factor(L1), value)) + 
-    geom_violin() + 
-    geom_jitter(alpha = 0.1) + 
-    facet_wrap(~variable, scale = "free"))
-  # to assist with interpretation: http://article.gmane.org/gmane.comp.ai.mallet.devel/1483/
-  message("done")
+#   # Output files are in inspect the diagnostics files to see which number of topics is best. 
+#   message("preparing diagnostics...")
+#   library(XML)
+#   setwd(MALLET)
+#   diagnosticfiles <- list.files(pattern="(diagnostics).*\\.xml$")
+#   diagnostics <- lapply(1:length(K), function(j) xmlParse(diagnosticfiles[[j]], useInternal = TRUE))
+#   # function to get topic diagnostics from XML files
+#   makediagnosticsdataframe <- function(x){
+#     tmp <-  t(xmlSApply(xmlRoot(x), xmlAttrs))[, -1]
+#     df <- as.data.frame(tmp, stringsAsFactors = FALSE, row.names = 1:nrow(tmp))
+#   }
+#   # apply function to diagnostic files from topic models with different numbers of topics
+#   # thanks to https://stat.ethz.ch/pipermail/r-help/2009-May/199076.html
+#   listofdiagnostics <- lapply(1:length(diagnostics), function(i) makediagnosticsdataframe(diagnostics[[i]]))
+#   # attach topic numbers to the list so we know what data are associated with what number of topics
+#   names(listofdiagnostics) <- as.numeric(gsub("\\D", "", diagnosticfiles))
+#   message("done")
+#   
+#   # explore diagnostics
+#   message("plotting diagnostics...")
+#   library(reshape2)
+#   suppressWarnings(df <- melt(listofdiagnostics))
+#   # convert character dataframe to numeric
+#   df <- data.frame(sapply(df,function(x)as.numeric(as.character(x)))) 
+#   suppressWarnings(df <- melt(df, id.vars = "L1"))
+#   # visualize
+#   library(ggplot2)
+#   print(ggplot(df, aes(factor(L1), value)) + 
+#     geom_violin() + 
+#     geom_jitter(alpha = 0.1) + 
+#     facet_wrap(~variable, scale = "free"))
+#   # to assist with interpretation: http://article.gmane.org/gmane.comp.ai.mallet.devel/1483/
+#   message("done")
   message(paste0("MALLET's output files are in ", getwd()))
   # pop open the folder for the user to see: 
   # from http://stackoverflow.com/a/12135823/1036500

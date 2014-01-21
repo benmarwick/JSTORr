@@ -20,6 +20,7 @@ Depends:
     stringr,
     tm,
     openNLP,
+    NLP,
     lda,
     XML,
     cluster,

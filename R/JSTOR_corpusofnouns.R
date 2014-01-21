@@ -13,7 +13,6 @@
 JSTOR_corpusofnouns <- function(x, parallel=FALSE){
 
 wordcounts <- x$wordcounts
-
   
 # Full-text method
 bibliodata <- x$bibliodata
@@ -55,25 +54,24 @@ if(parallel) { # if parallel == TRUE, do this top set...
   
 } else { # if parallel == FALSE, do this top set...
 
-message("applying part of speech tags to words...")
-library("openNLP")
-# apply POS tags, this can take a very long time...
-mycorpus.clean.POStag <- vector("list", length = length(mycorpus.clean))
-
-for(i in 1:length(mycorpus.clean)){
-  cat(paste0("tagged ", i," of ", length(mycorpus.clean), " documents\n")) 
-  mycorpus.clean.POStag[[i]] <- tmTagPOS(mycorpus.clean[[i]])
-  if (i%%10) invisible(gc(verbose = FALSE)) # force empty RAM evry 100 iterations
-  cat("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b")
-}
-
+  message("applying part of speech tags to words...")
+  library("openNLP")
+  # apply POS tags, this can take a very long time...
+  mycorpus.clean.POStag <- vector("list", length = length(mycorpus.clean))
+  
+  for(i in 1:length(mycorpus.clean)){
+    cat(paste0("tagged ", i," of ", length(mycorpus.clean), " documents\n")) 
+    mycorpus.clean.POStag[[i]] <- tmTagPOS(mycorpus.clean[[i]])
+    if (i%%10) invisible(gc(verbose = FALSE)) # force empty RAM evry 100 iterations
+    cat("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b")
+  }
+  
 }
 # clean up
 rm("mycorpus.clean"); if ( exists("tagger")) {rm("tagger") ; invisible(gc())} else {invisible(gc()) } 
 
-###### end POS-tagging ####
 
-###### now do a bunch of small data-cleaning jobs...
+######  do a bunch of small data-cleaning jobs...
 
 if(parallel) { # if parallel == TRUE, do this top set...
 
@@ -153,19 +151,11 @@ stopCluster(cl); rm(cl)
  
  library(plyr)
  # not parallel
- 
- message("done")
- message("extracting non-name nouns and discarding the rest...")
- 
- # just keep NNs
- mycorpus.POStag.split <- llply(1:length(mycorpus.clean.POStag), function(i)  read.table(textConnection(gsub(" ", "\n", mycorpus.clean.POStag[[i]])), sep="/", stringsAsFactors=FALSE), .progress = "text", .inform = FALSE)
- mycorpus.nouns <- llply(1:length(mycorpus.POStag.split), function(i) mycorpus.POStag.split[[i]][mycorpus.POStag.split[[i]]$V2 == "NN" | mycorpus.POStag.split[[i]]$V2 == "NNS",], .progress = "text", .inform = FALSE)
- 
- 
- message("done")
+
  message("discarding words with <3 characters...")
  
  # remove words with less than 3 characters
+ mycorpus.nouns <- mycorpus.clean 
  mycorpus.nouns <- llply(1:length(mycorpus.nouns), function(i) mycorpus.nouns[[i]][nchar(mycorpus.nouns[[i]]$V1)  > 3, ], .progress = "text", .inform = FALSE)
  
  
@@ -187,6 +177,24 @@ stopCluster(cl); rm(cl)
  mycorpus.noun.strings <- llply(1:length(mycorpus.noun.strings), function(j) iconv(mycorpus.noun.strings[[j]], "latin1", "ASCII", sub=""), .progress = "text", .inform = FALSE)
  # remove punctuation
  mycorpus.noun.strings <- llply(1:length(mycorpus.noun.strings), function(j) gsub("[[:punct:]]", "",  mycorpus.noun.strings[[j]]), .progress = "text", .inform = FALSE)
+ 
+ 
+ 
+ message("done")
+ message("extracting non-name nouns and discarding the rest...")
+ 
+ 
+ 
+ # just keep NNs
+ mycorpus.POStag.split <- llply(1:length(mycorpus.clean.POStag), function(i)  read.table(textConnection(gsub(" ", "\n", mycorpus.clean.POStag[[i]])), sep="/", stringsAsFactors=FALSE), .progress = "text", .inform = FALSE)
+ mycorpus.nouns <- llply(1:length(mycorpus.POStag.split), function(i) mycorpus.POStag.split[[i]][mycorpus.POStag.split[[i]]$V2 == "NN" | mycorpus.POStag.split[[i]]$V2 == "NNS",], .progress = "text", .inform = FALSE)
+ 
+ 
+ message("done")
+ 
+ 
+ 
+ 
  
 }
 
