@@ -129,7 +129,20 @@ if(parallel) {
  } else { # non-parallel method
 
 
-  pos <- JSTORr:::tagPOS(y$dimnames$Terms)
+  # pos <- tagPOS(y$dimnames$Terms)
+  
+
+    s <- as.String(y$dimnames$Terms)
+    word_token_annotator <- Maxent_Word_Token_Annotator()
+    PTA <- Maxent_POS_Tag_Annotator()
+    a2 <- Annotation(1L, "sentence", 1L, nchar(s))
+    a2 <- annotate(s, word_token_annotator, a2)
+    a3 <- annotate(s, PTA, a2)
+    a3w <- a3[a3$type == "word"]
+    POStags <- unlist(lapply(a3w$features, `[[`, "POS"))
+    POStagged <- paste(sprintf("%s/%s", s[a3w], POStags), collapse = " ")
+    pos <- list(POStagged = POStagged, POStags = POStags)
+
 
 }
 
