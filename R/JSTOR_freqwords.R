@@ -17,7 +17,9 @@ JSTOR_freqwords <- function(unpack1grams, nouns, n=5, lowfreq=300, topn = 20, bi
   
   # get bibliodata ready
   bibliodata <- unpack1grams$bibliodata
-  y <- nouns
+  message("removing stopwords...")
+  y <- nouns[, !(nouns$dimnames$Terms %in% stopwords(kind = "en")) ]
+  message("done")
 require(plyr)
 
 bibliodata$year <- as.numeric(as.character(bibliodata$year))

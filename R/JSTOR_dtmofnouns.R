@@ -87,7 +87,7 @@ if (POStag == TRUE) {
 message("keeping only non-name nouns...")
 # openNLP changed, so we need this replacement for tagPOS...
 library(NLP)
-tagPOS <-  function(x, ...) {
+tagPOS <-  function(x) {
   s <- as.String(x)
   word_token_annotator <- Maxent_Word_Token_Annotator()
   PTA <- Maxent_POS_Tag_Annotator()
@@ -132,7 +132,7 @@ if(parallel) {
 
 }
 
-y <- y[,grep("/NN", pos)]
+y <- y[,grep("/NN", unlist(strsplit(pos$POStagged, " ,/, ")))]
 } else { 
   # don't do POS tagging 
 }
