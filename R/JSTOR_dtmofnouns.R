@@ -87,7 +87,7 @@ if (POStag == TRUE) {
 message("keeping only non-name nouns...")
 # openNLP changed, so we need this replacement for tagPOS...
 library(NLP)
-.tagPOS <-  function(x) {
+tagPOS <-  function(x) {
   s <- as.String(x)
   word_token_annotator <- Maxent_Word_Token_Annotator()
   PTA <- Maxent_POS_Tag_Annotator()
@@ -111,13 +111,13 @@ if(parallel) {
   require(parallel); library(openNLPmodels.en)
   cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
   clusterEvalQ(cl, {
-    .tagPOS
+    tagPOS
     library(openNLPmodels.en)
   })
   clusterExport(cl, varlist = "y1", envir=environment())
   
   pos <- parLapply(cl, seq_along(y1), function(i) {
-    x <- .tagPOS(y1[[i]], language = "en")
+    x <- tagPOS(y1[[i]], language = "en")
     if (i%%10==0) invisible(gc())
     x
   })
@@ -129,7 +129,7 @@ if(parallel) {
  } else { # non-parallel method
 
 
-  pos <- .tagPOS(y$dimnames$Terms)
+  pos <- JSTORr:::tagPOS(y$dimnames$Terms)
 
 }
 
