@@ -89,12 +89,12 @@ message("keeping only non-name nouns...")
 library(NLP); library(data.table); library(openNLP)
 tagPOS <-  function(x) {
   
-  s <- as.String(s)
+  s <- as.String(x)
   ## Need sentence and word token annotations.
   
   a2 <- Annotation(1L, "sentence", 1L, nchar(s))
-  a2 <- annotate(s, Maxent_Word_Token_Annotator(), a2)
-  a3 <- annotate(s,  Maxent_POS_Tag_Annotator(), a2)
+  a2 <- NLP::annotate(s, Maxent_Word_Token_Annotator(), a2)
+  a3 <- NLP::annotate(s,  Maxent_POS_Tag_Annotator(), a2)
   
   ## Determine the distribution of POS tags for word tokens.
   a3w <- a3[a3$type == "word"]
@@ -150,7 +150,7 @@ if(parallel) {
 
 }
 
-y <- dtm[ , dtm$dimnames$Terms[pos[[1]]$POStags == "NN"], ]
+y <- y[ , y$dimnames$Terms[pos[[1]]$POStags == "NN"], ]
 
 } else { 
   # don't do POS tagging 
