@@ -139,8 +139,8 @@ if(parallel) {
 
 
 }
+y <- [ , y$dimnames$Terms[pos$POStags == "NN"], ]
 
-y <- y[,grep("/NN", unlist(strsplit(pos$POStagged, " ,/, ")))]
 } else { 
   # don't do POS tagging 
 }
