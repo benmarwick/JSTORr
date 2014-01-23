@@ -139,7 +139,8 @@ if(parallel) {
 
 
 }
-y <- [ , y$dimnames$Terms[pos$POStags == "NN"], ]
+
+y <- y[ , y$dimnames$Terms[pos$POStags == "NN"], ] 
 
 } else { 
   # don't do POS tagging 
