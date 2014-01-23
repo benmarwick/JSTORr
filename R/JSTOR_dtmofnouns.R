@@ -86,23 +86,28 @@ message("done")
 if (POStag == TRUE) {
 message("keeping only non-name nouns...")
 # openNLP changed, so we need this replacement for tagPOS...
-library(NLP)
+library(NLP); library(data.table); library(openNLP)
 tagPOS <-  function(x) {
-  s <- as.String(x)
-  word_token_annotator <- Maxent_Word_Token_Annotator()
-  PTA <- Maxent_POS_Tag_Annotator()
+  s <- paste(gsub("[^[:alnum:]]", "", x), collapse = " ")
+  s <- as.String(s)
+  ## Need sentence and word token annotations.
+  
   a2 <- Annotation(1L, "sentence", 1L, nchar(s))
-  a2 <- annotate(s, word_token_annotator, a2)
-  a3 <- annotate(s, PTA, a2)
+  a2 <- annotate(s, Maxent_Word_Token_Annotator(), a2)
+  a3 <- annotate(s,  Maxent_POS_Tag_Annotator(), a2)
+  
+  ## Determine the distribution of POS tags for word tokens.
   a3w <- a3[a3$type == "word"]
   POStags <- unlist(lapply(a3w$features, `[[`, "POS"))
+  
+  ## Extract token/POS pairs (all of them): easy.
   POStagged <- paste(sprintf("%s/%s", s[a3w], POStags), collapse = " ")
-  list(POStagged = POStagged, POStags = POStags)
-}
+  data.table(words = s[a3w], POStags = POStags)
+} ## End of tagPOS function 
 
 
 
-library(openNLP)
+
 
 if(parallel) {
   
@@ -129,19 +134,8 @@ if(parallel) {
  } else { # non-parallel method
 
 
-  # pos <- tagPOS(y$dimnames$Terms)
+  pos <- tagPOS(y$dimnames$Terms)
   
-
-    s <- as.String(y$dimnames$Terms)
-    word_token_annotator <- Maxent_Word_Token_Annotator()
-    PTA <- Maxent_POS_Tag_Annotator()
-    a2 <- Annotation(1L, "sentence", 1L, nchar(s))
-    a2 <- annotate(s, word_token_annotator, a2)
-    a3 <- annotate(s, PTA, a2)
-    a3w <- a3[a3$type == "word"]
-    POStags <- unlist(lapply(a3w$features, `[[`, "POS"))
-    POStagged <- paste(sprintf("%s/%s", s[a3w], POStags), collapse = " ")
-    pos <- list(POStagged = POStagged, POStags = POStags)
 
 
 }
