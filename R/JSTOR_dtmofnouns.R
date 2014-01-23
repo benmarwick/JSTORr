@@ -88,7 +88,7 @@ message("keeping only non-name nouns...")
 # openNLP changed, so we need this replacement for tagPOS...
 library(NLP); library(data.table); library(openNLP)
 tagPOS <-  function(x) {
-  s <- paste(gsub("[^[:alnum:]]", "", x), collapse = " ")
+  
   s <- as.String(s)
   ## Need sentence and word token annotations.
   
@@ -102,7 +102,7 @@ tagPOS <-  function(x) {
   
   ## Extract token/POS pairs (all of them): easy.
   POStagged <- paste(sprintf("%s/%s", s[a3w], POStags), collapse = " ")
-  data.table(words = s[a3w], POStags = POStags)
+  list(POStagged = POStagged, POStags = POStags)
 } ## End of tagPOS function 
 
 
@@ -134,13 +134,23 @@ if(parallel) {
  } else { # non-parallel method
 
 
-  pos <- tagPOS(y$dimnames$Terms)
+  # pos <- tagPOS(y$dimnames$Terms)
+  
+  yt <- y$dimnames$Terms
+  
+  yt <- paste(gsub("[^[:alnum:]]", "", yt), collapse = " ")
+  
+  yt <- gsub('(\\s)\\1+', '\\1', yt )
+  
+  pos <- lapply(yt, function(x) {
+    tagPOS(x)
+  })
   
 
 
 }
 
-y <- y[ , y$dimnames$Terms[pos$POStags == "NN"], ] 
+y <- dtm[ , dtm$dimnames$Terms[pos[[1]]$POStags == "NN"], ]
 
 } else { 
   # don't do POS tagging 
