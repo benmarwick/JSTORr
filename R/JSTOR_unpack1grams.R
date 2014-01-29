@@ -173,6 +173,22 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
 # the CSV file is dodgy... 
 wordcounts <- wordcounts[unique(as.character(wordcounts$dimnames$Docs[1:nrow(wordcounts)])), ]
   
+  message("removing stopwords...")
+  wordcounts <- wordcounts[, !(wordcounts$dimnames$Terms %in% stopwords(kind = "en")) ]
+  message("done")
+  
+  message("discarding words with <3 characters (probably OCR errors)...")
+  wordcounts <- wordcounts[,nchar(wordcounts$dimnames$Terms) > 3]
+  message("done")
+  
+  message("discarding words with >2 consecutive characters (probably OCR errors)...")
+  wordcounts <- wordcounts[,!grepl("(.)\\1{2,}", wordcounts$dimnames$Terms)]
+  message("done")
+  
+  message("discarding non-ASCII characters...")
+  wordcounts <- wordcounts[,(wordcounts$dimnames$Terms %in% iconv(wordcounts$dimnames$Terms, "latin1", "ASCII", sub=""))]
+  message("done")
+  
   
   #### end 1-grams ####
   
