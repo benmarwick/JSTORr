@@ -2,7 +2,8 @@
 \alias{JSTOR_lda_hotncoldtopics}
 \title{Plot the top five hot and cold topics in the archive}
 \usage{
-  JSTOR_lda_hotncoldtopics(lda, pval = 0.05, ma = 5)
+  JSTOR_lda_hotncoldtopics(lda, pval = 0.05, ma = 5,
+    size = 12)
 }
 \arguments{
   \item{lda}{the object returned by the function
@@ -14,6 +15,9 @@
 
   \item{ma}{moving average interval, default is five
   years.}
+
+  \item{size}{size of the text in the legend (the topic
+  keywords). Default is 12.}
 }
 \value{
   Returns a plot of the hot topics and plot of the cold

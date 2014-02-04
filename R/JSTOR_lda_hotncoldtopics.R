@@ -4,13 +4,14 @@
 #' @param lda the object returned by the function JSTOR_lda.
 #' @param pval p-value of the correlation cutoff for topics to include in the top 5 negative/positive list (ie. only topics where p<0.01 or 0.001?). Default is 0.05.
 #' @param ma moving average interval, default is five years.
+#' @param size size of the text in the legend (the topic keywords). Default is 12.
 #' @return Returns a plot of the hot topics and plot of the cold topics and a list of dataframes of the topic proportions per year. Years as rows, topics as columns and posterior probabilities as cell values. Uses a five year moving average to smooth the plots a bit.
 #' @examples 
 #' ## hotncold <- JSTOR_lda_hotncoldtopics(lda = lda150, ma = 10) 
 
 
 
-JSTOR_lda_hotncoldtopics <- function(lda, pval=0.05, ma=5){
+JSTOR_lda_hotncoldtopics <- function(lda, pval=0.05, ma=5, size=12){
   
   # unpack output from JSTOR_lda
   topic.props <- lda[[1]]
@@ -51,14 +52,16 @@ JSTOR_lda_hotncoldtopics <- function(lda, pval=0.05, ma=5){
   dat.m.pos <- melt(top5_positive_df, id.vars='year')
   library(ggplot2)
   print(ggplot(dat.m.pos , aes(year, value, group=variable)) + 
-          geom_line(aes(colour=variable)) )
+          geom_line(aes(colour=variable)) +
+          theme(legend.text = element_text( size = size)))
   
   # plot top five -ve
   top5_negative_df <- data.frame(year = topic.props.agg$year, topic.props.agg[names(topic.props.agg) %in% neg$topic])
   
   dat.m.neg <- melt(top5_negative_df, id.vars='year')
   print(ggplot(dat.m.neg , aes(year, value, group=variable)) + 
-          geom_line(aes(colour=variable)) )
+          geom_line(aes(colour=variable)) +
+          theme(legend.text = element_text( size = size)))
   
   return(list("top5_positive" = top5_positive_df, "top5_negative" = top5_negative_df, "top5_pos_cor" = pos, "top5_neg_cor" = neg))
   
