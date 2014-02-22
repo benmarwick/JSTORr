@@ -2,7 +2,7 @@
 \alias{JSTOR_unpack2grams}
 \title{Unpack JSTOR journal articles and bibliographic data to a Document Term Matrix of 2-grams}
 \usage{
-  JSTOR_unpack2grams(parallel = FALSE, path = getwd())
+JSTOR_unpack2grams(parallel = FALSE, path = getwd())
 }
 \arguments{
   \item{path}{full path to directory containing 'bigrams'
@@ -17,16 +17,15 @@
   articles) due to communication overhead.}
 }
 \value{
-  Returns a list of two items. First is "bigrams", a
-  Document Term Matrix of 2-grams, and second is
-  'bibliodata', a data frame of bibliographic information
-  for all articles.
+Returns a list of two items. First is "bigrams", a Document
+Term Matrix of 2-grams, and second is 'bibliodata', a data
+frame of bibliographic information for all articles.
 }
 \description{
-  Import journal articles and bibliographic data from the
-  downloaded zipfile and reshape ready for simple text
-  mining. For use with JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/).
+Import journal articles and bibliographic data from the
+downloaded zipfile and reshape ready for simple text
+mining. For use with JSTOR's Data for Research datasets
+(http://dfr.jstor.org/).
 }
 \examples{
 ## unpack2grams <- JSTOR_unpack2grams(path = "C:/Users/marwick/Downloads/JSTOR") # then follow prompts to navigate to the location of the zipfile

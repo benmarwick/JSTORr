@@ -2,8 +2,8 @@
 \alias{JSTOR_MALLET}
 \title{Generate one or more topic models using MALLET's implementation of Latent Dirichlet allocation (LDA)}
 \usage{
-  JSTOR_MALLET(corpus, MALLET = "C:/mallet-2.0.7",
-    JAVA = "C:/Program Files (x86)/Java/jre7/bin", K)
+JSTOR_MALLET(corpus, MALLET = "C:/mallet-2.0.7",
+  JAVA = "C:/Program Files (x86)/Java/jre7/bin", K)
 }
 \arguments{
   \item{corpus}{the object returned by the function
@@ -23,17 +23,16 @@
   comparing diagnostics of different models.}
 }
 \value{
-  Returns plots of diagnostics if more than one number of
-  topics is specified. Output files from MALLET can be
-  found in the working directory.
+Returns plots of diagnostics if more than one number of
+topics is specified. Output files from MALLET can be found
+in the working directory.
 }
 \description{
-  Generates one or more topic models using MALLET and plots
-  diagnostics. This is a very basic R wrapper for MALLET on
-  Windows, see here for something better:
-  http://www.cs.princeton.edu/~mimno/R/ For use with
-  JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/).
+Generates one or more topic models using MALLET and plots
+diagnostics. This is a very basic R wrapper for MALLET on
+Windows, see here for something better:
+http://www.cs.princeton.edu/~mimno/R/ For use with JSTOR's
+Data for Research datasets (http://dfr.jstor.org/).
 }
 \examples{
 ## JSTOR_MALLET(corpus = corpus, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = 150) # generate a single model

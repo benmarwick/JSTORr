@@ -2,7 +2,7 @@
 \alias{JSTOR_unpack1grams}
 \title{Unpack JSTOR journal articles and bibliographic data to a Document Term Matrix of 1-grams}
 \usage{
-  JSTOR_unpack1grams(parallel = FALSE, path = getwd())
+JSTOR_unpack1grams(parallel = FALSE, path = getwd())
 }
 \arguments{
   \item{path}{full path to directory containing
@@ -17,16 +17,16 @@
   articles) due to communication overhead.}
 }
 \value{
-  Returns a list of two items. First is "wordcounts", a
-  Document Term Matrix of 1-grams, and second is
-  'bibliodata', a data frame of bibliographic information
-  for all articles.
+Returns a list of two items. First is "wordcounts", a
+Document Term Matrix of 1-grams, and second is
+'bibliodata', a data frame of bibliographic information for
+all articles.
 }
 \description{
-  Import journal articles and bibliographic data from the
-  downloaded zipfile and reshape ready for simple text
-  mining. For use with JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/).
+Import journal articles and bibliographic data from the
+downloaded zipfile and reshape ready for simple text
+mining. For use with JSTOR's Data for Research datasets
+(http://dfr.jstor.org/).
 }
 \examples{
 ## unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")

@@ -2,8 +2,8 @@
 \alias{JSTOR_freqwords}
 \title{Plot the most frequent words by time intervals}
 \usage{
-  JSTOR_freqwords(unpack1grams, nouns, n = 5,
-    lowfreq = 300, topn = 20, biggest = 10)
+JSTOR_freqwords(unpack1grams, nouns, n = 5, lowfreq = 300, topn = 20,
+  biggest = 10)
 }
 \arguments{
   \item{unpack1grams}{object returned by the function
@@ -28,20 +28,19 @@
   the text in the plot}
 }
 \value{
-  Returns a plot of the most frequent words per year range,
-  with word size scaled to frequency, and a dataframe with
-  words and counts for each year range
+Returns a plot of the most frequent words per year range,
+with word size scaled to frequency, and a dataframe with
+words and counts for each year range
 }
 \description{
-  Generates a plot of the top n words in all the documents
-  in ranges of years. For use with JSTOR's Data for
-  Research datasets (http://dfr.jstor.org/). For best
-  results, repeat the function several times after adding
-  common words to the stopword list and excluding them by
-  re-running the JSTOR_dtmofnouns function. The location of
-  the English stopwords list can be found by entering this
-  at the R prompt: paste0(.libPaths()[1],
-  "/tm/stopwords/english.dat")
+Generates a plot of the top n words in all the documents in
+ranges of years. For use with JSTOR's Data for Research
+datasets (http://dfr.jstor.org/). For best results, repeat
+the function several times after adding common words to the
+stopword list and excluding them by re-running the
+JSTOR_dtmofnouns function. The location of the English
+stopwords list can be found by entering this at the R
+prompt: paste0(.libPaths()[1], "/tm/stopwords/english.dat")
 }
 \examples{
 ## freqwords <- JSTOR_freqwords(unpack1grams, nouns, n = 2, biggest = 5, lowfreq = 100, topn = 5)

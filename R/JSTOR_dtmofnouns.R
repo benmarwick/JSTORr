@@ -1,12 +1,9 @@
 #' Make a Document Term Matrix containing only nouns
 #' 
-#' @description This function does part-of-speech tagging and removes all parts of speech that are not non-name nouns. It also removes punctuation, numbers, words with less than three characters, stopwords and unusual characters (characters not in ISO-8859-1, ie non-latin1-ASCII). For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). This function uses the stoplist in the tm package. The location of tm's English stopwords list can be found by entering this at the R prompt: paste0(.libPaths()[1], "/tm/stopwords/english.dat") Note that the part-of-speech tagging can result in the removal of words of interest. To prevent the POS tagger from removing these words, edit the tagdict file and add the word(s) with a NN tag. To find the tagdict file, enter this at the R prompt: at the R prompt: paste0(.libPaths()[1], "/openNLPmodels.en/models/parser/tagdict") and edit with a text editor.
+#' @description This function does part-of-speech tagging and removes all parts of speech that are not non-name nouns. It also removes punctuation, numbers, words with less than three characters, stopwords and unusual characters (characters not in ISO-8859-1, ie non-latin1-ASCII). For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). This function uses the stoplist in the tm package. The location of tm's English stopwords list can be found by entering this at the R prompt: paste0(.libPaths()[1], "/tm/stopwords/english.dat") Note that the part-of-speech tagging can result in the removal of words of interest. Currently I'm not sure how to keep those words.
 #' @param unpack1grams object returned by the function JSTOR_unpack1grams.
 #' @param word Optional word or vector of words to subset the documents by, ie. make a document term matrix containing only documents in which this word (or words) appears at least once.
 #' @param sparse A numeric for the maximal allowed sparsity, default is one (ie. no sparsing applied). Removes sparse terms from a term-document matrix, see help(removeSparseTerms) for more details. Values close to 1 result in a sparse matrix, values close to zero result in a dense matrix. It may be useful to reduce sparseness if the matrix is too big to manipulate in memory or if processing times are long.
-#' @param parallel  logical.  If TRUE attempts to run the function on multiple 
-#' cores.  Note that this may actually be slower if you have one core, limited memory or if 
-#' the data set is small due to communication of data between the cores.
 #' @param POStag logical Do part-of-speech tagging to identify and remove non-nouns. Default is True, but the option is here to speed things up when working interactively with large numbers of documents. 
 #' @return Returns a Document Term Matrix containing documents, ready for more advanced text mining and topic modelling.  
 #' @examples 
@@ -15,7 +12,7 @@
 
 
 
-JSTOR_dtmofnouns <- function(unpack1grams, word=NULL, parallel=FALSE, sparse=1, POStag=TRUE){
+JSTOR_dtmofnouns <- function(unpack1grams, word=NULL, sparse=1, POStag=TRUE){
 
 y <- unpack1grams$wordcounts
 
@@ -84,73 +81,72 @@ message("done")
 # y <- y[,!(y$dimnames$Terms %in% bn)]
 # message("done")
 if (POStag == TRUE) {
-message("keeping only non-name nouns...")
+
 # openNLP changed, so we need this replacement for tagPOS...
 library(NLP); library(data.table); library(openNLP)
 tagPOS <-  function(x) {
   
-  s <- as.String(x)
+  s <- NLP::as.String(x)
   ## Need sentence and word token annotations.
   
-  a2 <- Annotation(1L, "sentence", 1L, nchar(s))
-  a2 <- NLP::annotate(s, Maxent_Word_Token_Annotator(), a2)
-  a3 <- NLP::annotate(s,  Maxent_POS_Tag_Annotator(), a2)
+  a1 <- NLP::Annotation(1L, "sentence", 1L, nchar(s))
+  a2 <- NLP::annotate(s, openNLP::Maxent_Word_Token_Annotator(), a1)
+  a3 <- NLP::annotate(s,  openNLP::Maxent_POS_Tag_Annotator(), a2)
   
   ## Determine the distribution of POS tags for word tokens.
   a3w <- a3[a3$type == "word"]
   POStags <- unlist(lapply(a3w$features, `[[`, "POS"))
   
-  ## Extract token/POS pairs (all of them): easy.
-  POStagged <- paste(sprintf("%s/%s", s[a3w], POStags), collapse = " ")
-  list(POStagged = POStagged, POStags = POStags)
-} ## End of tagPOS function 
+  ## Extract token/POS pairs (all of them): easy - not needed
+  # POStagged <- paste(sprintf("%s/%s", s[a3w], POStags), collapse = " ")
+  return(unlist(POStags))
+} 
 
+# if(parallel) {
+#   
+#   # parallel version
+#   y1 <- strsplit(y$dimnames$Terms,",")
+#   require(parallel); # library(openNLPmodels.en)
+#   cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
+#   clusterEvalQ(cl, {
+#     tagPOS
+#     # library(openNLPmodels.en)
+#   })
+#   clusterExport(cl, varlist = "y1", envir=environment())
+#   
+#   pos <- parLapply(cl, seq_along(y1), function(i) {
+#     x <- tagPOS(y1[[i]], language = "en")
+#     if (i%%10==0) invisible(gc())
+#     x
+#   })
+#   
+#   
+#   stopCluster(cl)
+#   
+#   
+#  } else { # non-parallel method
+# 
 
-
-
-
-if(parallel) {
-  
-  # parallel version
-  y1 <- strsplit(y$dimnames$Terms,",")
-  require(parallel); library(openNLPmodels.en)
-  cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
-  clusterEvalQ(cl, {
-    tagPOS
-    library(openNLPmodels.en)
-  })
-  clusterExport(cl, varlist = "y1", envir=environment())
-  
-  pos <- parLapply(cl, seq_along(y1), function(i) {
-    x <- tagPOS(y1[[i]], language = "en")
-    if (i%%10==0) invisible(gc())
-    x
-  })
-  
-  
-  stopCluster(cl)
-  
-  
- } else { # non-parallel method
-
-
-  # pos <- tagPOS(y$dimnames$Terms)
-  
-  yt <- y$dimnames$Terms
-  
-  yt <- paste(gsub("[^[:alnum:]]", "", yt), collapse = " ")
-  
-  yt <- gsub('(\\s)\\1+', '\\1', yt )
-  
-  pos <- lapply(yt, function(x) {
-    tagPOS(x)
-  })
-  
-
-
-}
-
-y <- y[ , y$dimnames$Terms[pos[[1]]$POStags == "NN"], ]
+   yt <- y$dimnames$Terms
+   
+   # divide Terms into chunks of 1000 terms each because more than that can cause
+   # memory problems
+   ytl <- split(yt, ceiling(seq_along(yt)/1000))
+   
+   # loop over each chunk of 1000 terms to do POStagging, I found that trying to
+   # do 10,000 terms or more causes Java memory problems, so this is a very safe
+   # method to try not to fill memory
+   message("keeping only non-name nouns, this may take some time...")
+   ytlp <- plyr::llply(ytl, function(i){
+     tmp <- paste(gsub("[^[:alnum:]]", "", i), collapse = " ")
+     tagPOS(tmp)
+   }, .progress = "text")
+   
+   # get all the tags in a vector
+   ytlput <- unname(c(unlist(ytlp)))
+   
+   # subset document term matrix terms to keep only nouns
+   y <- y[ , y$dimnames$Terms[ytlput == "NN"], ]
 
 } else { 
   # don't do POS tagging 

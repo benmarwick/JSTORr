@@ -2,7 +2,7 @@
 \alias{JSTOR_1word}
 \title{Plot the frequency of one word over time in a JSTOR DfR dataset}
 \usage{
-  JSTOR_1word(unpack1grams, oneword, span = 0.5, se = TRUE)
+JSTOR_1word(unpack1grams, oneword, span = 0.5, se = TRUE)
 }
 \arguments{
   \item{unpack1grams}{object returned by the function
@@ -18,16 +18,16 @@
   smoother line, Default is TRUE.}
 }
 \value{
-  Returns a ggplot object with publication year on the
-  horizontal axis and log relative frequency on the
-  vertical axis. Each point represents a single document.
+Returns a ggplot object with publication year on the
+horizontal axis and log relative frequency on the vertical
+axis. Each point represents a single document.
 }
 \description{
-  Function to plot changes in the relative frequency of a
-  word over time. The relative frequency is the frequency
-  of the word in a document divided by the total number of
-  words in a document. For use with JSTOR's Data for
-  Research datasets (http://dfr.jstor.org/).
+Function to plot changes in the relative frequency of a
+word over time. The relative frequency is the frequency of
+the word in a document divided by the total number of words
+in a document. For use with JSTOR's Data for Research
+datasets (http://dfr.jstor.org/).
 }
 \examples{
 ## JSTOR_1word(unpack1grams, "diamonds")

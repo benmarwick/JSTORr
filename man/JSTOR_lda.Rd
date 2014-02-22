@@ -2,7 +2,7 @@
 \alias{JSTOR_lda}
 \title{Generate a topic model with K topics using the implementation of Latent Dirichlet allocation (LDA) in the lda package}
 \usage{
-  JSTOR_lda(unpack1grams, nouns, K, alpha = 50/K)
+JSTOR_lda(unpack1grams, nouns, K, alpha = 50/K)
 }
 \arguments{
   \item{unpack1grams}{object returned by the function
@@ -20,14 +20,14 @@
   Default is 50/K}
 }
 \value{
-  Returns a data frame with documents as rows, topics as
-  columns and posterior probabilities as cell values.
+Returns a data frame with documents as rows, topics as
+columns and posterior probabilities as cell values.
 }
 \description{
-  Generates a topic model with K topics using Latent
-  Dirichlet allocation (LDA, with the lda package) For use
-  with JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/).
+Generates a topic model with K topics using Latent
+Dirichlet allocation (LDA, with the lda package) For use
+with JSTOR's Data for Research datasets
+(http://dfr.jstor.org/).
 }
 \examples{
 ## lda1 <- JSTOR_lda(unpack1grams, nouns, K = 150)

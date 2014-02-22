@@ -2,9 +2,8 @@
 \alias{JSTOR_findassocs}
 \title{Plot the words with the strongest correlation with a given word, by time intervals}
 \usage{
-  JSTOR_findassocs(unpack1grams, nouns, word, n = 5,
-    corlimit = 0.4, plimit = 0.05, topn = 20, biggest = 5,
-    parallel = FALSE)
+JSTOR_findassocs(unpack1grams, nouns, word, n = 5, corlimit = 0.4,
+  plimit = 0.05, topn = 20, biggest = 5, parallel = FALSE)
 }
 \arguments{
   \item{unpack1grams}{object returned by the function
@@ -44,18 +43,18 @@
   the cores.}
 }
 \value{
-  Returns a plot of the most frequent words per year range,
-  with word size scaled to frequency, and a dataframe with
-  words and counts for each year range
+Returns a plot of the most frequent words per year range,
+with word size scaled to frequency, and a dataframe with
+words and counts for each year range
 }
 \description{
-  Generates a plot of the top n words in all the documents
-  that positively correlate with a given word, in ranges of
-  years. For use with JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/). For best results, repeat the
-  function after adding common words to the stopword list.
-  To learn more about editing the stopword list, see the
-  help for the JSTOR_dtmofnouns function.
+Generates a plot of the top n words in all the documents
+that positively correlate with a given word, in ranges of
+years. For use with JSTOR's Data for Research datasets
+(http://dfr.jstor.org/). For best results, repeat the
+function after adding common words to the stopword list. To
+learn more about editing the stopword list, see the help
+for the JSTOR_dtmofnouns function.
 }
 \examples{
 ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, "rouges")

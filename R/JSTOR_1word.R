@@ -10,8 +10,6 @@
 #' ## JSTOR_1word(unpack1grams, "diamonds")
 #' ## JSTOR_1word(unpack1grams, c("diamonds", "pearls"), span = 0.8, se = FALSE)
 
-
-
 JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=TRUE){
   #### investigate change in use of certain words of interest over time
   y <- unpack1grams$wordcounts

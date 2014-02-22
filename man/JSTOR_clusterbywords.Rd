@@ -2,7 +2,7 @@
 \alias{JSTOR_clusterbywords}
 \title{Cluster documents by similarities in word frequencies}
 \usage{
-  JSTOR_clusterbywords(nouns, word, f = 0.01)
+JSTOR_clusterbywords(nouns, word, f = 0.01)
 }
 \arguments{
   \item{nouns}{the object returned by the function
@@ -25,17 +25,16 @@
   for the cluster analyses.}
 }
 \value{
-  Returns plots of clusters of documents, and dataframes of
-  affinity propogation clustering, k-means and PCA outputs
+Returns plots of clusters of documents, and dataframes of
+affinity propogation clustering, k-means and PCA outputs
 }
 \description{
-  Generates plots visualizing the results of different
-  clustering methods applied to the documents. For use with
-  JSTOR's Data for Research datasets
-  (http://dfr.jstor.org/). For best results, repeat the
-  function several times after adding common words to the
-  stopword list and excluding them using the
-  JSTOR_removestopwords function.
+Generates plots visualizing the results of different
+clustering methods applied to the documents. For use with
+JSTOR's Data for Research datasets (http://dfr.jstor.org/).
+For best results, repeat the function several times after
+adding common words to the stopword list and excluding them
+using the JSTOR_removestopwords function.
 }
 \examples{
 ## cl1 <- JSTOR_clusterbywords(nouns, "pirates")

@@ -9,8 +9,6 @@
 #' ## JSTOR_1bigram(unpack2grams, "pirate booty")
 #' ## JSTOR_1bigram(unpack2grams, c("treasure chest", "musket balls", "jolly roger"), span = 0.7)
 
-
-
 JSTOR_1bigram <- function(unpack2grams, bigram, span = 0.4){
   #### investigate change in use of certain bigrams of interest over time
   # set working directory to where the bigrams are
@@ -54,4 +52,3 @@ JSTOR_1bigram <- function(unpack2grams, bigram, span = 0.4){
                      # inspect bibliodata$year to see min and max year to set axis limits
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)))
 }
-
