@@ -63,8 +63,9 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
 
 # Identify empty CSV files and exclude them
 lens <- sapply(aawc, function(i) i[1]$WEIGHT + i[2]$WEIGHT + i[3]$WEIGHT)
+full <- unname(!is.na(lens))
 # Subset only CSV files with at least three words...
-aawc1 <- aawc[unname(!is.na(lens))]
+aawc1 <- aawc[full]
   
   #### convert DfR format to dtm for each doc
   message("reshaping the 1-grams into a document term matrix...")
