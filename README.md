@@ -12,12 +12,10 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - correlations between two words over time (ie. plot the correlation of two 1-grams over time)
 - correlations between two sets of words over time (ie. plot the correlation two sets of multiple 1-grams over time)
 - all of the above with bigrams (a sequence of two words)
-- the most frequent words by n-year ranges
+- the most frequent words by n-year ranges of documents (ie. top words in all documents published in 2-5-10 year ranges, whatever you like)
 - the top n words correlated a word by n-year ranges of documents (ie. the top 20 words associated with the word 'pirate' in 5 year ranges)
 - various methods (k-means, PCA, affinity propagation) to detect clusters in a set of documents containing a word or set of words
-- topic models with the `lda` package for full `R` solution or the Java-based MALLET program (if installing that is an option)
-- most frequent words by n-year ranges of documents (ie. top words in all documents published in 2-5-10 year ranges, whatever you like)
-
+- topic models with the `lda` package for full `R` solution or the Java-based MALLET program (if installing that is an option, currently implemented here for Windows only) 
 
 How to install
 ----
@@ -46,7 +44,6 @@ Second, once you've downloaded and unzipped the zip file that is the 'full datas
 library(JSTORr)
 unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR") # change the path to suit your system
 ```
-Third, have fun exploring the other functions in the package!
 
 Typical workflow
 ----
@@ -54,19 +51,57 @@ Here's one way to make use of this package:
 
 First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: `unzip("2013.6.4.usytW8LZ.zip")`).
 
-Second, start `RStudio` and run something like `unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")`, change the path value to suit your system and watch the console progress bars. Then you'll get a data object `unpack1grams`, containing a document term matrix of 1-grams and a data frame of bibliographic data.
+Second, start `RStudio` and run: 
 
-Third, explore some visualisations of key words over time with `JSTOR_1word`, `JSTOR_2words`, and correlations of words over time with `JSTOR_2wordcor`.
+```
+# change the path to where you unzipped your file on your computer
+`unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")`
+```
+but change the path value to suit your system and watch the console progress bars. Then you'll get a data object `unpack1grams`, containing a document term matrix of 1-grams and a data frame of bibliographic data.
 
-Fourth, run `nouns <- JSTOR_dtmofnouns(unpack1grams)` to create a document term matrix of nouns only, then investigate the most frequent words over time with `JSTOR_freqwords` and analyse correlations over time of all words with a word of interest with `JSTOR_findassocs`. To optimise the output from this function you must add words to the stop word list and then repeat these functions a few times until the results look reasonable. See the documentation for those functions for instructions on how to edit the stop word list.
+Third, now you're ready to explore some visualisations of key words over time with `JSTOR_1word`, `JSTOR_2words`, and correlations of words over time with `JSTOR_2wordcor`, for example:
 
-Fifth, explore document clusters using `JSTOR_clusterbywords` to calculate Affinity Propagation Clustering, K-means Clustering and Principal Components Analysis on a document term matrix.
+```
+# one word over time
+JSTOR_1word(unpack1grams, "pirate")
+# two words over time
+JSTOR_2words(unpack1grams, "pirate", "navy")
+# correlation of words over time
+JSTOR_2wordcor(unpack1grams, "pirate", "navy")
+```
 
-Sixth, generate topic models with `JSTOR_lda` (using the `lda` package, it's a lot faster than `topicmodels`). Expore the model output with `JSTOR_lda_docdists` and `JSTOR_lda_topicdists`. Identify hot and cold topics in the corpus with `JSTOR_lda_hotncoldtopics`.
+Fourth, run `nouns <- JSTOR_dtmofnouns(unpack1grams)` to create a document term matrix of nouns only, then investigate the most frequent words over time with `JSTOR_freqwords` and analyse correlations over time of all words with a word of interest with `JSTOR_findassocs`.  For example,
+
+```
+# subset the words to get nouns only
+nouns <-  JSTOR_dtmofnouns(unpack1grams, sparse = 0.75)
+# plot and tabulate the most frequent words over time
+JSTOR_freqwords(unpack1grams, nouns)
+# plot and tabulate words correlated with 'pirate' over time
+JSTOR_findassocs(unpack1grams, nouns, "pirate")
+```
+
+To optimise the output from these functions you must add words to the stopword list and then repeat these functions a few times over until the results look more relevant. Typically you'll need to add words like 'journal', 'press', 'research' and so on to your stopword list. You can find the location of the stopword list on your computer by running this line `paste0(.libPaths()[1], "/tm/stopwords/english.dat")` Then you can just edit the stopword list in RStudio or any text editor. Be careful not to have any errant spaces after a word on the list.
+
+Fifth, explore document clusters using `JSTOR_clusterbywords` to calculate Affinity Propagation Clustering, K-means Clustering and Principal Components Analysis on a document term matrix. For example, 
+
+```
+# plot and tabulate clusters of documents that contain the word 'pirate'
+JSTOR_clusterbywords(nouns, 'pirate')
+```
+
+Sixth, generate topic models with `JSTOR_lda` (using the `lda` package, it's a lot faster than `topicmodels`). Expore the model output with `JSTOR_lda_docdists` and `JSTOR_lda_topicdists`. Identify hot and cold topics in the corpus with `JSTOR_lda_hotncoldtopics`. Remember that editing the stopwords list may help to make the topics more distinctive. 
+
+```
+# generate topic model
+my_model <- JSTOR_lda(unpack1grams, nouns, 50)
+# visualise document distances by topics
+JSTOR_lda_docdists(my_model)
+# plot and tabulate hot and cold topics
+JSTOR_lda_hotncoldtopics(my_model)
+```
 
 Seventh, if you have MALLET installed, you can run `JSTOR_unpack`, followed by `JSTOR_corpusofnouns` to create a corpus to prepare the data for MALLET, and then `JSTOR_MALLET` to generate topic models using MALLET. Explore topic models with `JSTOR_MALLET_topicsovertime` and `JSTOR_MALLET_topicinfo`. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
-
-
 
 Limitations and Disclaimer
 ----
