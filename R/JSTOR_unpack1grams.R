@@ -15,9 +15,6 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
   # set working directory to newly created folder
   # (within working directory) with lots of CSV files
   
-
-  
-  
   ## trim off the last forward slash, if there was one.
   if  (substr(path, nchar(path), nchar(path)) == "/") {
     
@@ -62,6 +59,12 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
   # assign file names to each dataframe in the list
   names(aawc) <- myfiles
   message("done")
+
+
+# Identify empty CSV files and exclude them
+lens <- sapply(aawc, function(i) i[1]$WEIGHT + i[2]$WEIGHT + i[3]$WEIGHT)
+# Subset only CSV files with at least three words...
+aawc1 <- aawc[unname(!is.na(lens))]
   
   #### convert DfR format to dtm for each doc
   message("reshaping the 1-grams into a document term matrix...")
@@ -94,23 +97,22 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
     cl <- makeCluster(detectCores(), type = "SOCK")
     clusterExport(cl, c("aawc", "my_dtm_1gram"), envir=environment())
     clusterEvalQ(cl, list(library(tm), library(slam)))
-    aawc1 <- parLapplyLB(cl, 1:length(aawc), function(i) my_dtm_1gram(aawc[[i]]) )
+    aawc1 <- parLapplyLB(cl, 1:length(aawc1), function(i) my_dtm_1gram(aawc1[[i]]) )
     stopCluster(cl); rm("aawc"); invisible(gc(verbose = FALSE))
     
    } else {
      
      library(plyr)
-     aawc1 <- llply(1:length(aawc), function(i) my_dtm_1gram(aawc[[i]]), .progress = "text", .inform = FALSE)
+     aawc2 <- llply(1:length(aawc1), function(i) my_dtm_1gram(aawc1[[i]]), .progress = "text", .inform = FALSE)
   }
   
-  
+################################### 
+# subset file names so we only get CSV files with three or more words
+myfiles1 <- myfiles[full]
   library(stringr)
-  names(aawc1) <- str_extract(basename(myfiles), "[^wordcounts_].+[^.CSV]")
- 
+  names(aawc2) <- str_extract(basename(myfiles1), "[^wordcounts_].+[^.CSV]")
+
   message("done")
-
-
-  
  
   message("arranging bibliographic data...")
   #### bring in citations file with biblio data for each paper
@@ -131,8 +133,7 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
  
   # subset items in the list of wordcount data whose names are in 
   # the list of fla citation IDs
-  wordcounts <- aawc1[which(names(aawc1) %in%  citfla$id)]
-  
+  wordcounts <- aawc2[which(names(aawc2) %in%  citfla$id)]
   
   # put citation IDs in the same order with wordcount data names
   # which is the same order as myfiles
@@ -142,7 +143,7 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
   bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]+{4}")
   
   # clean up a little
-  rm(aawc1, cit, citfla, myfiles); invisible(gc(verbose = FALSE))
+  rm(aawc1, aawc2, cit, citfla, myfiles); invisible(gc(verbose = FALSE))
   
   # make one giant dtm with all docs (rather slow...)
   
@@ -195,7 +196,6 @@ wordcounts <- wordcounts[unique(as.character(wordcounts$dimnames$Docs[1:nrow(wor
   message("finished with 1-grams")
   
   return(list("wordcounts" = wordcounts, "bibliodata" = bibliodata))
-  
 }
   
   

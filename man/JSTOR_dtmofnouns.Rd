@@ -42,13 +42,8 @@ This function uses the stoplist in the tm package. The
 location of tm's English stopwords list can be found by
 entering this at the R prompt: paste0(.libPaths()[1],
 "/tm/stopwords/english.dat") Note that the part-of-speech
-tagging can result in the removal of words of interest. To
-prevent the POS tagger from removing these words, edit the
-tagdict file and add the word(s) with a NN tag. To find the
-tagdict file, enter this at the R prompt: at the R prompt:
-paste0(.libPaths()[1],
-"/openNLPmodels.en/models/parser/tagdict") and edit with a
-text editor.
+tagging can result in the removal of words of interest.
+Currently I'm not sure how to keep those words.
 }
 \examples{
 ## nouns <- JSTOR_dtmofnouns(unpack1grams)

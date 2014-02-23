@@ -1,7 +1,7 @@
 Package: JSTORr
 Type: Package
 Title: Simple text mining and document clustering of JSTOR journal articles
-Version: 1.0.20140204
+Version: 1.0.20140222
 Date: 2013-04-25
 Author: Ben Marwick
 Maintainer: Ben Marwick <bmarwick@gmail.com>
