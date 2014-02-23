@@ -38,16 +38,11 @@ First, go to JSTOR's [Data for Research service][dfr] and make a request for dat
 - `CSV` as the 'output format', not `XML`, which is the default
 - `Word Counts` **and** `bigrams` as the 'Data Type'
 
-Second, once you've downloaded and unzipped the zip file that is the 'full dataset' from DfR then you can start `R` (it's highly recommended to use [RStudio][rstudio] when working with this package, much easier to manage the plot output), install this package and run these lines: 
-
-```
-library(JSTORr)
-unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR") # change the path to suit your system
-```
+Second, once you've downloaded and unzipped the zip file that is the 'full dataset' from DfR then you can start `R` (it's highly recommended to use [RStudio][rstudio] when working with this package, much easier to manage the plot output) and work through the steps in the next section.
 
 Typical workflow
 ----
-Here's one way to make use of this package:
+Here's how to make use of this package:
 
 First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: `unzip("2013.6.4.usytW8LZ.zip")`).
 
@@ -93,7 +88,7 @@ JSTOR_clusterbywords(nouns, 'pirate')
 Sixth, generate topic models with `JSTOR_lda` (using the `lda` package, it's a lot faster than `topicmodels`). Expore the model output with `JSTOR_lda_docdists` and `JSTOR_lda_topicdists`. Identify hot and cold topics in the corpus with `JSTOR_lda_hotncoldtopics`. Remember that editing the stopwords list may help to make the topics more distinctive. 
 
 ```
-# generate topic model
+# generate topic model with 50 topics (an arbitrary choice)
 my_model <- JSTOR_lda(unpack1grams, nouns, 50)
 # visualise document distances by topics
 JSTOR_lda_docdists(my_model)

@@ -187,15 +187,11 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macr
 <li><code>Word Counts</code> <strong>and</strong> <code>bigrams</code> as the &#39;Data Type&#39;</li>
 </ul>
 
-<p>Second, once you&#39;ve downloaded and unzipped the zip file that is the &#39;full dataset&#39; from DfR then you can start <code>R</code> (it&#39;s highly recommended to use <a href="http://www.rstudio.com/ide/download/">RStudio</a> when working with this package, much easier to manage the plot output), install this package and run these lines: </p>
-
-<pre><code>library(JSTORr)
-unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JSTOR&quot;) # change the path to suit your system
-</code></pre>
+<p>Second, once you&#39;ve downloaded and unzipped the zip file that is the &#39;full dataset&#39; from DfR then you can start <code>R</code> (it&#39;s highly recommended to use <a href="http://www.rstudio.com/ide/download/">RStudio</a> when working with this package, much easier to manage the plot output) and work through the steps in the next section.</p>
 
 <h2>Typical workflow</h2>
 
-<p>Here&#39;s one way to make use of this package:</p>
+<p>Here&#39;s how to make use of this package:</p>
 
 <p>First, go to <a href="http://dfr.jstor.org/">Data for Research service</a> and request data as specified above and download the zip file when it&#39;s available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: <code>unzip(&quot;2013.6.4.usytW8LZ.zip&quot;)</code>).</p>
 
@@ -237,7 +233,7 @@ JSTOR_clusterbywords(nouns, &#39;pirate&#39;)
 
 <p>Sixth, generate topic models with <code>JSTOR_lda</code> (using the <code>lda</code> package, it&#39;s a lot faster than <code>topicmodels</code>). Expore the model output with <code>JSTOR_lda_docdists</code> and <code>JSTOR_lda_topicdists</code>. Identify hot and cold topics in the corpus with <code>JSTOR_lda_hotncoldtopics</code>. Remember that editing the stopwords list may help to make the topics more distinctive. </p>
 
-<pre><code># generate topic model
+<pre><code># generate topic model with 50 topics (an arbitrary choice)
 my_model &lt;- JSTOR_lda(unpack1grams, nouns, 50)
 # visualise document distances by topics
 JSTOR_lda_docdists(my_model)
