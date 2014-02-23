@@ -129,7 +129,8 @@ myfiles1 <- myfiles[full]
   # limit list of citations to full length articles only 
   # note that citation type is not in the correct column
   # and that we need \t in there also
-  citfla <- cit[cit$publisher == 'fla\t',]
+  # changed this in case we get a dataset that was not originally all fla
+  citfla <- cit #[cit$publisher == 'fla\t',]
   # subset from the wordcount data only the full length articles
  
   # subset items in the list of wordcount data whose names are in 
