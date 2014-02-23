@@ -193,12 +193,12 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macr
 
 <p>Here&#39;s how to make use of this package:</p>
 
-<p>First, go to <a href="http://dfr.jstor.org/">Data for Research service</a> and request data as specified above and download the zip file when it&#39;s available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: <code>unzip(&quot;2013.6.4.usytW8LZ.zip&quot;)</code>).</p>
+<p>First, go to <a href="http://dfr.jstor.org/">Data for Research service</a> and request data as specified above and download the zip file when it&#39;s available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: <code>unzip(&quot;2013.6.4.usytW8LZ.zip&quot;)</code> with your zip file name in between the quote marks).</p>
 
-<p>Second, start <code>RStudio</code> and run: </p>
+<p>Second, start <a href="http://www.rstudio.com/ide/download/">RStudio</a> and run: </p>
 
 <pre><code># change the path to where you unzipped your file on your computer
-`unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JSTOR&quot;)`
+unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JSTOR&quot;)
 </code></pre>
 
 <p>but change the path value to suit your system and watch the console progress bars. Then you&#39;ll get a data object <code>unpack1grams</code>, containing a document term matrix of 1-grams and a data frame of bibliographic data.</p>
@@ -213,7 +213,7 @@ JSTOR_2words(unpack1grams, &quot;pirate&quot;, &quot;navy&quot;)
 JSTOR_2wordcor(unpack1grams, &quot;pirate&quot;, &quot;navy&quot;)
 </code></pre>
 
-<p>Fourth, run <code>nouns &lt;- JSTOR_dtmofnouns(unpack1grams)</code> to create a document term matrix of nouns only, then investigate the most frequent words over time with <code>JSTOR_freqwords</code> and analyse correlations over time of all words with a word of interest with <code>JSTOR_findassocs</code>.  For example,</p>
+<p>Fourth, use <code>JSTOR_dtmofnouns</code> to create a document term matrix of nouns only, then investigate the most frequent words over time with <code>JSTOR_freqwords</code> and analyse correlations over time of all words with a word of interest with <code>JSTOR_findassocs</code>.  For example,</p>
 
 <pre><code># subset the words to get nouns only
 nouns &lt;-  JSTOR_dtmofnouns(unpack1grams, sparse = 0.75)
@@ -241,7 +241,7 @@ JSTOR_lda_docdists(my_model)
 JSTOR_lda_hotncoldtopics(my_model)
 </code></pre>
 
-<p>Seventh, if you have MALLET installed, you can run <code>JSTOR_unpack</code>, followed by <code>JSTOR_corpusofnouns</code> to create a corpus to prepare the data for MALLET, and then <code>JSTOR_MALLET</code> to generate topic models using MALLET. Explore topic models with <code>JSTOR_MALLET_topicsovertime</code> and <code>JSTOR_MALLET_topicinfo</code>. See more about MALLET here <a href="http://mallet.cs.umass.edu/topics.php">http://mallet.cs.umass.edu/topics.php</a> and <a href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">http://programminghistorian.org/lessons/topic-modeling-and-mallet</a> </p>
+<p>Or if you have MALLET installed, you can run <code>JSTOR_unpack</code>, followed by <code>JSTOR_corpusofnouns</code> to create a corpus to prepare the data for MALLET, and then <code>JSTOR_MALLET</code> to generate topic models using MALLET. Explore topic models with <code>JSTOR_MALLET_topicsovertime</code> and <code>JSTOR_MALLET_topicinfo</code>. See more about MALLET here <a href="http://mallet.cs.umass.edu/topics.php">http://mallet.cs.umass.edu/topics.php</a> and <a href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">http://programminghistorian.org/lessons/topic-modeling-and-mallet</a> </p>
 
 <h2>Limitations and Disclaimer</h2>
 

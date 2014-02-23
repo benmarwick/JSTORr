@@ -44,13 +44,13 @@ Typical workflow
 ----
 Here's how to make use of this package:
 
-First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: `unzip("2013.6.4.usytW8LZ.zip")`).
+First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: `unzip("2013.6.4.usytW8LZ.zip")` with your zip file name in between the quote marks).
 
-Second, start `RStudio` and run: 
+Second, start [RStudio][rstudio] and run: 
 
 ```
 # change the path to where you unzipped your file on your computer
-`unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")`
+unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")
 ```
 but change the path value to suit your system and watch the console progress bars. Then you'll get a data object `unpack1grams`, containing a document term matrix of 1-grams and a data frame of bibliographic data.
 
@@ -65,7 +65,7 @@ JSTOR_2words(unpack1grams, "pirate", "navy")
 JSTOR_2wordcor(unpack1grams, "pirate", "navy")
 ```
 
-Fourth, run `nouns <- JSTOR_dtmofnouns(unpack1grams)` to create a document term matrix of nouns only, then investigate the most frequent words over time with `JSTOR_freqwords` and analyse correlations over time of all words with a word of interest with `JSTOR_findassocs`.  For example,
+Fourth, use `JSTOR_dtmofnouns` to create a document term matrix of nouns only, then investigate the most frequent words over time with `JSTOR_freqwords` and analyse correlations over time of all words with a word of interest with `JSTOR_findassocs`.  For example,
 
 ```
 # subset the words to get nouns only
@@ -96,7 +96,7 @@ JSTOR_lda_docdists(my_model)
 JSTOR_lda_hotncoldtopics(my_model)
 ```
 
-Seventh, if you have MALLET installed, you can run `JSTOR_unpack`, followed by `JSTOR_corpusofnouns` to create a corpus to prepare the data for MALLET, and then `JSTOR_MALLET` to generate topic models using MALLET. Explore topic models with `JSTOR_MALLET_topicsovertime` and `JSTOR_MALLET_topicinfo`. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
+Or if you have MALLET installed, you can run `JSTOR_unpack`, followed by `JSTOR_corpusofnouns` to create a corpus to prepare the data for MALLET, and then `JSTOR_MALLET` to generate topic models using MALLET. Explore topic models with `JSTOR_MALLET_topicsovertime` and `JSTOR_MALLET_topicinfo`. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
 
 Limitations and Disclaimer
 ----
