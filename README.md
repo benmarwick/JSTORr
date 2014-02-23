@@ -28,6 +28,7 @@ Then, use the `install_github()` function to fetch this package from github:
 
 ```
 library(devtools)
+# download and install the package (do this only once ever per computer)
 install_github(repo = "JSTORr", username = "UW-ARCHY-textual-macroanalysis-lab")
 ```
 Error messages relating to rJava can probably be fixed by following exactly the instructions [here][SOrJava].
@@ -49,6 +50,8 @@ First, go to [Data for Research service][dfr] and request data as specified abov
 Second, start [RStudio][rstudio] and run: 
 
 ```
+# load the package to your current R session (do this every time you start R and use the functions)
+library(JSTORr)
 # change the path to where you unzipped your file on your computer
 unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR")
 ```

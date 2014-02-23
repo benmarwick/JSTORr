@@ -173,6 +173,7 @@ hr {
 <p>Then, use the <code>install_github()</code> function to fetch this package from github:</p>
 
 <pre><code>library(devtools)
+# download and install the package (do this only once ever per computer)
 install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macroanalysis-lab&quot;)
 </code></pre>
 
@@ -197,7 +198,9 @@ install_github(repo = &quot;JSTORr&quot;, username = &quot;UW-ARCHY-textual-macr
 
 <p>Second, start <a href="http://www.rstudio.com/ide/download/">RStudio</a> and run: </p>
 
-<pre><code># change the path to where you unzipped your file on your computer
+<pre><code># load the package to your current R session (do this every time you start R and use the functions)
+library(JSTORr)
+# change the path to where you unzipped your file on your computer
 unpack1grams &lt;- JSTOR_unpack1grams(path = &quot;C:/Users/marwick/Downloads/JSTOR&quot;)
 </code></pre>
 
