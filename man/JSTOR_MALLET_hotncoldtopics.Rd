@@ -6,7 +6,7 @@ JSTOR_MALLET_hotncoldtopics(x, pval = 0.05, ma = 5)
 }
 \arguments{
   \item{x}{the object returned by the function
-  JSTOR_unpack.}
+  JSTOR_unpack1grams (for the bibliographic data only).}
 
   \item{pval}{p-value of the correlation cutoff for topics
   to include in the top 5 negative/positive list (ie. only
@@ -29,6 +29,6 @@ negative correlation. For use with JSTOR's Data for
 Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-## hotncold <- JSTOR_MALLET_hotncoldtopics(x = unpacked)
+## hotncold <- JSTOR_MALLET_hotncoldtopics(x = unpack1grams)
 }
 
