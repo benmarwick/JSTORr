@@ -99,7 +99,7 @@ JSTOR_lda_docdists(my_model)
 JSTOR_lda_hotncoldtopics(my_model)
 ```
 
-Or if you have MALLET installed, you can run `JSTOR_unpack`, followed by `JSTOR_corpusofnouns` to create a corpus to prepare the data for MALLET, and then `JSTOR_MALLET` to generate topic models using MALLET. Explore topic models with `JSTOR_MALLET_topicsovertime` and `JSTOR_MALLET_topicinfo`. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
+Or if you have MALLET installed, you can run `JSTOR_MALLET` to generate topic models using MALLET. Explore topic models with `JSTOR_MALLET_hotncoldtopics`, `JSTOR_MALLET_topicsovertime` and `JSTOR_MALLET_topicinfo`. See more about MALLET here http://mallet.cs.umass.edu/topics.php and http://programminghistorian.org/lessons/topic-modeling-and-mallet 
 
 Limitations and Disclaimer
 ----
