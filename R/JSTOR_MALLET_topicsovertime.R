@@ -1,12 +1,12 @@
 #' Plot the changes in topic proportions over time
 #' 
 #' @description Generates plots and data frames showing changes in topic proportions over time. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
-#' @param x the object returned by the function JSTOR_unpack.
+#' @param x the object returned by the function JSTOR_unpack1grams.
 #' @param topics a range of topic numbers to plot, Default is 1 to 56 (ie. the first 56 topics in the model). A mimimum of two topics must be specified.
 #' @return Returns a plot of topics over time and a list of dataframes of the topic proportions per document for further analysis.
 #' @author Ben Marwick with substantial contributions from Andrew Goldstone
 #' @examples 
-#' ## tot <- JSTOR_MALLET_topicsovertime(x = unpack, topics = 1:100)
+#' ## tot <- JSTOR_MALLET_topicsovertime(x = unpack1grams, topics = 10:20)
 
 
 
@@ -24,11 +24,11 @@ JSTOR_MALLET_topicsovertime <- function(x, topics=1:56){
   outputtopickeys <- file.choose()
   print(outputtopickeys)
   
-  message("Select the topic docs file")
+  message("Select the doc topics file")
   ignore <- readline("(press return to open file dialog - it might pop up behind here) ")
   outputdoctopics <- file.choose()
   print(outputdoctopics)
-  
+  ?facets
 #   # get user to paste in the path to the MALLET output files
 #   
 #   # from  http://r.789695.n4.nabble.com/url-prep-function-backslash-issue-tp3778530p3779086.html
@@ -49,7 +49,7 @@ JSTOR_MALLET_topicsovertime <- function(x, topics=1:56){
 #   oldstring3 <- readline() 
 #   outputdoctopics <- oldstring3
   
-  outputtopickeysresult <- read.table(outputtopickeys, header=F, sep="\t")
+  # outputtopickeysresult <- read.table(outputtopickeys, header=F, sep="\t")
   outputdoctopicsresult <- read.table(outputdoctopics, header=F, sep="\t")
   
   ## Andrew Goldstone's function to make a matrix where
@@ -210,7 +210,11 @@ JSTOR_MALLET_topicsovertime <- function(x, topics=1:56){
     }
     )
     to.plot <- do.call(rbind,to.plot.list)
-    (qplot(year,proportion,data=to.plot,facets= ~ topic, color=alpha, geom="line"))
+    (ggplot(to.plot, aes(year,proportion,color=alpha)) +
+       geom_line() +
+       facet_wrap( ~ topic , scales="free_y"))
+    
+    #(qplot(year,proportion,data=to.plot,facets= ~ topic, color=alpha, geom="line"))
   }
   
   ### make it so
