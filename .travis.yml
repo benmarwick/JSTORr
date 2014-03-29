@@ -5,6 +5,7 @@
 #   https://github.com/craigcitro/r-travis/wiki
 
 language: c
+language: java
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -12,6 +13,8 @@ before_install:
   - ./travis-tool.sh bootstrap
 install:
   - ./travis-tool.sh install_deps
+  - sudo R CMD javareconf
+  - ./travis-tool.sh aptget_install r-cran-xml 
 script: ./travis-tool.sh run_tests
 
 after_failure:
