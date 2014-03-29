@@ -12,6 +12,8 @@ before_install:
 - ./travis-tool.sh bootstrap
 install:
   - ./travis-tool.sh install_deps
+  - ./travis-tool.sh aptget_install r-cran-xml 
+
 script: ./travis-tool.sh run_tests
 
 after_failure:
