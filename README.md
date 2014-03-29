@@ -29,7 +29,7 @@ Then, use the `install_github()` function to fetch this package from github:
 ```
 library(devtools)
 # download and install the package (do this only once ever per computer)
-install_github(repo = "JSTORr", username = "UW-ARCHY-textual-macroanalysis-lab")
+install_github("benmarwick/JSTORr")
 ```
 Error messages relating to rJava can probably be fixed by following exactly the instructions [here][SOrJava].
 
