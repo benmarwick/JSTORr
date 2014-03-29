@@ -12,9 +12,11 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
 install:
-  - ./travis-tool.sh install_deps
   - sudo R CMD javareconf
-  - ./travis-tool.sh aptget_install r-cran-xml 
+  - ./travis-tool.sh aptget_install r-cran-xml
+  - ./travis-tool.sh install_deps
+  
+   
 script: ./travis-tool.sh run_tests
 
 after_failure:

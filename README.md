@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/benmarwick/JSTORr.svg?branch=master)](https://travis-ci.org/benmarwick/JSTORr)
-
-JSTORr
+JSTORr  [![Build Status](https://travis-ci.org/benmarwick/JSTORr.svg?branch=master)](https://travis-ci.org/benmarwick/JSTORr)
 ======
 
 Simple exploratory text mining and document clustering of journal articles from JSTOR's Data for Research service.
