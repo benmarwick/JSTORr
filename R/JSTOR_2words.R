@@ -6,13 +6,14 @@
 #' @param word1 One word (or vector of words), surrounded by standard quote marks.
 #' @param word2 One word (or vector of words), surrounded by standard quote marks.
 #' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
+#' @param se display standard error of lowess line. Default is no (false).
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ## JSTOR_2words(unpack1grams, "diamonds", "pearls")
 #' ## JSTOR_2words(unpack1grams, word1 = "milk", word2 = "sugar"), span = 0.8
 
 
-JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4){
+JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE){
   # Comparing two words of interest (always lower case)
   y <- unpack1grams$wordcounts
   bibliodata <- unpack1grams$bibliodata
@@ -64,11 +65,16 @@ JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4){
   # visualise
   library(ggplot2)
   suppressWarnings(ggplot(twowords_by_year_melt, aes(year, log(value))) +
-                     geom_point(subset = .(value > 0), aes(colour = variable)) +
-                     geom_smooth( aes(colour = variable), method = "loess", span = span, subset = .(value > 0)) +
-                     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+                     geom_point(subset = .(value > 0), aes(colour = variable), size = I(3)) +
+                     geom_smooth( aes(colour = variable), se = se, method = "loess", span = span, subset = .(value > 0)) +
+                     theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+                           legend.background = element_blank(), legend.key = element_blank(), 
+                           panel.background = element_blank(), panel.border = element_blank(), 
+                           strip.background = element_blank(), plot.background = element_blank()) +
                      ylab(paste0("log of frequency of words")) +
+                     
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
-                     scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) )
+                     scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) +
+                     guides(colour=guide_legend(title="words")))
 }
 }

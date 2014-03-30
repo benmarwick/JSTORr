@@ -2,7 +2,7 @@
 \alias{JSTOR_2words}
 \title{Plot the frequencies of one word against another word over time in a JSTOR DfR dataset}
 \usage{
-JSTOR_2words(unpack1grams, word1, word2, span = 0.4)
+JSTOR_2words(unpack1grams, word1, word2, span = 0.4, se = FALSE)
 }
 \arguments{
   \item{unpack1grams}{object returned by the function
@@ -16,6 +16,9 @@ JSTOR_2words(unpack1grams, word1, word2, span = 0.4)
 
   \item{span}{span of the lowess line (controls the degree
   of smoothing). Default is 0.4}
+
+  \item{se}{display standard error of lowess line. Default
+  is no (false).}
 }
 \value{
 Returns a ggplot object with publication year on the
