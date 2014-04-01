@@ -13,7 +13,7 @@
 #' ## JSTOR_2words(unpack1grams, word1 = "milk", word2 = "sugar"), span = 0.8
 
 
-JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE){
+JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE, yearfrom = NULL, yearto = NULL){
   # Comparing two words of interest (always lower case)
   y <- unpack1grams$wordcounts
   bibliodata <- unpack1grams$bibliodata
@@ -60,7 +60,61 @@ JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE){
   # reshape into a long table to make it easier to work with in ggplt
   library(reshape2)
   twowords_by_year_melt <- melt(twowords_by_year, id.vars = "year")
+  
+  if(is.null(yearfrom)) { # if no value entered by user, take min value of years in dataset
+    
+    yearfrom <- as.numeric(as.character(min(bibliodata$year)))
+    
+    
+  } else { # if value intered by user, then check it's in the dataset
+    
+    if(yearfrom %in% as.numeric(as.character(bibliodata$year))) {
+     
+      yearfrom <- yearfrom # if it is, take the user's value
+      
+    } else {
+    
+    stop("The yearfrom value is outside the range of years available for this corpus")  # if not, throw an error 
+    
+  }
+}
+
+# repeat for upper value of years
+
+
+if(is.null(yearto)) { # if no value entered by user, take max value of years in dataset
+  
+  yearfrom <- as.numeric(as.character(max(bibliodata$year)))
+  
+  
+} else { # if value intered by user, then check it's in the dataset
+  
+  if(yearto %in% as.numeric(as.character(bibliodata$year))) {
+    
+    yearto <- yearto # if it is, take the user's value
+    
+  } else {
+    
+    stop("The yearto value is outside the range of years available for this corpus")  # if not, throw an error 
+    
+  }
+}
+
+
+
+
+
+
+
+
+
+  
   lim_min <- as.numeric(as.character(min(bibliodata$year)))
+  
+  
+  yearto
+  
+  
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # visualise
   library(ggplot2)
@@ -73,7 +127,7 @@ JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE){
                            strip.background = element_blank(), plot.background = element_blank()) +
                      ylab(paste0("log of frequency of words")) +
                      
-                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
+                     scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq(yearfrom-1, yearto+1, 2)) +
                      scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) +
                      guides(colour=guide_legend(title="words")))
 }
