@@ -7,6 +7,8 @@
 #' @param word2 One word (or vector of words), surrounded by standard quote marks.
 #' @param span span of the lowess line (controls the degree of smoothing). Default is 0.4
 #' @param se display standard error of lowess line. Default is no (false).
+#' @param yearfrom year to start the x-axis from, the minimum year to display on the plot
+#' @param yearto year to end the x-axis at, the maximum year to display on the plot
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ## JSTOR_2words(unpack1grams, "diamonds", "pearls")
@@ -84,7 +86,7 @@ JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE, yea
 
 if(is.null(yearto)) { # if no value entered by user, take max value of years in dataset
   
-  yearfrom <- as.numeric(as.character(max(bibliodata$year)))
+  yearto <- as.numeric(as.character(max(bibliodata$year)))
   
   
 } else { # if value intered by user, then check it's in the dataset
@@ -105,17 +107,6 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
 
 
 
-
-
-
-  
-  lim_min <- as.numeric(as.character(min(bibliodata$year)))
-  
-  
-  yearto
-  
-  
-  lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # visualise
   library(ggplot2)
   suppressWarnings(ggplot(twowords_by_year_melt, aes(year, log(value))) +
@@ -127,7 +118,7 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
                            strip.background = element_blank(), plot.background = element_blank()) +
                      ylab(paste0("log of frequency of words")) +
                      
-                     scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq(yearfrom-1, yearto+1, 2)) +
+                     scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
                      scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) +
                      guides(colour=guide_legend(title="words")))
 }
