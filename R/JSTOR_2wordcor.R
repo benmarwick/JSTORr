@@ -5,13 +5,15 @@
 #' @param word1 One word or a vector of words, each word surrounded by standard quote marks.
 #' @param word2  One word or a vector of words, each word surrounded by standard quote marks.
 #' @param span span of the loess line (controls the degree of smoothing). Default is 0.4
+#' @param yearfrom year to start the x-axis from, the minimum year to display on the plot
+#' @param yearto year to end the x-axis at, the maximum year to display on the plot
 #' @return Returns a ggplot object with publication year on the horizontal axis and Pearson's correlation on the vertical axis. Each point represents all the documents of a single year, point size is inversely proportional to p-value of the correlation.
 #' @examples 
 #' ## JSTOR_2wordcor(unpack1grams, word1 = "pearls", word2 = "diamonds")
 #' ## JSTOR_2wordcor(unpack1grams, c("silver", "gold", "platinum"), c("oil", "gas"), span = 0.3)
 
 
-JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4){
+JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NULL, yearto = NULL){
   ## investigate correlations between words over time
   y <- unpack1grams$wordcounts
   bibliodata <- unpack1grams$bibliodata
@@ -60,6 +62,53 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4){
   # calculate correlations of the two words per year (and p-values)
   library(plyr)
   corrp <- ddply(ctwowords_by_year, .(year), summarize, "corr" = cor.test(ww1, ww2)$estimate, "pval" = cor.test(ww1, ww2)$p.value)
+  
+  
+  # apply year limits, if any specified
+  
+  if(is.null(yearfrom)) { # if no value entered by user, take min value of years in dataset
+    
+    yearfrom <- as.numeric(as.character(min(bibliodata$year)))
+    
+    
+  } else { # if value intered by user, then check it's in the dataset
+    
+    if(yearfrom %in% as.numeric(as.character(bibliodata$year))) {
+      
+      yearfrom <- yearfrom # if it is, take the user's value
+      
+    } else {
+      
+      stop("The yearfrom value is outside the range of years available for this corpus")  # if not, throw an error 
+      
+    }
+  }
+  
+  # repeat for upper value of years
+  
+  
+  if(is.null(yearto)) { # if no value entered by user, take max value of years in dataset
+    
+    yearto <- as.numeric(as.character(max(bibliodata$year)))
+    
+    
+  } else { # if value intered by user, then check it's in the dataset
+    
+    if(yearto %in% as.numeric(as.character(bibliodata$year))) {
+      
+      yearto <- yearto # if it is, take the user's value
+      
+    } else {
+      
+      stop("The yearto value is outside the range of years available for this corpus")  # if not, throw an error 
+      
+    }
+  }
+  
+  
+  
+  
+  
   # visualise
   library(ggplot2)
   suppressWarnings(ggplot(corrp, aes(year, corr)) +
@@ -69,7 +118,7 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4){
                      geom_hline(yintercept=0, colour = "red") + 
                      ylab(paste0("correlation between '",cw1, "' and '", cw2,"'")) +
                      ylim(-1.0, 1.0) +
-                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
+                     scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
                      scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001)))
 }
   }

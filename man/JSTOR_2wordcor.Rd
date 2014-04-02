@@ -2,7 +2,8 @@
 \alias{JSTOR_2wordcor}
 \title{Plot the change over time of the correlation between one set of words and another set of words in a JSTOR DfR dataset}
 \usage{
-JSTOR_2wordcor(unpack1grams, word1, word2, span = 0.4)
+JSTOR_2wordcor(unpack1grams, word1, word2, span = 0.4, yearfrom = NULL,
+  yearto = NULL)
 }
 \arguments{
   \item{unpack1grams}{object returned by the function
@@ -16,6 +17,12 @@ JSTOR_2wordcor(unpack1grams, word1, word2, span = 0.4)
 
   \item{span}{span of the loess line (controls the degree
   of smoothing). Default is 0.4}
+
+  \item{yearfrom}{year to start the x-axis from, the
+  minimum year to display on the plot}
+
+  \item{yearto}{year to end the x-axis at, the maximum year
+  to display on the plot}
 }
 \value{
 Returns a ggplot object with publication year on the
