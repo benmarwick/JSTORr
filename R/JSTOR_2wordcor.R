@@ -116,6 +116,10 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NU
                      geom_smooth(  method = "loess", span = span, se = FALSE) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      geom_hline(yintercept=0, colour = "red") + 
+                     theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+                           legend.background = element_blank(), legend.key = element_blank(), 
+                           panel.background = element_blank(), panel.border = element_blank(), 
+                           strip.background = element_blank(), plot.background = element_blank()) +
                      ylab(paste0("correlation between '",cw1, "' and '", cw2,"'")) +
                      ylim(-1.0, 1.0) +
                      scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
