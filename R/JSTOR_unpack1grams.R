@@ -120,8 +120,7 @@ myfiles1 <- myfiles[full]
   setwd(path) # change this to the location of the citations.csv file
     
   # now read in file
-  cit <- read.csv("citations.CSV", row.names = NULL, comment.char = "", header = TRUE, 
-                  stringsAsFactors = FALSE, colClasses="character", quote = "")
+  cit <- read.delim("citations.TSV", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
   library(stringr)
@@ -130,6 +129,8 @@ myfiles1 <- myfiles[full]
   # note that citation type is not in the correct column
   # and that we need \t in there also
   # changed this in case we get a dataset that was not originally all fla
+  # better to make this choice on the DFR website instead of 
+  # hard-code it here
   citfla <- cit #[cit$publisher == 'fla\t',]
   # subset from the wordcount data only the full length articles
  
@@ -161,7 +162,6 @@ myfiles1 <- myfiles[full]
     
   } else {
     
-    library(plyr)
     wordcounts <- do.call(tm:::c.DocumentTermMatrix, wordcounts)
 
   }
