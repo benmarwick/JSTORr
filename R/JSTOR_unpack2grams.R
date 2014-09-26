@@ -38,9 +38,7 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   suppressMessages(library(data.table))
   library(plyr)
   read_csv2dt <- function(x) data.table(fread(x, sep = ",", stringsAsFactors=FALSE))
-#   read_csv2dt <- function(x) data.table(read.csv(x, sep = ",", stringsAsFactors=FALSE, 
-#                                                  colClasses = c("character", "integer"), 
-#                                                  comment.char = "", header = TRUE ))
+                                                
   if(parallel) {
     
     suppressMessages(library(snow)); suppressMessages(library(parallel))
@@ -116,8 +114,7 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   
   
   # now read in file
-  cit <- read.csv("citations.CSV", row.names = NULL, comment.char = "", header = TRUE, 
-                  stringsAsFactors = FALSE, colClasses="character", quote = "")
+cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
   library(stringr)
@@ -125,7 +122,8 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   # limit list of citations to full length articles only 
   # note that citation type is not in the correct column
   # and that we need \t in there also
-  citfla <- cit[cit$publisher == 'fla\t',]
+  # better to leave this to be done at theh DFR webpage
+  citfla <- cit #cit[cit$publisher == 'fla\t',]
   # subset from the wordcount data only the full length articles
  
   # subset items in the list of wordcount data whose names are in 
@@ -157,7 +155,7 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
     
   } else {
     
-    library(plyr)
+    
       bigrams <- do.call(tm:::c.DocumentTermMatrix, bigrams)
 
   }
