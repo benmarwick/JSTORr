@@ -120,7 +120,7 @@ myfiles1 <- myfiles[full]
   setwd(path) # change this to the location of the citations.csv file
     
   # now read in file
-  cit <- read.delim("citations.TSV", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
+  cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
   library(stringr)
