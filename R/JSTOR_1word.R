@@ -11,7 +11,7 @@
 #' ## JSTOR_1word(unpack1grams, c("diamonds", "pearls"), span = 0.4, se = FALSE) +
 #' ##  scale_y_continuous(trans=log2_trans()) # to diminish the effect of a few extreme values
 
-JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=TRUE){
+JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=FALSE){
   #### investigate change in use of certain words of interest over time
   y <- unpack1grams$wordcounts
   
@@ -49,7 +49,7 @@ JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=TRUE){
   # vizualise one word over time
   library(ggplot2)
   library(scales)
-  suppressWarnings(ggplot(word_by_year, aes(year, word_ratio)) +
+  g <- suppressWarnings(ggplot(word_by_year, aes(year, word_ratio)) +
                      geom_point(subset = .(word_ratio > 0)) +
                      geom_smooth( aes(group = 1), method = "loess", se = se, span = span, data=subset(word_by_year, word_ratio>0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
@@ -59,5 +59,8 @@ JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=TRUE){
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)))
  
   }
+  # put DOIs back on 
+  word_by_year <- cbind(word_by_year, as.character(bibliodata$x))
+  return(list(word_by_year = word_by_year, plot = g))
 }
 

@@ -47,4 +47,8 @@ test_that("1 word is in the right spot", {
   
   expect_equal(nrow(biblio_), 6)
   
+  gender_ <- JSTOR_1word(unpack1grams, "gender")
+  
+  expect_equal(nrow(gender_$word_by_year), 178)
+  
 })

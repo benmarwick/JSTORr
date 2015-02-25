@@ -112,7 +112,7 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
   # visualise
   library(ggplot2)
   library(scales)
-  suppressWarnings(ggplot(twowords_by_year_melt, aes(year, (value))) +
+  g <- suppressWarnings(ggplot(twowords_by_year_melt, aes(year, (value))) +
                      geom_point(subset = .(value > 0), aes(colour = variable), size = I(3)) +
                      geom_smooth( aes(colour = variable), se = se, method = "loess", span = span, subset = .(value > 0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1), 
@@ -125,4 +125,8 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
                      scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) +
                      guides(colour=guide_legend(title="words"))) 
 }
+# put DOIs back on 
+twowords_by_year_melt <- cbind(twowords_by_year_melt, as.character(bibliodata$x))
+return(list(words_by_year = twowords_by_year_melt, plot = g))
+
 }

@@ -21,5 +21,6 @@ unlink("wordcounts", recursive = TRUE)
 # if working with an older DFR archive that had a CSV file instead of a TSV,
 # here's how to convert...
 # citations <- read.csv("citations.CSV")
-# citations <- data.frame(apply(citations, 2, function(i) gsub("\t", " ", i)))
+# citations <- data.frame(apply(citations, 2, function(i) gsub("\t", "", i)))
 # write.table(citations, 'citations.tsv',  quote=FALSE, sep='\t')
+# unlink("citations.CSV") # delete CSV
