@@ -37,9 +37,7 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
   suppressMessages(library(data.table))
   library(plyr)
   read_csv2dt <- function(x) data.table(fread(x, sep = ",", stringsAsFactors=FALSE))
-#   read_csv2dt <- function(x) data.table(read.csv(x, sep = ",", stringsAsFactors=FALSE, 
-#                                                  colClasses = c("character", "integer"), 
-#                                                  comment.char = "", header = TRUE ))
+                                                
   if(parallel) {
     
     suppressMessages(library(snow)); suppressMessages(library(parallel))
@@ -127,16 +125,14 @@ myfiles1 <- myfiles[full]
   cit$id <- str_extract(chartr('/', '_', cit$id), ".*[^\t]")
   # limit list of citations to full length articles only 
   # note that citation type is not in the correct column
-  # and that we need \t in there also
   # changed this in case we get a dataset that was not originally all fla
-  # better to make this choice on the DFR website instead of 
-  # hard-code it here
-  citfla <- cit #[cit$publisher == 'fla\t',]
+  citfla <- cit[cit$publisher == 'fla',]
   # subset from the wordcount data only the full length articles
  
   # subset items in the list of wordcount data whose names are in 
-  # the list of fla citation IDs
-  wordcounts <- aawc2[which(names(aawc2) %in%  citfla$id)]
+  # the list of fla citation IDs (clear out any spaces also)
+  citfla$id <- as.character(gsub(" ", "", citfla$id))
+  wordcounts <- aawc2[which(names(aawc2) %in% citfla$id)]
   
   # put citation IDs in the same order with wordcount data names
   # which is the same order as myfiles

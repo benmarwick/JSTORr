@@ -8,7 +8,8 @@
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ## JSTOR_1word(unpack1grams, "diamonds")
-#' ## JSTOR_1word(unpack1grams, c("diamonds", "pearls"), span = 0.8, se = FALSE)
+#' ## JSTOR_1word(unpack1grams, c("diamonds", "pearls"), span = 0.4, se = FALSE) +
+#' ##  scale_y_continuous(trans=log2_trans()) # to diminish the effect of a few extreme values
 
 JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=TRUE){
   #### investigate change in use of certain words of interest over time
@@ -36,10 +37,8 @@ JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=TRUE){
     word <- word
   }
   
-  # calculate ratio
-  word_ratio <- word/leng
-  
-
+  # calculate rate per 1000 words
+  word_ratio <- word/leng * 1000
   
   # get years for each article
   suppressMessages(library(data.table))
@@ -49,13 +48,16 @@ JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=TRUE){
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # vizualise one word over time
   library(ggplot2)
-  suppressWarnings(ggplot(word_by_year, aes(year, log(word_ratio))) +
+  library(scales)
+  suppressWarnings(ggplot(word_by_year, aes(year, word_ratio)) +
                      geom_point(subset = .(word_ratio > 0)) +
                      geom_smooth( aes(group = 1), method = "loess", se = se, span = span, data=subset(word_by_year, word_ratio>0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-                     ylab(paste0("log of frequency of the word '", oneword, "'")) +
+                     ylab(paste0("frequency of the word '", oneword, "' per 1000 words")) +
+            
                      # inspect bibliodata$year to see min and max year to set axis limits
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)))
- }
+ 
+  }
 }
 

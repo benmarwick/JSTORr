@@ -12,7 +12,9 @@
 #' @return Returns a ggplot object with publication year on the horizontal axis and log relative frequency on the vertical axis. Each point represents a single document.
 #' @examples 
 #' ## JSTOR_2words(unpack1grams, "diamonds", "pearls")
-#' ## JSTOR_2words(unpack1grams, word1 = "milk", word2 = "sugar"), span = 0.8
+#' ## JSTOR_2words(unpack1grams, word1 = "milk", word2 = "sugar", span = 0.8) +
+#' ## scale_y_continuous(trans=log2_trans()) # to diminish the effect of a few extreme values
+#' 
 
 
 JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE, yearfrom = NULL, yearto = NULL){
@@ -51,8 +53,8 @@ JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE, yea
     
     
   # calculate ratios
-  word1_ratio <- word1/leng
-  word2_ratio <- word2/leng
+  word1_ratio <- word1/leng * 1000
+  word2_ratio <- word2/leng * 1000
   
 
    
@@ -109,17 +111,18 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
 
   # visualise
   library(ggplot2)
-  suppressWarnings(ggplot(twowords_by_year_melt, aes(year, log(value))) +
+  library(scales)
+  suppressWarnings(ggplot(twowords_by_year_melt, aes(year, (value))) +
                      geom_point(subset = .(value > 0), aes(colour = variable), size = I(3)) +
                      geom_smooth( aes(colour = variable), se = se, method = "loess", span = span, subset = .(value > 0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1), 
                            legend.background = element_blank(), legend.key = element_blank(), 
                            panel.background = element_blank(), panel.border = element_blank(), 
                            strip.background = element_blank(), plot.background = element_blank()) +
-                     ylab(paste0("log of frequency of words")) +
+                     ylab(paste0("frequency of words per 1000 words")) +
                      
                      scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
                      scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) +
-                     guides(colour=guide_legend(title="words")))
+                     guides(colour=guide_legend(title="words"))) 
 }
 }

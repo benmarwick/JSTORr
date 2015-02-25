@@ -13,7 +13,7 @@ Description: Simple exploratory text mining and document clustering of journal
     with any of the other functions. For more details on installation and
     usage, see https://github.com/UW-ARCHY-textual-macroanalysis-lab/JSTORr
 License: MIT
-Imports:
+Imports: 
     ggplot2,
     reshape2,
     plyr,
@@ -36,3 +36,4 @@ Imports:
     igraph,
     snow,
     devtools
+Suggests: testthat
