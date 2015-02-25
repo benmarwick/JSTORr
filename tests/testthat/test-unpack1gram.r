@@ -11,9 +11,7 @@ test_that("1 word is in the right spot", {
   biblio <- unpack1grams$bibliodata
   
   # to limit by year
-  library(dplyr)
-  y_ <- biblio %>%
-    filter(year == year_)
+  y_ <- biblio[ biblio$year == year_, ]
   
   # to incldue all years
   # y_ <- biblio 
@@ -41,9 +39,7 @@ test_that("1 word is in the right spot", {
   biblio_ <- biblio[biblio$x %in% x_doi , ]
   
   # sort by year
-  biblio_  <- biblio_  %>%
-    arrange(year)
-  
+  biblio_  <- biblio_[with(biblio_, order(year)), ]  
   
   expect_equal(nrow(biblio_), 6)
   
