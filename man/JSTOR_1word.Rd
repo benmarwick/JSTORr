@@ -4,7 +4,7 @@
 \alias{JSTOR_1word}
 \title{Plot the frequency of one word over time in a JSTOR DfR dataset}
 \usage{
-JSTOR_1word(unpack1grams, oneword, span = 0.5, se = TRUE)
+JSTOR_1word(unpack1grams, oneword, span = 0.5, se = FALSE)
 }
 \arguments{
 \item{unpack1grams}{object returned by the function JSTOR_unpack1grams.}
@@ -23,6 +23,7 @@ Function to plot changes in the relative frequency of a word over time. The rela
 }
 \examples{
 ## JSTOR_1word(unpack1grams, "diamonds")
-## JSTOR_1word(unpack1grams, c("diamonds", "pearls"), span = 0.8, se = FALSE)
+## JSTOR_1word(unpack1grams, c("diamonds", "pearls"), span = 0.4, se = FALSE) +
+##  scale_y_continuous(trans=log2_trans()) # to diminish the effect of a few extreme values
 }
 

@@ -30,6 +30,7 @@ Function to plot changes in the relative frequency of two words (two 1-grams) ov
 }
 \examples{
 ## JSTOR_2words(unpack1grams, "diamonds", "pearls")
-## JSTOR_2words(unpack1grams, word1 = "milk", word2 = "sugar"), span = 0.8
+## JSTOR_2words(unpack1grams, word1 = "milk", word2 = "sugar", span = 0.8) +
+## scale_y_continuous(trans=log2_trans()) # to diminish the effect of a few extreme values
 }
 

@@ -8,16 +8,6 @@ JSTOR_unpack_multiple_archives(mydir = getwd())
 }
 \arguments{
 \item{mydir}{path to directory containing multiple zip files dowloaded from dfr.jstor.org (default is the current working directory)}
-
-\item{nouns}{the object returned by the function JSTOR_dtmofnouns. A Document Term Matrix of nouns.}
-
-\item{n}{the number years to aggregate documents by. For example, n = 5 (the default value) will create groups of all documents published in non-overlapping five year ranges.}
-
-\item{lowfreq}{An integer for the minimum frequency of a word to be included in the plot. Default is 300.}
-
-\item{topn}{An integer for the number of top ranking words to plot. For example, topn = 20 (the default value) will plot the top 20 words for each range of years.}
-
-\item{biggest}{An integer to control the maximum size of the text in the plot}
 }
 \value{
 Returns a list of two items. First is "wordcounts", a Document Term Matrix of 1-grams, and second is 'bibliodata', a data frame of bibliographic information for all articles.

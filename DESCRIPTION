@@ -1,8 +1,8 @@
 Package: JSTORr
 Type: Package
 Title: Simple text mining and document clustering of JSTOR journal articles
-Version: 1.0.20140222
-Date: 2013-04-25
+Version: 1.0.20150226
+Date: 2015-02-25
 Author: Ben Marwick
 Maintainer: Ben Marwick <bmarwick@gmail.com>
 Description: Simple exploratory text mining and document clustering of journal
@@ -11,7 +11,7 @@ Description: Simple exploratory text mining and document clustering of journal
     format and Word Counts as data type), then once you get a zip file, unzip
     it and start with one of the unpack functions and then you're ready to go
     with any of the other functions. For more details on installation and
-    usage, see https://github.com/UW-ARCHY-textual-macroanalysis-lab/JSTORr
+    usage, see https://github.com/benmarwick/JSTORr
 License: MIT
 Imports: 
     ggplot2,
@@ -37,3 +37,4 @@ Imports:
     snow,
     devtools
 Suggests: testthat
+LazyData: true
