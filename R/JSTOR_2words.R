@@ -119,7 +119,7 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
                            legend.background = element_blank(), legend.key = element_blank(), 
                            panel.background = element_blank(), panel.border = element_blank(), 
                            strip.background = element_blank(), plot.background = element_blank()) +
-                     ylab(paste0("frequency of keywords per 1000 words")) +
+                     ylab(paste0("frequency per 1000 words")) +
                      
                      scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
                      scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) +
