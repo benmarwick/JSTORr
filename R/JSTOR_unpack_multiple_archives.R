@@ -161,5 +161,5 @@ wordcounts <- wordcounts[,(wordcounts$dimnames$Terms %in% iconv(wordcounts$dimna
 message("done")
 
 unpack_multi <- list("wordcounts" = wordcounts, "bibliodata" = bibliodata)
-return(list(wordcounts, bibliodata))
+return(list(wordcounts = wordcounts, bibliodata = bibliodata))
 }
