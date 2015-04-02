@@ -1,6 +1,6 @@
-#' Plot the most frequent words by time intervals
+#' Unpacks multiple zip files of JSTOR journal articles and bibliographic data to a Document Term Matrix of 1-grams
 #' 
-#' @description Generates a plot of the top n words in all the documents in ranges of years. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). For best results, repeat the function several times after adding common words to the stopword list and excluding them by re-running the JSTOR_dtmofnouns function. The location of the English stopwords list can be found by entering this at the R prompt: paste0(.libPaths()[1], "/tm/stopwords/english.dat")
+#' @description Import journal articles and bibliographic data from multiple downloaded zipfiles, and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). 
 #' @param mydir path to directory containing multiple zip files dowloaded from dfr.jstor.org (default is the current working directory)
 #' @return Returns a list of two items. First is "wordcounts", a Document Term Matrix of 1-grams, and second is 'bibliodata', a data frame of bibliographic information for all articles. 
 

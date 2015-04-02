@@ -2,7 +2,7 @@
 % Please edit documentation in R/JSTOR_unpack_multiple_archives.R
 \name{JSTOR_unpack_multiple_archives}
 \alias{JSTOR_unpack_multiple_archives}
-\title{Plot the most frequent words by time intervals}
+\title{Unpacks multiple zip files of JSTOR journal articles and bibliographic data to a Document Term Matrix of 1-grams}
 \usage{
 JSTOR_unpack_multiple_archives(mydir = getwd())
 }
@@ -13,7 +13,7 @@ JSTOR_unpack_multiple_archives(mydir = getwd())
 Returns a list of two items. First is "wordcounts", a Document Term Matrix of 1-grams, and second is 'bibliodata', a data frame of bibliographic information for all articles.
 }
 \description{
-Generates a plot of the top n words in all the documents in ranges of years. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). For best results, repeat the function several times after adding common words to the stopword list and excluding them by re-running the JSTOR_dtmofnouns function. The location of the English stopwords list can be found by entering this at the R prompt: paste0(.libPaths()[1], "/tm/stopwords/english.dat")
+Import journal articles and bibliographic data from multiple downloaded zipfiles, and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 }
 \examples{
 ## multiple_archives <- JSTOR_unpack_multiple_archives(mydir = "~/my_data")

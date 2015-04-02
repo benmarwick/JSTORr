@@ -11,7 +11,7 @@ JSTOR_clusterbywords(nouns, word, f = 0.01)
 
 \item{word}{The word or vector of words to subset the documents by, ie. use only documents containing this word (or words) in the cluster analysis}
 
-\item{f}{A scalar value to filter the total number of words used in the cluster analyses. For each document, the count of each word is divided by the total number of words in that document, expressing a word's frequency as a proportion of all words in that document. This parameter corresponds to the summed proportions of a word in all documents (ie. the column sum for the document term matrix). If f = 0.01 then only words that constitute at least 1.0% of all words in all documents will be used for the cluster analyses.}
+\item{f}{A scalar value to filter the total number of words used in the cluster analyses. For each document, the count of each word is divided by the total number of words in that document, expressing a word's frequency as a proportion of all words in that document. This parameter corresponds to the summed proportions of a word in all documents (ie. the column sum for the document term matrix). If f = 0.01 then only words that constitute at least 1.0 percent of all words in all documents will be used for the cluster analyses.}
 }
 \value{
 Returns plots of clusters of documents, and dataframes of affinity propogation clustering, k-means and PCA outputs
