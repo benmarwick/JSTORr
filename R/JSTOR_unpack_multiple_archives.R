@@ -3,7 +3,7 @@
 #' @description Import journal articles and bibliographic data from multiple downloaded zipfiles, and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). 
 #' @param mydir path to directory containing multiple zip files dowloaded from dfr.jstor.org (default is the current working directory)
 #' @return Returns a list of two items. First is "wordcounts", a Document Term Matrix of 1-grams, and second is 'bibliodata', a data frame of bibliographic information for all articles. 
-
+#' @export
 #' @examples 
 #' ## multiple_archives <- JSTOR_unpack_multiple_archives(mydir = "~/my_data")
 
