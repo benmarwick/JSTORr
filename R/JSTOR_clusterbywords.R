@@ -10,14 +10,14 @@
 #' ## cl2 <- JSTOR_clusterbywords(nouns, c("pirates", "privateers"))
 
 
-JSTOR_clusterbywords <- function(nouns, word, f = 0.01){ 
+JSTOR_clusterbywords <- function(nouns, word, custom_stopwords=NULL, f = 0.01){ 
 
 
 y <- nouns
-
-
 # get dtm that only has the word of interest (to minimize memory burden)
 y1 <- y[,y$dimnames$Terms == word]
+message("removing stopwords...")
+y1 <- y1[, !(y1$dimnames$Terms %in% c(custom_stopwords, stopwords(kind = "en"))) ]
 # get matrix of frequencies of that word over all docs
 y2 <- as.matrix(y1[,dimnames(y1)$Terms %in% word])
 # subset full dtm to keep only docs with the word of interest
