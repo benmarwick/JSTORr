@@ -49,11 +49,11 @@ JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=FALSE){
   # vizualise one word over time
   library(ggplot2)
   library(scales)
-  g <- suppressWarnings(ggplot(word_by_year, aes(year, word_ratio)) +
+  g <- suppressWarnings(ggplot(word_by_year, aes(year, log(word_ratio))) +
                      geom_point(subset = .(word_ratio > 0)) +
                      geom_smooth( aes(group = 1), method = "loess", se = se, span = span, data=subset(word_by_year, word_ratio>0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-                     ylab(paste0("frequency '", oneword, "' per 1000 words")) +
+                     ylab(paste0("log of frequency of the word '", oneword, "' per 1000 words")) +
             
                      # inspect bibliodata$year to see min and max year to set axis limits
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)))

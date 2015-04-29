@@ -112,14 +112,14 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
   # visualise
   library(ggplot2)
   library(scales)
-  g <- suppressWarnings(ggplot(twowords_by_year_melt, aes(year, (value))) +
+  g <- suppressWarnings(ggplot(twowords_by_year_melt, aes(year, log(value))) +
                      geom_point(subset = .(value > 0), aes(colour = variable), size = I(3)) +
                      geom_smooth( aes(colour = variable), se = se, method = "loess", span = span, subset = .(value > 0)) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1), 
                            legend.background = element_blank(), legend.key = element_blank(), 
                            panel.background = element_blank(), panel.border = element_blank(), 
                            strip.background = element_blank(), plot.background = element_blank()) +
-                     ylab(paste0("frequency per 1000 words")) +
+                     ylab(paste0("log of frequency per 1000 words")) +
                      
                      scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
                      scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) +
