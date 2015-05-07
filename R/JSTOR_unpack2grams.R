@@ -5,7 +5,7 @@
 #' @param parallel if TRUE, apply function in parallel, using the parallel library. Default is FALSE as this is typically faster for smaller datasets (ie. ~5000 articles) due to communication overhead.
 #' @return Returns a list of two items. First is "bigrams", a Document Term Matrix of 2-grams, and second is 'bibliodata', a data frame of bibliographic information for all articles. 
 #' @examples 
-#' ## unpack2grams <- JSTOR_unpack2grams(path = "C:/Users/marwick/Downloads/JSTOR") # then follow prompts to navigate to the location of the zipfile
+  #' ## unpack2grams <- JSTOR_unpack2grams(path = "C:/Users/marwick/Downloads/JSTOR") # then follow prompts to navigate to the location of the zipfile
 
 
 
