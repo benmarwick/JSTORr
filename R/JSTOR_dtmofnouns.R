@@ -10,8 +10,6 @@
 #' ## nouns <- JSTOR_dtmofnouns(unpack1grams) 
 
 
-
-
 JSTOR_dtmofnouns <- function(unpack1grams, word=NULL, sparse=1, POStag=TRUE){
 
 y <- unpack1grams$wordcounts

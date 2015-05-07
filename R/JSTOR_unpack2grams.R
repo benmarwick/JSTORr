@@ -114,16 +114,15 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   
   
   # now read in file
-cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
+  cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
   library(stringr)
   cit$id <- str_extract(chartr('/', '_', cit$id), ".*[^\t]")
   # limit list of citations to full length articles only 
   # note that citation type is not in the correct column
-  # and that we need \t in there also
-  # better to leave this to be done at theh DFR webpage
-  citfla <- cit #cit[cit$publisher == 'fla\t',]
+  # changed this in case we get a dataset that was not originally all fla
+  citfla <- cit[cit$publisher == 'fla',]
   # subset from the wordcount data only the full length articles
  
   # subset items in the list of wordcount data whose names are in 
