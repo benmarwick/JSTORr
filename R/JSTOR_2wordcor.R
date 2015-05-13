@@ -111,7 +111,7 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NU
   
   # visualise
   library(ggplot2)
-  suppressWarnings(ggplot(corrp, aes(year, corr)) +
+  g <- suppressWarnings(ggplot(corrp, aes(year, corr)) +
                      geom_point(aes(size = -pval)) +
                      geom_smooth(  method = "loess", span = span, se = FALSE) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
@@ -124,5 +124,7 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NU
                      ylim(-1.0, 1.0) +
                      scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
                      scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001)))
-}
+  }
+  
+  return(list(corrp = corrp, plot = g))
   }
