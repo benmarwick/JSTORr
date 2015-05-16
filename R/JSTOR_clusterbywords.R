@@ -16,13 +16,15 @@ JSTOR_clusterbywords <- function(nouns, word, custom_stopwords=NULL, f = 0.01){
 y <- nouns
 # get dtm that only has the word of interest (to minimize memory burden)
 y1 <- y[,y$dimnames$Terms == word]
-message("removing stopwords...")
-y1 <- y1[, !(y1$dimnames$Terms %in% c(custom_stopwords, stopwords(kind = "en"))) ]
+
 # get matrix of frequencies of that word over all docs
 y2 <- as.matrix(y1[,dimnames(y1)$Terms %in% word])
 # subset full dtm to keep only docs with the word of interest
 # plus all the other words in those docs
 y3 <- y[ y$dimnames$Docs %in% names(y2[ y2 >= 1, ]), ]
+
+message("removing stopwords...")
+y3 <- y3[, !(y3$dimnames$Terms %in% c(custom_stopwords, stopwords(kind = "en"))) ]
 
 
 message("standardising word counts in the document term matrix...")
