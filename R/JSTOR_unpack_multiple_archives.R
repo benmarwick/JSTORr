@@ -114,7 +114,7 @@ all_citations_fla <- all_citations_fla[which(all_citations_fla$id %in% names(wor
 bibliodata <- data.table(merge(names(wordcounts_fla), all_citations_fla, by.x=1, by.y="id"))
 # create a variable that holds the year of publication for
 # each article
-bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]+{4}")
+bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]{4}")
 
 # remove duplicate articles (where the same DOI occurs more than once)
 
