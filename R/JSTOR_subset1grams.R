@@ -1,10 +1,7 @@
 #' Subset 1gram object
 #' 
-#' @description  
-#' @param 
-#' @param 
-#' @return  
-#' @examples 
+#' @description Subsets 1 grams 
+
 
 
 

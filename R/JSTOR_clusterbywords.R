@@ -69,7 +69,7 @@ require(ggdendro)
 #convert cluster object to use with ggplot
 message("making a cluster dendrogram of documents...")
 dendr <- dendro_data(as.dendrogram(aggres1), showSamples=TRUE, main = "Document clusters", type="rectangle")
-print(ggdendrogram(dendr, rotate=TRUE, size = 3) + 
+ggden <- print(ggdendrogram(dendr, rotate=TRUE, size = 3) + 
         labs(title="Document clusters") + 
         # not 100% sure these are the correct labels... best to inspect the cluster output...
         geom_text(data=label(dendr), aes(x=x, y=y), label=names(unlist(aggres1@clusters[[1]])), hjust=0, size=3))
@@ -127,10 +127,9 @@ fun <- function(PCs, PClabs){
 p <- ggplot(PCs, aes(PC1,PC2)) + 
   geom_text(size = 2, label = PClabs) +
   theme(aspect.ratio=1) + theme_bw(base_size = 20)
-p
 }
 p <- fun(PCs, PClabs)
-print(p)
+
 
 #
 fun <- function(df){
@@ -138,7 +137,6 @@ pv <- ggplot() + theme(aspect.ratio=1) + theme_bw(base_size = 20)
 # no data so there's nothing to plot
 # put a faint circle there, as is customary
 pv <- pv + geom_path(aes(x, y), data = df, colour="grey70") 
-pv
 }
 angle <- seq(-pi, pi, length = 50) 
 df <- data.frame(x = sin(angle), y = cos(angle)) 
@@ -161,10 +159,9 @@ fun <- function(res.pca){
   
 pv <- pv + geom_text(data=vPCs, aes(x=vPC1,y=vPC2), label=rownames(vPCs), size=4) + xlab("PC1") + ylab("PC2") 
 pv <- pv + geom_segment(data=vPCs, aes(x = 0, y = 0, xend = vPC1*0.9, yend = vPC2*0.9), arrow = arrow(length = unit(1/2, 'picas')), color = "grey30")
-pv
 }
 pv <- fun(res.pca)
-print(pv)
+
 
 
 
@@ -235,9 +232,9 @@ q <- ggplot(data=df, aes(x=PC1, y=PC2, color=cluster)) +
   # geom_point() +
   stat_ellipse() +
   geom_text(aes(label=cluster), size=5)
-print(q)
+
   
 
-return(list(cluster = aggres1, kmeans = x4, PCA = res.pca))
+return(list(cluster = aggres1, kmeans = x4, PCA = res.pca, cl_plot = cl_plot, ggden = ggden, p = p, pv = pv, q = q))
 
 }
