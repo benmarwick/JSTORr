@@ -1,6 +1,7 @@
 #' Subset 1gram object
 #' 
 #' @description Subsets 1 grams 
+#' @export
 
 
 
