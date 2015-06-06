@@ -8,3 +8,5 @@ pacman.Rproj
 R/JSTOR_unpack.R
 R/JSTOR_corpusofnouns.R
 deprecated/
+*NULL
+*.pdf
