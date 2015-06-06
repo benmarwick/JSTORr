@@ -32,7 +32,7 @@
 #' 
 #' @docType data
 #'
-#' @usage data(unpack1grams)
+#' @usage data(unpack2grams)
 #' 
 #' 
 NULL

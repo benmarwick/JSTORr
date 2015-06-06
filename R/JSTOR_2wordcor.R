@@ -59,6 +59,16 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NU
   setnames(ctwowords_by_year, c("ww1", "ww2", "year"))
   lim_min <- as.numeric(as.character(min(bibliodata$year)))
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
+  # "Not enough finite obervations" is an error returned by cor.test under certain circumstances. when year has only 1 value
+  
+  # find how many articles per year there are
+  year_count <- table(ctwowords_by_year$year)
+  # want to keep these  
+  keep_years <- as.numeric(names(year_count[year_count > 2]))
+  
+  # subset 
+  ctwowords_by_year <-  ctwowords_by_year[ctwowords_by_year$year %in% keep_years,]
+  
   # calculate correlations of the two words per year (and p-values)
   library(plyr)
   corrp <- ddply(ctwowords_by_year, .(year), summarize, "corr" = cor.test(ww1, ww2)$estimate, "pval" = cor.test(ww1, ww2)$p.value)

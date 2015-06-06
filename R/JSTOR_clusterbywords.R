@@ -60,7 +60,9 @@ k <-  length(d.apclus@clusters)
 aggres1 <- aggExCluster(x=d.apclus)
 message("done")
 message("making a cluster dendrogram of clusters...")
+{
 cl_plot <- plot(aggres1, showSamples=F, main = "Document clusters")
+}
 message("done")
 
 require(ggplot2)
@@ -68,11 +70,14 @@ require(ggdendro)
 
 #convert cluster object to use with ggplot
 message("making a cluster dendrogram of documents...")
+{
 dendr <- dendro_data(as.dendrogram(aggres1), showSamples=TRUE, main = "Document clusters", type="rectangle")
 ggden <- print(ggdendrogram(dendr, rotate=TRUE, size = 3) + 
         labs(title="Document clusters") + 
         # not 100% sure these are the correct labels... best to inspect the cluster output...
         geom_text(data=label(dendr), aes(x=x, y=y), label=names(unlist(aggres1@clusters[[1]])), hjust=0, size=3))
+}
+
 message("done")
 
 message("calculating k-means clusters...")
@@ -128,7 +133,9 @@ p <- ggplot(PCs, aes(PC1,PC2)) +
   geom_text(size = 2, label = PClabs) +
   theme(aspect.ratio=1) + theme_bw(base_size = 20)
 }
+{
 p <- fun(PCs, PClabs)
+}
 
 
 #
@@ -140,7 +147,9 @@ pv <- pv + geom_path(aes(x, y), data = df, colour="grey70")
 }
 angle <- seq(-pi, pi, length = 50) 
 df <- data.frame(x = sin(angle), y = cos(angle)) 
+{
 pv <- fun(df)
+}
 
 #
 # add on arrows and variable labels
@@ -160,25 +169,27 @@ fun <- function(res.pca){
 pv <- pv + geom_text(data=vPCs, aes(x=vPC1,y=vPC2), label=rownames(vPCs), size=4) + xlab("PC1") + ylab("PC2") 
 pv <- pv + geom_segment(data=vPCs, aes(x = 0, y = 0, xend = vPC1*0.9, yend = vPC2*0.9), arrow = arrow(length = unit(1/2, 'picas')), color = "grey30")
 }
+{
 pv <- fun(res.pca)
-
-
-
-
+}
 
 
 # plot docs and words side by side
 library(gridExtra)
 message("plotting PCA output...")
-grid.arrange(p,pv,nrow=1)
+{
+arranged <-  grid.arrange(p,pv,nrow=1)
+}
 
 
 message("plotting affinity propagation clustering output...")
-plot(d.apclus, as.matrix(cbind(PC1, PC2)))
+{
+apc <- plot(d.apclus, as.matrix(cbind(PC1, PC2)))
+}
 
 message("plotting k-means clustering output...")
 df <- data.frame(as.matrix(cbind(PC1, PC2)))
-df$cluster=factor(cl$cluster)
+df$cluster = factor(cl$cluster)
 
 # The following graph color codes the points by cluster
 # and draws ellipses around the clusters
@@ -227,14 +238,14 @@ stat_ellipse <- function(mapping=NULL, data=NULL, geom="path", position="identit
   StatEllipse$new(mapping=mapping, data=data, geom=geom, position=position, ...)
 }
 
-
+{
 q <- ggplot(data=df, aes(x=PC1, y=PC2, color=cluster)) + 
   # geom_point() +
   stat_ellipse() +
   geom_text(aes(label=cluster), size=5)
-
+}
   
 
-return(list(cluster = aggres1, kmeans = x4, PCA = res.pca, cl_plot = cl_plot, ggden = ggden, p = p, pv = pv, q = q))
+return(list(cluster = aggres1, kmeans = x4, PCA = res.pca, cl_plot = cl_plot, ggden = ggden, p = p, pv = pv, q = q, arranged = arranged, apc = apc ))
 
 }
