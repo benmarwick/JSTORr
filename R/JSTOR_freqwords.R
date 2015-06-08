@@ -7,7 +7,7 @@
 #' @param lowfreq An integer for the minimum frequency of a word to be included in the plot. Default is 300.
 #' @param topn An integer for the number of top ranking words to plot. For example, topn = 20 (the default value) will plot the top 20 words for each range of years.
 #' @param biggest An integer to control the maximum size of the text in the plot
-#' @return Returns a plot of the most frequent words per year range, with word size scaled to frequency, and a dataframe with words and counts for each year range
+#' @return Returns a plot of the most frequent words per year, with word size scaled to frequency (accessed via freqwords$plot$plot, yes twice), and a dataframe with words and counts for each year range (accessed via freqwords$freqterms).
 #' @examples 
 #' ## freqwords <- JSTOR_freqwords(unpack1grams, nouns, n = 2, biggest = 5, lowfreq = 100, topn = 5)
 #' ## freqwords <- JSTOR_freqwords(unpack1grams, nouns)
@@ -91,7 +91,8 @@ JSTOR_freqwords <- function (unpack1grams, nouns, custom_stopwords = NULL, n = 5
   freqterms3$rank <- as.numeric(gsub(".*\\.", "", rownames(freqterms3)))
   message("done")
   require(ggplot2)
-  suppressWarnings(print(ggplot(freqterms3, aes(factor(year), 
+png("NULL")
+  plot <- suppressWarnings(print(ggplot(freqterms3, aes(factor(year), 
                                                 rank)) + geom_text(aes(label = word, size = count, alpha = count), 
                                                                    data = subset(freqterms3, rank < topn)) + scale_y_reverse() + 
                            scale_size(range = c(3, biggest), name = "Word count") + 
@@ -101,7 +102,11 @@ JSTOR_freqwords <- function (unpack1grams, nouns, custom_stopwords = NULL, n = 5
                                                               panel.border = element_blank(), panel.grid.major = element_blank(), 
                                                               panel.grid.minor = element_blank(), plot.background = element_blank(), 
                                                               axis.text.x = element_text(angle = 90, hjust = 0))))
-  return(freqterms3)
-}
+  
+dev.off()
+
+  return(list(freqterms = freqterms3, plot = plot))
+  }
+
 
 
