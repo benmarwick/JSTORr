@@ -43,9 +43,18 @@ all_wordcounts <- unzips[grep("wordcounts", unzips)]
 # 
 # loop over citation files...
 all_citations <- unzips[grep("citation", unzips)]
-all_citations_csvs <- lapply(all_citations,  read.csv, quote="", row.names=NULL, comment.char = "", header = TRUE,  stringsAsFactors = FALSE, colClasses="character")
+
+# since citation files can be TSV (JSTOR changed to this in 2015) or csv...
+all_citations_csvs <- lapply(all_citations,  function(i) {if (stringr::str_sub(i, start=-3) == "CSV" | stringr::str_sub(i, start=-3) == "csv") 
+                                                            {read.csv(i, quote="", row.names=NULL, comment.char = "", header = TRUE,  stringsAsFactors = FALSE, colClasses="character")}
+                                                          else 
+                                                            {if (stringr::str_sub(i, start=-3) == "TSV" | stringr::str_sub(i, start=-3) == "tsv") 
+                                                            {read.delim(i, row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")}
+                                                              else
+                                                              {"Citations files cannot be loaded"}  } } )
+
 library("data.table")
-all_citations_csvs <- rbindlist(all_citations_csvs)
+all_citations_csvs <- rbindlist(all_citations_csvs, fill = TRUE)
 
 ###############
 
