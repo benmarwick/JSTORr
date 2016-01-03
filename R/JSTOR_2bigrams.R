@@ -50,9 +50,10 @@ JSTOR_2bigrams <- function(unpack2grams, bigram1, bigram2, span = 0.4){
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # vizualise one word over time
   library(ggplot2)
+  two_bigrams_by_year_melt <- two_bigrams_by_year_melt[two_bigrams_by_year_melt$value > 0, ]
   suppressWarnings(ggplot(two_bigrams_by_year_melt, aes(year, log(value))) +
-                     geom_point(subset = .(value > 0), aes(colour = variable)) +
-                     geom_smooth( aes(colour = variable), method = "loess", span = span, subset = .(value > 0)) +
+                     geom_point(aes(colour = variable)) +
+                     geom_smooth( aes(colour = variable), method = "loess", span = span) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of bigrams")) +
                      scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +

@@ -44,9 +44,10 @@ JSTOR_1bigram <- function(unpack2grams, bigram, span = 0.4){
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # vizualise one word over time
   library(ggplot2)
+  bigram_by_year <- bigram_by_year[bigram_by_year$bigram_ratio > 0, ]
   suppressWarnings(ggplot(bigram_by_year, aes(year, log(bigram_ratio))) +
-                     geom_point(subset = .(bigram_ratio > 0)) +
-                     geom_smooth( aes(group=1), method = "loess", span = span, data=subset(bigram_by_year, bigram_ratio>0)) +
+                     geom_point() +
+                     geom_smooth( aes(group=1), method = "loess", span = span, data=bigram_by_year) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of the bigram '", bigram, "'")) +
                      # inspect bibliodata$year to see min and max year to set axis limits

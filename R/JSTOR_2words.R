@@ -112,9 +112,10 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
   # visualise
   library(ggplot2)
   library(scales)
+  twowords_by_year_melt <- twowords_by_year_melt[twowords_by_year_melt$value > 0, ]
   g <- suppressWarnings(ggplot(twowords_by_year_melt, aes(year, log(value))) +
-                     geom_point(subset = .(value > 0), aes(colour = variable), size = I(3)) +
-                     geom_smooth( aes(colour = variable), se = se, method = "loess", span = span, subset = .(value > 0)) +
+                     geom_point(aes(colour = variable), size = I(3)) +
+                     geom_smooth( aes(colour = variable), se = se, method = "loess", span = span) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1), 
                            legend.background = element_blank(), legend.key = element_blank(), 
                            panel.background = element_blank(), panel.border = element_blank(), 
