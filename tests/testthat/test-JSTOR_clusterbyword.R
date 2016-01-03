@@ -1,6 +1,6 @@
 context("one word against another word over time")
 
-test_that("2words gives a plot", {
+test_that("cluster by words works", {
   
   # load data
   library(JSTORr)
@@ -21,9 +21,12 @@ test_that("2words gives a plot", {
   )
   
   # hardcoded classes that I identified when writing the test
-  expected_classes <- c("dendrogram", "gg" ,   "ggplot" ,    "gg" ,        "ggplot" ,   
-  "gg"   ,      "ggplot",     "arrange",    "ggplot" ,    "gTree"  ,   
-  "grob" ,      "gDesc" ,     "gg"   ,      "ggplot")
+  expected_classes <- c("dendrogram", 
+                        "gg" ,   "ggplot" ,    
+                        "gg" ,   "ggplot" , 
+                        "gg",    "ggplot",     
+                        "gtable", "grob",   "gDesc",   
+                        "gg"   ,  "ggplot")
   
   
   # test to see if we get a plot object class

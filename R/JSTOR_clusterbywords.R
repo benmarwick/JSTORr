@@ -203,48 +203,48 @@ df$cluster = factor(cl$cluster)
 # and draws ellipses around the clusters
 
 library(ggplot2)
-# to get the stat_ellipse() function
-# need these if accessing the function online:
-# suppressMessages(library(devtools)); library(digest)
-# from http://raw.github.com/low-decarie/FAAV/master/r/stat-ellipse.R
-# but I've pasted the whole thing here:
-require(proto)
-
-StatEllipse <- proto(ggplot2:::Stat,
-{
-  required_aes <- c("x", "y")
-  default_geom <- function(.) GeomPath
-  objname <- "ellipse"
-  
-  calculate_groups <- function(., data, scales, ...){
-    .super$calculate_groups(., data, scales,...)
-  }
-  calculate <- function(., data, scales, level = 0.75, segments = 51,...){
-    dfn <- 2
-    dfd <- length(data$x) - 1
-    if (dfd < 3){
-      ellipse <- rbind(c(NA,NA))	
-    } else {
-      require(MASS)
-      v <- cov.trob(cbind(data$x, data$y))
-      shape <- v$cov
-      center <- v$center
-      radius <- sqrt(dfn * qf(level, dfn, dfd))
-      angles <- (0:segments) * 2 * pi/segments
-      unit.circle <- cbind(cos(angles), sin(angles))
-      ellipse <- t(center + radius * t(unit.circle %*% chol(shape)))
-    }
-    
-    ellipse <- as.data.frame(ellipse)
-    colnames(ellipse) <- c("x","y")
-    return(ellipse)
-  }
-}
-)
-
-stat_ellipse <- function(mapping=NULL, data=NULL, geom="path", position="identity", ...) {
-  StatEllipse$new(mapping=mapping, data=data, geom=geom, position=position, ...)
-}
+# # to get the stat_ellipse() function
+# # need these if accessing the function online:
+# # suppressMessages(library(devtools)); library(digest)
+# # from http://raw.github.com/low-decarie/FAAV/master/r/stat-ellipse.R
+# # but I've pasted the whole thing here:
+# require(proto)
+# 
+# StatEllipse <- proto(ggplot2:::Stat,
+# {
+#   required_aes <- c("x", "y")
+#   default_geom <- function(.) GeomPath
+#   objname <- "ellipse"
+#   
+#   calculate_groups <- function(., data, scales, ...){
+#     .super$calculate_groups(., data, scales,...)
+#   }
+#   calculate <- function(., data, scales, level = 0.75, segments = 51,...){
+#     dfn <- 2
+#     dfd <- length(data$x) - 1
+#     if (dfd < 3){
+#       ellipse <- rbind(c(NA,NA))	
+#     } else {
+#       require(MASS)
+#       v <- cov.trob(cbind(data$x, data$y))
+#       shape <- v$cov
+#       center <- v$center
+#       radius <- sqrt(dfn * qf(level, dfn, dfd))
+#       angles <- (0:segments) * 2 * pi/segments
+#       unit.circle <- cbind(cos(angles), sin(angles))
+#       ellipse <- t(center + radius * t(unit.circle %*% chol(shape)))
+#     }
+#     
+#     ellipse <- as.data.frame(ellipse)
+#     colnames(ellipse) <- c("x","y")
+#     return(ellipse)
+#   }
+# }
+# )
+# 
+# stat_ellipse <- function(mapping=NULL, data=NULL, geom="path", position="identity", ...) {
+#   StatEllipse$new(mapping=mapping, data=data, geom=geom, position=position, ...)
+# }
 
 png("NULL") 
 q <- ggplot(data=df, aes(x=PC1, y=PC2, color=cluster)) + 

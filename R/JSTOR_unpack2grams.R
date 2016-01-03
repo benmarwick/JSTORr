@@ -112,9 +112,19 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   #### bring in citations file with biblio data for each paper
   setwd(path) # change this to the location of the citations.csv file
   
+  # since citation files can be TSV (JSTOR changed to this in 2015) or csv (before 2015)...
+  read_citations <- function(i) {if (stringr::str_sub(i, start=-3) == "CSV" | stringr::str_sub(i, start=-3) == "csv") 
+  {read.csv(i, quote="", row.names=NULL, comment.char = "", header = TRUE,  stringsAsFactors = FALSE, colClasses="character")}
+    else 
+    {if (stringr::str_sub(i, start=-3) == "TSV" | stringr::str_sub(i, start=-3) == "tsv") 
+    {read.delim(i, row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")}
+      else
+      {"Citations files cannot be loaded"}  } 
+  }
   
-  # now read in file
-  cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
+  
+  cit <- read_citations
+  # cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
   library(stringr)
