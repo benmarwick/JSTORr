@@ -103,12 +103,13 @@ names(aawc2) <- str_extract(basename(myfiles1), "[^wordcounts_].+[^.CSV]")
 # and replace odd \t that was added during import 
 library(stringr)
 all_citations_csvs$id <- str_extract(chartr('/', '_', all_citations_csvs$id), ".*[^\t]")
+all_citations_csvs$publisher <- str_extract(chartr('/', '_', all_citations_csvs$publisher), ".*[^\t]")
 
 # limit list of citations to full length articles only 
 # note that citation type is not in the correct column
 # and that we need \t in there also
 # changed this in case we get a dataset that was not originally all fla
-all_citations_fla <- unique(all_citations_csvs[all_citations_csvs$publisher == 'fla\t',])
+all_citations_fla <- unique(all_citations_csvs[all_citations_csvs$publisher == 'fla',])
 # subset from the wordcount data only the full length articles
 
 # subset items in the list of wordcount data whose names are in 
