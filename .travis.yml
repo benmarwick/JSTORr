@@ -10,7 +10,7 @@ addons:
       - r-cran-xml
       
 install:
-  - sudo R CMD javareconf
+  - R CMD javareconf
       
       
 warnings_are_errors: false
