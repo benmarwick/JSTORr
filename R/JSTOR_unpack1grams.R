@@ -130,7 +130,7 @@ myfiles1 <- myfiles[full]
     }
   
   
-  cit <- read_citations
+  cit <- read_citations(dir(pattern='citations'))
   # cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
@@ -152,7 +152,7 @@ myfiles1 <- myfiles[full]
   bibliodata <- (merge(names(wordcounts), citfla, by.x=1, by.y="id"))
   # create a variable that holds the year of publication for
   # each article
-  bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]+{4}")
+  bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]{4}")
   
   # clean up a little
   rm(aawc1, aawc2, cit, citfla, myfiles); invisible(gc(verbose = FALSE))
