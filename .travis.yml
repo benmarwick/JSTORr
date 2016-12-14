@@ -9,9 +9,7 @@ addons:
       - libgsl0-dev # for topicmodels
       - r-cran-xml
       
-install:
-  - R CMD javareconf
-      
+     
       
 warnings_are_errors: false
 
