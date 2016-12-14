@@ -25,7 +25,7 @@ test_that("cluster by words works", {
                         "gg" ,   "ggplot" ,    
                         "gg" ,   "ggplot" , 
                         "gg",    "ggplot",     
-                        "gtable", "grob",   "gDesc",   
+                        "gtable", "gTree", "grob",   "gDesc",   
                         "gg"   ,  "ggplot")
   
   
