@@ -1,5 +1,5 @@
   ---
-  title: 'JSTORr: Simple exploratory text mining and document clustering of journal articles from JSTOR's Data for Research service.
+  title: 'JSTORr: Simple exploratory text mining and document clustering of journal articles from JSTOR's Data for Research service.'
 '
   tags:
     - textmining
