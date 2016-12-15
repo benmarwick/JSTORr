@@ -12,8 +12,8 @@ Description: Simple exploratory text mining and document clustering of journal
     it and start with one of the unpack functions and then you're ready to go
     with any of the other functions. For more details on installation and
     usage, see https://github.com/benmarwick/JSTORr
-License: MIT
-Imports: 
+License: MIT + file LICENSE
+Imports:
     ggplot2,
     reshape2,
     plyr,

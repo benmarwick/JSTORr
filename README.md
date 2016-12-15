@@ -5,7 +5,9 @@ Simple exploratory text mining and document clustering of journal articles from 
 
 Objective
 ----
-The aim of this package is provide some simple functions in `R` to explore changes in word frequencies over time in a specific journal archive. Currently there are functions to explore changes in:
+The aim of this package is provide some simple functions in `R` to explore changes in word frequencies over time in a specific journal archive. It is designed to solve the problem of finding patterns and trends in the unstructured text content of a large number of scholarly journals articles from the JSTOR archive.
+
+Currently there are functions to explore changes in:
 - a single word (ie. plot the relative frequency of a 1-gram over time)
 - two words independantly (ie. plot the relative frequency of two 1-grams over time)
 - sets of words (ie. plot the relative frequency of a single group of mulitple 1-grams over time)
@@ -16,6 +18,8 @@ The aim of this package is provide some simple functions in `R` to explore chang
 - the top n words correlated a word by n-year ranges of documents (ie. the top 20 words associated with the word 'pirate' in 5 year ranges)
 - various methods (k-means, PCA, affinity propagation) to detect clusters in a set of documents containing a word or set of words
 - topic models with the `lda` package for full `R` solution or the Java-based MALLET program (if installing that is an option, currently implemented here for Windows only) 
+
+This package will be useful to researchers who want to explore the history of ideas in an academic field, and investigate changes in word and phrase use over time, and between different journals. 
 
 How to install
 ----
@@ -45,7 +49,7 @@ Typical workflow
 ----
 Here's how to make use of this package:
 
-First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: `unzip("2013.6.4.usytW8LZ.zip")` with your zip file name in between the quote marks).
+First, go to [Data for Research service][dfr] and request data as specified above and download the zip file when it's available (it can take a few hours to days for DfR to prepare your archive). Unzip the file and make a note of its location on your computer (in R, you can unzip like this: `unzip("2013.6.4.usytW8LZ.zip")` with your zip file name in between the quote marks). If you can't, or don't want to, get data from dfr, there is a small dataset included with the package, you can access it with `JSTORr::data(unpack1grams)`, and then skip down to exploring some visualisations.
 
 Second, start [RStudio][rstudio] and run: 
 
@@ -103,7 +107,7 @@ Or if you have MALLET installed, you can run `JSTOR_MALLET` to generate topic mo
 
 Limitations and Disclaimer
 ----
-Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal or on one subject. It may be useful for other types of DfR archives, but has not yet been widely tested. Also, I am not a programmer, computer scientist, linguist, statistician, lawyer, etc. This software is provided as-is, in the hope that it may be useful, but without any warranty or support, whatsoever. This is a work in progress and there is currently very little custom error handling (the more cryptic errors are usually due to a search for a word or bigram that does not exist in the archive). Use at your own risk, and fork and share as you like. 
+Currently this package is intended for the exploration of a single journal archive. For example, all of the articles held by JSTOR of one journal or on one subject. It may be useful for other types of DfR archives, but has not yet been widely tested. Also, I am not a programmer, computer scientist, linguist, statistician, lawyer, etc. This software is provided as-is, in the hope that it may be useful, but without any warranty or support, whatsoever, see the [LICENSE](LICENSE) for more details. This is a work in progress and there is currently very little custom error handling (the more cryptic errors are usually due to a search for a word or bigram that does not exist in the archive). Use at your own risk, and fork and share as you like. Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 Acknowledgements
 ----
