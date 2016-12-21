@@ -15,7 +15,6 @@ addons:
   apt:
     packages:
       - libgsl0-dev # for topicmodels
-      - r-cran-xml  
-  ; fi
+      - r-cran-xml  ; fi
   
 warnings_are_errors: false
