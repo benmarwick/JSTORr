@@ -7,6 +7,6 @@ os:
 
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then R -e "install.packages('XML', repos = 'http://cran.rstudio.com/')" && R CMD javareconf && R -e "install.packages('rJava', type='source')"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -y && sudo apt-get install r-cran-xml libgsl0-dev -y ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -y && sudo apt-get install r-cran-xml r-cran-devtools libgsl0-dev -y ; fi
   
 warnings_are_errors: false
