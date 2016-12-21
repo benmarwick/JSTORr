@@ -1,9 +1,9 @@
 language: r
 sudo: required
+
 os:
   - linux
   - osx
-  
 
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then R -e "install.packages('XML', repos = 'http://cran.rstudio.com/')" && R CMD javareconf && R -e "install.packages('rJava', type='source')"; fi
