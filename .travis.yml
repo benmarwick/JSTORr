@@ -1,6 +1,5 @@
 language: r
-sudo: false
-
+sudo: required
 os:
   - linux
   - osx
