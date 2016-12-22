@@ -11,8 +11,7 @@ matrix:
                - libxml2-dev r-cran-xml libgsl0-dev
                
 install:
- - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then R -e "install.packages('rJava', type='source')"  ; fi
- # R -e "install.packages(c('devtools', 'XML', 'testthat', 'ggplot2', 'reshape2', 'plyr', 'stringr', 'tm', 'openNLP', 'NLP', 'lda', 'apcluster', 'ggdendro', 'FactoMineR', 'gridExtra', 'data.table', 'snowfall', 'slam', 'igraph', 'snow'), repos = 'http://cran.rstudio.com/')" && R CMD javareconf ; fi
+ - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then R CMD javareconf && R -e "install.packages('rJava', type='source')"  && R -e "install.packages(c('devtools', 'XML', 'testthat', 'ggplot2', 'reshape2', 'plyr', 'stringr', 'tm', 'openNLP', 'NLP', 'lda', 'apcluster', 'ggdendro', 'FactoMineR', 'gridExtra', 'data.table', 'snowfall', 'slam', 'igraph', 'snow'), repos = 'http://cran.rstudio.com/')"  ; fi
  # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -y && sudo apt-get install r-cran-xml r-cran-devtools libgsl0-dev -y && R -e "install.packages(c('testthat', 'ggplot2', 'reshape2', 'plyr', 'stringr', 'tm', 'openNLP', 'NLP', 'lda', 'apcluster', 'ggdendro', 'FactoMineR', 'gridExtra', 'data.table', 'snowfall', 'slam', 'igraph', 'snow'))"; fi
 
 warnings_are_errors: false
