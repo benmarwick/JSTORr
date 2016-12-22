@@ -35,9 +35,8 @@ library(devtools)
 # download and install the package (do this only once ever per computer)
 install_github("benmarwick/JSTORr")
 ```
-Error messages relating to rJava can probably be fixed by following exactly the instructions [here][SOrJava].
+Error messages relating to rJava on Windows can probably be fixed by following exactly the instructions [here][SOrJava]. On OSX, try `R CMD javareconf` at the command line, then R `install.packages("rJava",type='source')`.
 
-How to get started
 ----
 First, go to JSTOR's [Data for Research service][dfr] and make a request for data. The DfR service makes available large numbers of journal articles in a format that is convenient for text mining. When making a request for data to use with this package, you **must** chose:
 - `CSV` as the 'output format', not `XML`, which is the default
