@@ -3,7 +3,7 @@ Type: Package
 Title: Simple text mining and document clustering of JSTOR journal articles
 Version: 1.0.20161214
 Author: Ben Marwick
-Maintainer: Ben Marwick <bmarwick@gmail.com>
+Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: Simple exploratory text mining and document clustering of journal
     articles from JSTOR's Data for Research service. Go to
     http://dfr.jstor.org/, make a request for data (specify CSV as outout
@@ -29,13 +29,13 @@ Imports:
     gridExtra,
     grid,
     data.table,
-    snowfall,
+    scales,
     slam,
     digest,
-    igraph,
-    snow,
-    devtools
-Suggests: testthat
+    igraph
+Suggests:
+    testthat
 LazyData: true
 URL: https://github.com/benmarwick/JSTORr
-BugReports: https://github.com/benmarwick/JSTORr/issues 
+BugReports: https://github.com/benmarwick/JSTORr/issues
+RoxygenNote: 5.0.1
