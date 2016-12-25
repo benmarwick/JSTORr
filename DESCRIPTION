@@ -37,3 +37,5 @@ Imports:
     devtools
 Suggests: testthat
 LazyData: true
+URL: https://github.com/benmarwick/JSTORr
+BugReports: https://github.com/benmarwick/JSTORr/issues 
