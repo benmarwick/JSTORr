@@ -9,8 +9,7 @@
 #' @return Returns a ggplot object with publication year on the horizontal axis and Pearson's correlation on the vertical axis. Each point represents all the documents of a single year, point size is inversely proportional to p-value of the correlation.
 #' @examples 
 #' ## JSTOR_2bigramscor(unpack2, bigram1 = "hot water", bigram2 = "cold water")
-#' ## JSTOR_2bigramscor(unpack2, c("hot water", "warm water", "tepid water"), 
-#' c("cold water", "ice water"))
+#' ## JSTOR_2bigramscor(unpack2, c("hot water", "warm water", "tepid water"),  c("cold water", "ice water"))
 #' @import slam data.table ggplot2 scales reshape2 plyr
 
 

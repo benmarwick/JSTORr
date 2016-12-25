@@ -1,16 +1,16 @@
 Package: JSTORr
 Type: Package
-Title: Simple text mining and document clustering of JSTOR journal articles
+Title: Simple Text Mining and Document Clustering of JSTOR Journal Articles
 Version: 1.0.20161214
 Author: Ben Marwick
 Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: Simple exploratory text mining and document clustering of journal
     articles from JSTOR's Data for Research service. Go to
-    http://dfr.jstor.org/, make a request for data (specify CSV as outout
+    \url{http://dfr.jstor.org/}, make a request for data (specify CSV as outout
     format and Word Counts as data type), then once you get a zip file, unzip
     it and start with one of the unpack functions and then you're ready to go
     with any of the other functions. For more details on installation and
-    usage, see https://github.com/benmarwick/JSTORr
+    usage, see \url{https://github.com/benmarwick/JSTORr/}
 License: MIT + file LICENSE
 Imports:
     ggplot2,

@@ -7,14 +7,8 @@
 #' @param K the number of topics that the model should contain. Can also be a vector of numbers of topics, then a model will be generated for each number. Useful for comparing diagnostics of different models, but may be time consuming.
 #' @return Returns a folder of text files (one text file per document) and a folder of output files from MALLET. The folders are named with a date-time stamp so they wont be overwritten by repeated runs. 
 #' @examples 
-#' ## JSTOR_MALLET(nouns, 
-#' MALLET = "C:/mallet-2.0.7", 
-#' JAVA = "C:/Program Files (x86)/Java/jre7/bin", 
-#' K = 150) # generate a single model
-#' ## JSTOR_MALLET(nouns =  unpack1grams$wordcounts, 
-#' MALLET = "C:/mallet-2.0.7", 
-#' JAVA = "C:/Program Files (x86)/Java/jre7/bin", 
-#' K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
+#' ## JSTOR_MALLET(nouns, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = 150) # generate a single model
+#' ## JSTOR_MALLET(nouns =  unpack1grams$wordcounts, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
 
 
 JSTOR_MALLET <- function(nouns, MALLET="C:/mallet-2.0.7" , JAVA = "C:/Program Files (x86)/Java/jre7/bin", K){

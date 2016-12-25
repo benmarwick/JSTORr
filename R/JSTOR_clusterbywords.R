@@ -131,19 +131,19 @@ rownames(PCs) <- PClabs #gsub("[[:punct:]]", "", labs)
 #
 # Just showing the individual samples...
 
-fun <- function(PCs, PClabs){
+fun1 <- function(PCs, PClabs){
   ggplot(PCs, aes(PC1,PC2)) + 
   geom_text(size = 2, label = PClabs) +
   theme(aspect.ratio=1) + theme_bw(base_size = 20)
 }
 
 png("NULL") 
-p <- fun(PCs, PClabs)
+p <- fun1(PCs, PClabs)
 dev.off()
 
 
 #
-fun <- function(df){
+fun2 <- function(df){
 pv <- ggplot() + theme(aspect.ratio=1) + theme_bw(base_size = 20) 
 # no data so there's nothing to plot
 # put a faint circle there, as is customary
@@ -154,12 +154,12 @@ angle <- seq(-pi, pi, length = 50)
 df <- data.frame(x = sin(angle), y = cos(angle)) 
 
 png("NULL") 
-pv <- fun(df)
+pv <- fun2(df)
 dev.off()
 
 #
 # add on arrows and variable labels
-fun <- function(res.pca){
+fun3 <- function(res.pca){
   
   # Now extract variables
   #
@@ -176,7 +176,7 @@ pv <- pv + geom_segment(data=vPCs, aes(x = 0, y = 0, xend = vPC1*0.9, yend = vPC
 }
 
 png("NULL") 
-pv <- fun(res.pca)
+pv <- fun3(res.pca)
 dev.off()
 
 
