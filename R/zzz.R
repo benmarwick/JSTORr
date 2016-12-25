@@ -28,3 +28,25 @@ globalVariables(c(
 # rhub::check_for_cran()
 
 # tools::showNonASCIIfile()
+
+# quick look for non-ascii characters in files in the pkg:
+# files_with_non_ascii <- 
+#   sapply(list.files("data-raw/2015.2.25.w2Rqrn2E/wordcounts", 
+#                     recursive = T,  
+#                     full.names = T, 
+#                     include.dirs = T), 
+#          function(i) tools::showNonASCIIfile(i))
+# names(files_with_non_ascii)
+# 
+# # replace non-ascii chars
+# for(i in seq_along(files_with_non_ascii)){
+#   
+#   tmp <- read.csv(names(files_with_non_ascii)[i])
+#   tmp$WORDCOUNTS <- stringi::stri_trans_general(tmp$WORDCOUNTS, "latin-ascii")
+#   write.csv(tmp, 
+#             names(files_with_non_ascii)[i] )
+# }
+# 
+
+
+
