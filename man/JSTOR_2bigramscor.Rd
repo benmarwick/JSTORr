@@ -23,6 +23,7 @@ Function to plot changes in the correlation of two sets of bigrams (two sets of 
 }
 \examples{
 ## JSTOR_2bigramscor(unpack2, bigram1 = "hot water", bigram2 = "cold water")
-## JSTOR_2bigramscor(unpack2, c("hot water", "warm water", "tepid water"), c("cold water", "ice water"))
+## JSTOR_2bigramscor(unpack2, c("hot water", "warm water", "tepid water"), 
+c("cold water", "ice water"))
 }
 

@@ -20,13 +20,13 @@ unpack2grams
 Full-length articles from the Journal of Archaeological Reseach
 
 A dataset containing the full text of full-length articles published in 
-the Journal of Archaeological Reseach. Obtained from dfr.jstor.org
+the Journal of Archaeological Reseach. Obtained from  \url{http://dfr.jstor.org}
 }
 \description{
 Full-length articles from the Journal of Archaeological Reseach
 }
 \details{
 A dataset containing the full text of full-length articles published in 
-the Journal of Archaeological Reseach. Obtained from dfr.jstor.org
+the Journal of Archaeological Reseach. Obtained from \url{http://dfr.jstor.org/}
 }
 

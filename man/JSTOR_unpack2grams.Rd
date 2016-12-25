@@ -16,6 +16,7 @@ Returns a list of two items. First is "bigrams", a Document Term Matrix of 2-gra
 Import journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (\url{http://dfr.jstor.org/}).
 }
 \examples{
-## unpack2grams <- JSTOR_unpack2grams(path = "C:/Users/marwick/Downloads/JSTOR") # then follow prompts to navigate to the location of the zipfile
+## unpack2grams <- JSTOR_unpack2grams(path = "C:/Users/marwick/Downloads/JSTOR") 
+# then follow prompts to navigate to the location of the zipfile
 }
 

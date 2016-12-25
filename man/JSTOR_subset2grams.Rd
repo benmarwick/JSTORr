@@ -7,9 +7,9 @@
 JSTOR_subset2grams(unpack2grams, bigram)
 }
 \arguments{
-\item{bigram}{A bigram, surrounded by standard quote marks.}
+\item{unpack2grams}{object returned by the function JSTOR_unpack1grams.}
 
-\item{unpack1grams}{object returned by the function JSTOR_unpack1grams.}
+\item{bigram}{A bigram, surrounded by standard quote marks.}
 }
 \description{
 Subsets bigrams
