@@ -1,16 +1,14 @@
 #' Unpack JSTOR journal articles and bibliographic data to a Document Term Matrix of 1-grams
 #' 
-#' @description Import journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). 
+#' @description Import journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (\url{http://dfr.jstor.org/}). 
 #' @param path full path to directory containing 'wordcounts' folder and the citations.tsv file. These are obtained after unzipping the file downloaded from DfR (you should unzip the file before running this function). Default is the working directory.
-#' @param parallel if TRUE, apply function in parallel, using the parallel library. Default is FALSE as this is typically faster for smaller datasets (ie. ~5000 articles) due to communication overhead.
 #' @return Returns a list of two items. First is "wordcounts", a Document Term Matrix of 1-grams, and second is 'bibliodata', a data frame of bibliographic information for all articles. 
 #' @examples 
 #' ## unpack1grams <- JSTOR_unpack1grams(path = "C:/Users/marwick/Downloads/JSTOR") 
+#' @import plyr data.table slam tm stringr
 
 
-
-
-JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
+JSTOR_unpack1grams <- function( path = getwd()){
 
   # set working directory to newly created folder
   # (within working directory) with lots of CSV files
@@ -34,25 +32,12 @@ JSTOR_unpack1grams <- function(parallel=FALSE, path = getwd()){
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
   # read CSV files into a R data.table object
   # fread is 10x faster than read.csv...
-  suppressMessages(library(data.table))
-  library(plyr)
+
   read_csv2dt <- function(x) data.table(fread(x, sep = ",", stringsAsFactors=FALSE))
                                                 
-  if(parallel) {
-    
-    suppressMessages(library(snow)); suppressMessages(library(parallel))
-    cl <- makeCluster(detectCores(), type = "SOCK")
-    clusterExport(cl, c("myfiles", "read_csv2dt"), envir=environment())
-    clusterEvalQ(cl, library(data.table))
-    aawc <- parLapplyLB(cl, myfiles, read_csv2dt)
-    stopCluster(cl); invisible(gc(verbose = FALSE))
-    
-  } else {
-    
-    library(plyr)
-    aawc <-  llply(myfiles, read_csv2dt, .progress = "text", .inform = FALSE)
-  }
   
+    aawc <-  llply(myfiles, read_csv2dt, .progress = "text", .inform = FALSE)
+ 
 
   # assign file names to each dataframe in the list
   names(aawc) <- myfiles
@@ -69,7 +54,7 @@ aawc1 <- aawc[full]
   message("reshaping the 1-grams into a document term matrix...")
   
   # custom version of tm::DocumentTermMatrix for 1-grams
-  library(slam); library(tm)
+
   my_dtm_1gram <- function(x){ 
     y <- as.integer(x$WEIGHT)
     names(y) <- x$WORDCOUNTS
@@ -90,25 +75,15 @@ aawc1 <- aawc[full]
   }
   
   # get all tables into dtms
-  if(parallel) {
-    
-    suppressMessages(library(snow)); suppressMessages(library(parallel))
-    cl <- makeCluster(detectCores(), type = "SOCK")
-    clusterExport(cl, c("aawc", "my_dtm_1gram"), envir=environment())
-    clusterEvalQ(cl, list(library(tm), library(slam)))
-    aawc1 <- parLapplyLB(cl, 1:length(aawc1), function(i) my_dtm_1gram(aawc1[[i]]) )
-    stopCluster(cl); rm("aawc"); invisible(gc(verbose = FALSE))
-    
-   } else {
-     
-     library(plyr)
+
+   
      aawc2 <- llply(1:length(aawc1), function(i) my_dtm_1gram(aawc1[[i]]), .progress = "text", .inform = FALSE)
-  }
+  
   
 ################################### 
 # subset file names so we only get CSV files with three or more words
 myfiles1 <- myfiles[full]
-  library(stringr)
+
   names(aawc2) <- str_extract(basename(myfiles1), "[^wordcounts_].+[^.CSV]")
 
   message("done")
@@ -134,7 +109,6 @@ myfiles1 <- myfiles[full]
   # cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
-  library(stringr)
   cit$id <- str_extract(chartr('/', '_', cit$id), ".*[^\t]")
   # limit list of citations to full length articles only 
   # note that citation type is not in the correct column
@@ -160,20 +134,9 @@ myfiles1 <- myfiles[full]
   # make one giant dtm with all docs (rather slow...)
   
   
-  if(parallel) {
-    
-    suppressMessages(library(snow)); suppressMessages(library(parallel))
-    cl <- makeCluster(detectCores(), type = "SOCK")
-    clusterExport(cl, c("wordcounts"), envir=environment())
-    clusterEvalQ(cl, library(tm) )
-    wordcounts <- do.call(tm:::c.DocumentTermMatrix, wordcounts)
-    stopCluster(cl); invisible(gc(verbose = FALSE))
-    
-  } else {
-    
     wordcounts <- do.call(tm:::c.DocumentTermMatrix, wordcounts)
 
-  }
+
 
   
   # give docs their DOI as names

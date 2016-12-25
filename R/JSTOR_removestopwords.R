@@ -5,14 +5,13 @@
 #' @return Returns a corpus containing documents with stopwords removed, ready for more advanced text mining and topic modelling.  
 #' @examples 
 #' ## mycorpus <- JSTOR_removestopwords(corpus) 
+#' @import tm
 
 
 
 
 JSTOR_removestopwords <- function(corpus){
 
-
-library(tm)
 # clean and simplify the text
 message("removing stopwords...")
 skipWords <- function(x) removeWords(x, stopwords("english"))

@@ -7,11 +7,12 @@
 #' @param lowfreq An integer for the minimum frequency of a word to be included in the plot. Default is 300.
 #' @param topn An integer for the number of top ranking words to plot. For example, topn = 20 (the default value) will plot the top 20 words for each range of years.
 #' @param biggest An integer to control the maximum size of the text in the plot
+#' @param custom_stopwords character vector of stop words to use in addition to the default set supplied by the tm package
 #' @return Returns a plot of the most frequent words per year, with word size scaled to frequency (accessed via freqwords$plot$plot, yes twice), and a dataframe with words and counts for each year range (accessed via freqwords$freqterms).
 #' @examples 
 #' ## freqwords <- JSTOR_freqwords(unpack1grams, nouns, n = 2, biggest = 5, lowfreq = 100, topn = 5)
 #' ## freqwords <- JSTOR_freqwords(unpack1grams, nouns)
-
+#' @import plyr ggplot2
 
 
 JSTOR_freqwords <- function (unpack1grams, nouns, custom_stopwords = NULL, n = 5, lowfreq = 300, topn = 20, 
@@ -28,7 +29,7 @@ JSTOR_freqwords <- function (unpack1grams, nouns, custom_stopwords = NULL, n = 5
   DOIs_in_dtm <- data.frame(DOI = y$dimnames$Docs)
   DOIs_and_years_in_bibliodata <- data.frame(DOI = bibliodata$x,
                                              year = as.numeric(substring(bibliodata$issue, 1, 4)))      
-  library(plyr)
+
   DOIs_and_years_in_dtm <- join(DOIs_in_dtm, DOIs_and_years_in_bibliodata, by = "DOI")
   # rename docs with year of publication, need to have Docs as character to subset it...
   y$dimnames$Docs <- as.character(DOIs_and_years_in_dtm$year)
@@ -39,7 +40,6 @@ JSTOR_freqwords <- function (unpack1grams, nouns, custom_stopwords = NULL, n = 5
   
   
   message("done")
-  require(plyr)
   bibliodata_subset$year <- as.numeric(as.character(bibliodata_subset$year))
   uniqueyears <- sort(unique(bibliodata_subset$year))
   
@@ -81,7 +81,7 @@ JSTOR_freqwords <- function (unpack1grams, nouns, custom_stopwords = NULL, n = 5
                       .progress = "text", .inform = FALSE)
   
   
-  require(plyr)
+
   freqterms2 <- llply(1:length(years), function(i) arrange(data.frame(word = names(freqterms1[[i]]), 
                                                                       count = unname(freqterms1[[i]])), desc(count)), .progress = "text", 
                       .inform = FALSE)
@@ -90,18 +90,32 @@ JSTOR_freqwords <- function (unpack1grams, nouns, custom_stopwords = NULL, n = 5
   freqterms3$year <- gsub("\\..*", "", rownames(freqterms3))
   freqterms3$rank <- as.numeric(gsub(".*\\.", "", rownames(freqterms3)))
   message("done")
-  require(ggplot2)
+
 png("NULL")
-  plot <- suppressWarnings(print(ggplot(freqterms3, aes(factor(year), 
-                                                rank)) + geom_text(aes(label = word, size = count, alpha = count), 
-                                                                   data = subset(freqterms3, rank < topn)) + scale_y_reverse() + 
-                           scale_size(range = c(3, biggest), name = "Word count") + 
-                           scale_alpha(range = c(0.5, 1), limits = c(min(freqterms3$count), 
-                                                                     max(freqterms3$count)), guide = "none") + xlab("Year range") + 
-                           ylab("Rank order of word") + theme(panel.background = element_blank(), 
-                                                              panel.border = element_blank(), panel.grid.major = element_blank(), 
-                                                              panel.grid.minor = element_blank(), plot.background = element_blank(), 
-                                                              axis.text.x = element_text(angle = 90, hjust = 0))))
+  plot <- suppressWarnings(print(ggplot(freqterms3, 
+                                        aes(factor(year), 
+                                                rank)) + 
+                                   geom_text(aes(label = word, 
+                                                 size = count, 
+                                                 alpha = count), 
+                                             data = subset(freqterms3, 
+                                                           rank < topn)) +
+                                   scale_y_reverse() + 
+                           scale_size(range = c(3, biggest), 
+                                      name = "Word count") + 
+                           scale_alpha(range = c(0.5, 1), 
+                                       limits = c(min(freqterms3$count),
+                                                  max(freqterms3$count)), 
+                                       guide = "none") + 
+                             xlab("Year range") + 
+                           ylab("Rank order of word") + 
+                             theme(panel.background = element_blank(), 
+                                   panel.border = element_blank(), 
+                                   panel.grid.major = element_blank(), 
+                                   panel.grid.minor = element_blank(), 
+                                   plot.background = element_blank(), 
+                                   axis.text.x = element_text(angle = 90, 
+                                                              hjust = 0))))
   
 dev.off()
 

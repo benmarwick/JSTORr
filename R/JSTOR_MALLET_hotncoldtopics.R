@@ -7,6 +7,7 @@
 #' @return Returns a plot of the hot topics and plot of the cold topics and a list of dataframes of the topic proportions per year. Years as rows, topics as columns and posterior probabilities as cell values.
 #' @examples 
 #' ## hotncold <- JSTOR_MALLET_hotncoldtopics(x = unpack1grams)
+#' @import data.table ggplot2 reshape2
 
 
 
@@ -55,7 +56,6 @@ dt$doc <- unlist(lapply(txt, function(i) rep(i, ncol(dat1)/2)))
 dt$docnum <- unlist(lapply(docnum, function(i) rep(i, ncol(dat1)/2)))
 
 # reshape to wide
-library(data.table)
 setkey(dt, tops...i., doc)
 out <- dt[CJ(unique(tops...i.), unique(doc))][, as.list(props...i.), by=tops...i.]
 setnames(out, c("topic", as.character(txt)))
@@ -124,7 +124,7 @@ keys.frame <- read.keys()
   
   dat.m.pos <- reshape2::melt(top5_positive_df, id.vars='year')
   dat.m.pos$topic <- words.list$keywords[match(gsub("\\D", "", dat.m.pos$variable), words.list$topic)]
-  library(ggplot2)
+ 
   print(ggplot(dat.m.pos , aes(year, value, group=topic)) + 
     geom_line(aes(colour=topic)) )
   

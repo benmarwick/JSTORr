@@ -6,6 +6,7 @@
 #' @export
 #' @examples 
 #' ## multiple_archives <- JSTOR_unpack_multiple_archives(mydir = "~/my_data")
+#' @import data.table plyr tm stringr slam
 
 
 
@@ -53,12 +54,10 @@ all_citations_csvs <- lapply(all_citations,  function(i) {if (stringr::str_sub(i
                                                               else
                                                               {"Citations files cannot be loaded"}  } } )
 
-library("data.table")
 all_citations_csvs <- rbindlist(all_citations_csvs, fill = TRUE)
 
 ###############
 
-library(plyr); library(data.table)
 read_csv2dt <- function(x) data.table(fread(x, sep = ",", stringsAsFactors=FALSE))
 aawc <-  llply(all_wordcounts, read_csv2dt, .progress = "text", .inform = FALSE)
 # give the DOIs
@@ -70,7 +69,7 @@ full <- unname(!is.na(lens))
 aawc1 <- aawc[full]
 
 # custom version of tm::DocumentTermMatrix for 1-grams
-library(slam); library(tm)
+
 my_dtm_1gram <- function(x){ 
   y <- as.integer(x$WEIGHT)
   names(y) <- x$WORDCOUNTS
@@ -95,13 +94,12 @@ aawc2 <- llply(1:length(aawc1), function(i) my_dtm_1gram(aawc1[[i]]), .progress 
 
 # assign file names to each dataframe in the list
 myfiles1 <- all_wordcounts[full]
-library(stringr)
 names(aawc2) <- str_extract(basename(myfiles1), "[^wordcounts_].+[^.CSV]")
 
 #Now work with biblio data
 # replace for-slash with underscore to make it match the filenames
 # and replace odd \t that was added during import 
-library(stringr)
+
 all_citations_csvs$id <- str_extract(chartr('/', '_', all_citations_csvs$id), ".*[^\t]")
 all_citations_csvs$publisher <- str_extract(chartr('/', '_', all_citations_csvs$publisher), ".*[^\t]")
 
@@ -133,7 +131,7 @@ keep <- c("bibliodata", "wordcounts_fla")
 rm(list=ls()[! ls() %in% keep])
 
 # combine into one giant dtm, rather slow
-library(plyr)
+
 wordcounts_combined <- do.call(tm:::c.DocumentTermMatrix, wordcounts_fla)
 
 # give docs their DOI as names (this was wrong! should be good now)

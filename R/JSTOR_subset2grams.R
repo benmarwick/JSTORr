@@ -1,6 +1,8 @@
 #' Subset 2gram object
 #' 
 #' @description Subsets bigrams 
+#' @param unpack2grams object returned by the function JSTOR_unpack1grams.
+#' @param bigram A bigram, surrounded by standard quote marks.
 
 
 

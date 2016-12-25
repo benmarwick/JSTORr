@@ -5,6 +5,7 @@
 #' @return Returns plots of the topic clusters and network and a graphml file in the working directory that can be opened with Gephi
 #' @examples 
 #' ## JSTOR_lda_topicdists(lda = lda150) 
+#' @import cluster igraph
 
 
 
@@ -16,7 +17,7 @@ JSTOR_lda_topicdists <- function(lda){
   # topic.props[topic.props == 0] <- 0.0000000000001
   
   #### Euclidean distance matrix on topics
-  library(cluster)
+  
   topic.props.dists1 <-  as.matrix(daisy(t((topic.props[, !(colnames(topic.props) %in% c("ID","year"))])), metric =  "euclidean", stand = TRUE))
   # Change row values to zero if less than row minimum plus row standard deviation
   # This is how Jockers subsets the distance matrix to keep only 
@@ -28,7 +29,7 @@ JSTOR_lda_topicdists <- function(lda){
   ## dendrogram
   plot(hclust(dist(topic.props.dists2)), xlab = "topic clusters", sub = "", main = "")
   ## network plot
-  library(igraph)
+
   g <- as.undirected(graph.adjacency(topic.props.dists1))
   layout1 <- layout.fruchterman.reingold(g, niter=500)
   plot(g, layout=layout1, edge.curved = TRUE, vertex.size = 1,  vertex.color= "grey", edge.arrow.size = 0.1, vertex.label.dist=0.5, vertex.label = NA)

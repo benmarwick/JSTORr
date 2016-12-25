@@ -4,11 +4,12 @@
 #' @param nouns the object returned by the function JSTOR_dtmofnouns. A corpus containing the documents with stopwords removed.
 #' @param word The word or vector of words to subset the documents by, ie. use only documents containing this word (or words) in the cluster analysis
 #' @param f A scalar value to filter the total number of words used in the cluster analyses. For each document, the count of each word is divided by the total number of words in that document, expressing a word's frequency as a proportion of all words in that document. This parameter corresponds to the summed proportions of a word in all documents (ie. the column sum for the document term matrix). If f = 0.01 then only words that constitute at least 1.0 percent of all words in all documents will be used for the cluster analyses.
+#' @param custom_stopwords character vector of stop words to use in addition to the default set supplied by the tm package
 #' @return Returns plots of clusters of documents, and dataframes of affinity propogation clustering, k-means and PCA outputs. The plots can be accessed and displayed using the $ function, for example with: cl1$p or plot(cl1$cl_plot) etc.
 #' @examples 
 #' ## cl1 <- JSTOR_clusterbywords(nouns, "pirates")
 #' ## cl2 <- JSTOR_clusterbywords(nouns, c("pirates", "privateers"))
-
+#' @import slam apcluster ggplot2 ggdendro FactoMineR grid gridExtra
 
 JSTOR_clusterbywords <- function(nouns, word, custom_stopwords=NULL, f = 0.01){ 
 
@@ -37,7 +38,7 @@ message("standardising word counts in the document term matrix...")
 # we may want to row-standardize our document matrix 
 # (divide each entry by the number of terms in that document).
 # We can perform this in R using the following code:
-library(slam)
+
 # Find the sum of all words in each Document
 rowTotals <-  row_sums(y3)      
 # Divide each row by those totals
@@ -55,7 +56,7 @@ message("done")
 message("calculating affinity propagation clustering...")
 
 {{
-suppressMessages(require(apcluster))
+
 d.apclus <- apcluster(negDistMat(r=2), input)
 k <-  length(d.apclus@clusters)
 }}
@@ -69,8 +70,6 @@ cl_plot <- (plot(aggres1, showSamples=F, main = "Document clusters"))
 dev.off() 
 message("done")
 
-require(ggplot2)
-require(ggdendro)
 
 #convert cluster object to use with ggplot
 message("making a cluster dendrogram of documents...")
@@ -121,7 +120,7 @@ message("done")
 
 message("calculating PCA...")
 # PCA
-suppressMessages(require(FactoMineR, quietly = TRUE))
+
 res.pca <- PCA(data.frame(input), graph = FALSE)
 # extract some parts for plotting
 PC1 <- res.pca$ind$coord[,1]
@@ -131,7 +130,7 @@ PCs <- data.frame(cbind(PC1,PC2))
 rownames(PCs) <- PClabs #gsub("[[:punct:]]", "", labs)
 #
 # Just showing the individual samples...
-library(ggplot2)
+
 fun <- function(PCs, PClabs){
   ggplot(PCs, aes(PC1,PC2)) + 
   geom_text(size = 2, label = PClabs) +
@@ -160,7 +159,6 @@ dev.off()
 
 #
 # add on arrows and variable labels
-library(grid)
 fun <- function(res.pca){
   
   # Now extract variables
@@ -183,7 +181,6 @@ dev.off()
 
 
 # plot docs and words side by side
-library(gridExtra)
 message("plotting PCA output...")
 png("NULL") 
 arranged <-  arrangeGrob(p,pv,nrow=1)
@@ -200,52 +197,7 @@ df <- data.frame(as.matrix(cbind(PC1, PC2)))
 df$cluster = factor(cl$cluster)
 
 # The following graph color codes the points by cluster
-# and draws ellipses around the clusters
-
-library(ggplot2)
-# # to get the stat_ellipse() function
-# # need these if accessing the function online:
-# # suppressMessages(library(devtools)); library(digest)
-# # from http://raw.github.com/low-decarie/FAAV/master/r/stat-ellipse.R
-# # but I've pasted the whole thing here:
-# require(proto)
 # 
-# StatEllipse <- proto(ggplot2:::Stat,
-# {
-#   required_aes <- c("x", "y")
-#   default_geom <- function(.) GeomPath
-#   objname <- "ellipse"
-#   
-#   calculate_groups <- function(., data, scales, ...){
-#     .super$calculate_groups(., data, scales,...)
-#   }
-#   calculate <- function(., data, scales, level = 0.75, segments = 51,...){
-#     dfn <- 2
-#     dfd <- length(data$x) - 1
-#     if (dfd < 3){
-#       ellipse <- rbind(c(NA,NA))	
-#     } else {
-#       require(MASS)
-#       v <- cov.trob(cbind(data$x, data$y))
-#       shape <- v$cov
-#       center <- v$center
-#       radius <- sqrt(dfn * qf(level, dfn, dfd))
-#       angles <- (0:segments) * 2 * pi/segments
-#       unit.circle <- cbind(cos(angles), sin(angles))
-#       ellipse <- t(center + radius * t(unit.circle %*% chol(shape)))
-#     }
-#     
-#     ellipse <- as.data.frame(ellipse)
-#     colnames(ellipse) <- c("x","y")
-#     return(ellipse)
-#   }
-# }
-# )
-# 
-# stat_ellipse <- function(mapping=NULL, data=NULL, geom="path", position="identity", ...) {
-#   StatEllipse$new(mapping=mapping, data=data, geom=geom, position=position, ...)
-# }
-
 png("NULL") 
 q <- ggplot(data=df, aes(x=PC1, y=PC2, color=cluster)) + 
   # geom_point() +

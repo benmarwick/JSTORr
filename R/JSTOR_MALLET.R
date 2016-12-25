@@ -7,8 +7,14 @@
 #' @param K the number of topics that the model should contain. Can also be a vector of numbers of topics, then a model will be generated for each number. Useful for comparing diagnostics of different models, but may be time consuming.
 #' @return Returns a folder of text files (one text file per document) and a folder of output files from MALLET. The folders are named with a date-time stamp so they wont be overwritten by repeated runs. 
 #' @examples 
-#' ## JSTOR_MALLET(nouns, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = 150) # generate a single model
-#' ## JSTOR_MALLET(nouns =  unpack1grams$wordcounts, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
+#' ## JSTOR_MALLET(nouns, 
+#' MALLET = "C:/mallet-2.0.7", 
+#' JAVA = "C:/Program Files (x86)/Java/jre7/bin", 
+#' K = 150) # generate a single model
+#' ## JSTOR_MALLET(nouns =  unpack1grams$wordcounts, 
+#' MALLET = "C:/mallet-2.0.7", 
+#' JAVA = "C:/Program Files (x86)/Java/jre7/bin", 
+#' K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
 
 
 JSTOR_MALLET <- function(nouns, MALLET="C:/mallet-2.0.7" , JAVA = "C:/Program Files (x86)/Java/jre7/bin", K){
@@ -98,38 +104,7 @@ setwd(MALLET)
   }
   message("done")
   
-  
-#   # Output files are in inspect the diagnostics files to see which number of topics is best. 
-#   message("preparing diagnostics...")
-#   library(XML)
-#   setwd(MALLET)
-#   diagnosticfiles <- list.files(pattern="(diagnostics).*\\.xml$")
-#   diagnostics <- lapply(1:length(K), function(j) xmlParse(diagnosticfiles[[j]], useInternal = TRUE))
-#   # function to get topic diagnostics from XML files
-#   makediagnosticsdataframe <- function(x){
-#     tmp <-  t(xmlSApply(xmlRoot(x), xmlAttrs))[, -1]
-#     df <- as.data.frame(tmp, stringsAsFactors = FALSE, row.names = 1:nrow(tmp))
-#   }
-#   # apply function to diagnostic files from topic models with different numbers of topics
-#   # thanks to https://stat.ethz.ch/pipermail/r-help/2009-May/199076.html
-#   listofdiagnostics <- lapply(1:length(diagnostics), function(i) makediagnosticsdataframe(diagnostics[[i]]))
-#   # attach topic numbers to the list so we know what data are associated with what number of topics
-#   names(listofdiagnostics) <- as.numeric(gsub("\\D", "", diagnosticfiles))
-#   message("done")
-#   
-#   # explore diagnostics
-#   message("plotting diagnostics...")
-#   library(reshape2)
-#   suppressWarnings(df <- melt(listofdiagnostics))
-#   # convert character dataframe to numeric
-#   df <- data.frame(sapply(df,function(x)as.numeric(as.character(x)))) 
-#   suppressWarnings(df <- melt(df, id.vars = "L1"))
-#   # visualize
-#   library(ggplot2)
-#   print(ggplot(df, aes(factor(L1), value)) + 
-#     geom_violin() + 
-#     geom_jitter(alpha = 0.1) + 
-#     facet_wrap(~variable, scale = "free"))
+ 
 #   # to assist with interpretation: http://article.gmane.org/gmane.comp.ai.mallet.devel/1483/
 #   message("done")
   message(paste0("MALLET's output files are in ", MALLET))

@@ -10,6 +10,7 @@
 #' ## JSTOR_1word(unpack1grams, "diamonds")
 #' ## JSTOR_1word(unpack1grams, c("diamonds", "pearls"), span = 0.4, se = FALSE) +
 #' ##  scale_y_continuous(trans=log2_trans()) # to diminish the effect of a few extreme values
+#' @import slam data.table ggplot2 scales
 
 JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=FALSE){
   #### investigate change in use of certain words of interest over time
@@ -41,23 +42,30 @@ JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=FALSE){
   word_ratio <- word/leng * 1000
   
   # get years for each article
-  suppressMessages(library(data.table))
   word_by_year <- data.table(word_ratio = word_ratio, year = as.numeric(as.character(bibliodata$year)))
   setnames(word_by_year, c("word_ratio", "year"))
   lim_min <- as.numeric(as.character(min(bibliodata$year)))
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # vizualise one word over time
-  library(ggplot2)
-  library(scales)
+
   word_by_year <- word_by_year[word_by_year$word_ratio > 0, ]
-  g <- suppressWarnings(ggplot(word_by_year, aes(year, log(word_ratio))) +
+  g <- suppressWarnings(ggplot(word_by_year, aes(year, 
+                                                 log(word_ratio))) +
                      geom_point() +
-                     geom_smooth( aes(group = 1), method = "loess", se = se, span = span, data = word_by_year) +
+                     geom_smooth( aes(group = 1), 
+                                  method = "loess", 
+                                  se = se, 
+                                  span = span, 
+                                  data = word_by_year) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-                     ylab(paste0("log of frequency of the word '", oneword, "' per 1000 words")) +
+                     ylab(paste0("log of frequency of the word '", 
+                                 oneword, "' per 1000 words")) +
             
                      # inspect bibliodata$year to see min and max year to set axis limits
-                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)))
+                     scale_x_continuous(limits=c(lim_min, 
+                                                 lim_max), 
+                                        breaks = seq(lim_min-1, 
+                                                     lim_max+1, 2)))
  
   }
   # put DOIs back on 

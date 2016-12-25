@@ -8,6 +8,7 @@
 #' @return Returns a Document Term Matrix containing documents, ready for more advanced text mining and topic modelling.  
 #' @examples 
 #' ## nouns <- JSTOR_dtmofnouns(unpack1grams) 
+#' @import tm NLP data.table openNLP 
 
 
 JSTOR_dtmofnouns <- function(unpack1grams, word=NULL, sparse=1, POStag=TRUE){
@@ -51,7 +52,6 @@ if (sparse == 1){
 }
 
 
-library(tm)
 # reduce the size of the dtm... select the dtm directly
 # https://stat.ethz.ch/pipermail/r-help/2011-May/278202.html
 
@@ -81,7 +81,7 @@ message("done")
 if (POStag == TRUE) {
 
 # openNLP changed, so we need this replacement for tagPOS...
-library(NLP); library(data.table); library(openNLP)
+
 tagPOS <-  function(x) {
   
   s <- NLP::as.String(x)
@@ -99,31 +99,6 @@ tagPOS <-  function(x) {
   # POStagged <- paste(sprintf("%s/%s", s[a3w], POStags), collapse = " ")
   return(unlist(POStags))
 } 
-
-# if(parallel) {
-#   
-#   # parallel version
-#   y1 <- strsplit(y$dimnames$Terms,",")
-#   require(parallel); # library(openNLPmodels.en)
-#   cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
-#   clusterEvalQ(cl, {
-#     tagPOS
-#     # library(openNLPmodels.en)
-#   })
-#   clusterExport(cl, varlist = "y1", envir=environment())
-#   
-#   pos <- parLapply(cl, seq_along(y1), function(i) {
-#     x <- tagPOS(y1[[i]], language = "en")
-#     if (i%%10==0) invisible(gc())
-#     x
-#   })
-#   
-#   
-#   stopCluster(cl)
-#   
-#   
-#  } else { # non-parallel method
-# 
 
    yt <- y$dimnames$Terms
    

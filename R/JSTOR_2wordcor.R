@@ -11,7 +11,7 @@
 #' @examples 
 #' ## JSTOR_2wordcor(unpack1grams, word1 = "pearls", word2 = "diamonds")
 #' ## JSTOR_2wordcor(unpack1grams, c("silver", "gold", "platinum"), c("oil", "gas"), span = 0.3)
-
+#' @import slam data.table ggplot2 scales reshape2 plyr
 
 JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NULL, yearto = NULL){
   ## investigate correlations between words over time
@@ -23,7 +23,6 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NU
   # using dtm
 
   # Get total number of word in the article to standarise for different article lengths
-  library(slam)
   leng <- row_sums(y)
   # now get total numbers of words of interest (always lower case)
   cword1 <- as.matrix(y[,dimnames(y)$Terms %in% cw1])
@@ -54,7 +53,6 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NU
   cword1_ratio <- cword1/leng
   cword2_ratio <- cword2/leng
   # get years for each article and make data frame
-  suppressMessages(library(data.table))
   ctwowords_by_year <- data.table(ww1 = cword1_ratio, ww2 = cword2_ratio, year = as.numeric(as.character(bibliodata$year)))
   setnames(ctwowords_by_year, c("ww1", "ww2", "year"))
   lim_min <- as.numeric(as.character(min(bibliodata$year)))
@@ -70,7 +68,6 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NU
   ctwowords_by_year <-  ctwowords_by_year[ctwowords_by_year$year %in% keep_years,]
   
   # calculate correlations of the two words per year (and p-values)
-  library(plyr)
   corrp <- ddply(ctwowords_by_year, .(year), summarize, "corr" = cor.test(ww1, ww2)$estimate, "pval" = cor.test(ww1, ww2)$p.value)
   
   
@@ -120,20 +117,29 @@ JSTOR_2wordcor <- function(unpack1grams, word1, word2, span = 0.4, yearfrom = NU
   
   
   # visualise
-  library(ggplot2)
+
   g <- suppressWarnings(ggplot(corrp, aes(year, corr)) +
                      geom_point(aes(size = -pval)) +
                      geom_smooth(  method = "loess", span = span, se = FALSE) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      geom_hline(yintercept=0, colour = "red") + 
                      theme(axis.text.x = element_text(angle = 90, hjust = 1), 
-                           legend.background = element_blank(), legend.key = element_blank(), 
-                           panel.background = element_blank(), panel.border = element_blank(), 
-                           strip.background = element_blank(), plot.background = element_blank()) +
-                     ylab(paste0("correlation between '",cw1, "' and '", cw2,"'")) +
+                           legend.background = element_blank(), 
+                           legend.key = element_blank(), 
+                           panel.background = element_blank(), 
+                           panel.border = element_blank(), 
+                           strip.background = element_blank(), 
+                           plot.background = element_blank()) +
+                     ylab(paste0("correlation between '",cw1, 
+                                 "' and '", cw2,"'")) +
                      ylim(-1.0, 1.0) +
-                     scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
-                     scale_size_continuous("p-values", breaks = c(-0.75, -0.25, -0.05, -0.001), labels = c(0.75, 0.25, 0.05, 0.001)))
+                     scale_x_continuous(limits=c(yearfrom, yearto), 
+                                        breaks = seq((yearfrom - 1), 
+                                                     (yearto + 1), 2)) +
+                     scale_size_continuous("p-values", 
+                                           breaks = c(-0.75, -0.25,
+                                                      -0.05, -0.001), 
+                                           labels = c(0.75, 0.25, 0.05, 0.001)))
   }
   
   return(list(corrp = corrp, plot = g))

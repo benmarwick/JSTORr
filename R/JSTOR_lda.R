@@ -8,6 +8,7 @@
 #' @return Returns a data frame with documents as rows, topics as columns and posterior probabilities as cell values.
 #' @examples 
 #' ## lda1 <- JSTOR_lda(unpack1grams, nouns, K = 150) 
+#' @import lda
 
 
 
@@ -20,8 +21,7 @@ JSTOR_lda <- function(unpack1grams, nouns, K, alpha = 50/K){
   if (as.integer(K) != K || as.integer(K) < 2) 
     stop("\nK needs to be an integer of at least 2")
   
-# library(tm) # needed to convert corpus to dtm
-library(lda)
+#  # needed to convert corpus to dtm
 
 message("converting corpus to document term matrix and then to doclines format...")
   # this dtm2ldaformat function is copied directly from the topicmodels library to avoid loading that library

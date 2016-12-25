@@ -17,6 +17,7 @@
 #' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, "rouges")
 #' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, n = 10, "pirates", topn = 100)
 #' ## findassocs <- JSTOR_findassocs(unpack1grams, nouns, n = 5, "marines", corlimit=0.6, plimit=0.001)
+#' @import  plyr slam data.table ggplot2
 
 
 JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimit=0.05, topn=20, biggest=5, parallel=FALSE){
@@ -50,7 +51,7 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
   
   
   # create a list of dtms to iterate over 
-  library(plyr)
+
   dtmlist <- llply(years,  function(x) nouns[ (nouns$dimnames$Docs %in% as.character(x)), ], .progress = "text", .inform = FALSE ) 
   message("done")
   
@@ -104,7 +105,7 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
   }
   
   # need a function from this one also... can't be bothered copy-pasting...
-  library(slam)
+ 
   
   # here they are all wrapped up: calculate the correlation, subset by corlimit and put in order
   findAssocsBig <- function(u, word, corlimit){
@@ -117,7 +118,6 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
   
   # find most correlation and p-value between the keyword and all other words in the chunk
   message("calculating correlations and p-values...")
-  suppressMessages(library(data.table))
   # function to calculate p and r values of correlation
   # supply list of dtms as u
   pandr <- function(u) { 
@@ -178,44 +178,24 @@ JSTOR_findassocs <- function(unpack1grams, nouns, word, n=5, corlimit=0.4, plimi
   }
   
   
-  if(parallel) {
-    
-    # parallel version
-    require(parallel)
-    cl <- makeCluster(mc <- getOption("cl.cores", detectCores()))
-    clusterEvalQ(cl, library(slam))
-    clusterExport(cl, varlist = c("dtmlist", "pandr", "cor_slam", "sdev", "normalize"), envir=environment())
-    
-    wordcor1 <- parLapplyLB(cl, dtmlist, pandr)    
-    
-    stopCluster(cl)
-    
-    
-  } else { # non-parallel method
+
     
     wordcor1  <- llply(dtmlist, pandr, .progress = "text", .inform = FALSE )  
     
-  }
-  
-  
-  
+ 
   # combine list of dataframes into one big dataframe with word, freq and year-range
   suppressWarnings(wordcor1 <- rbindlist(wordcor1))
   # add column of year ranges for each row
   # get a warning here because sometimes the dtmlist item does not have topn rows...
   # wordcor1$years <- unlist(lapply(1:length(dtmlist), function(i) rep(names(dtmlist[i]), topn)))
    
-  
-  
-  
-  
-  
+
   
   message("done")
   
   # plot in a word-cloud-y kind of way, but with more useful information in the 
   # structure of the visualiation... 
-  suppressMessages(require(ggplot2)); library("plyr")
+
   suppressWarnings(print(
     ggplot(wordcor1, aes(factor(years), r)) + 
       geom_text(aes(label = words, size = r, alpha = r), position=position_jitter(h=0.1,w=0.2), subset = .(r > 0)) +

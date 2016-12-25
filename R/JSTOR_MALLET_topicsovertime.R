@@ -7,6 +7,7 @@
 #' @author Ben Marwick with substantial contributions from Andrew Goldstone
 #' @examples 
 #' ## tot <- JSTOR_MALLET_topicsovertime(x = unpack1grams, topics = 10:20)
+#' @import ggplot2
 
 
 
@@ -28,7 +29,6 @@ JSTOR_MALLET_topicsovertime <- function(x, topics=1:56){
   ignore <- readline("(press return to open file dialog - it might pop up behind here) ")
   outputdoctopics <- file.choose()
   print(outputdoctopics)
-  ?facets
 #   # get user to paste in the path to the MALLET output files
 #   
 #   # from  http://r.789695.n4.nabble.com/url-prep-function-backslash-issue-tp3778530p3779086.html
@@ -218,7 +218,6 @@ JSTOR_MALLET_topicsovertime <- function(x, topics=1:56){
   }
   
   ### make it so
-  require(ggplot2)
   print(plot.many.topics.yearly(topics,  topic.model.df, keys.frame))
   return(topic.model.df)
   

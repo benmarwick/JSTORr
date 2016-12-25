@@ -14,7 +14,8 @@
 #' ## JSTOR_2words(unpack1grams, "diamonds", "pearls")
 #' ## JSTOR_2words(unpack1grams, word1 = "milk", word2 = "sugar", span = 0.8) +
 #' ## scale_y_continuous(trans=log2_trans()) # to diminish the effect of a few extreme values
-#' 
+#' @import slam data.table ggplot2 scales reshape2 plyr
+#' @importFrom reshape2 melt
 
 
 JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE, yearfrom = NULL, yearto = NULL){
@@ -25,7 +26,6 @@ JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE, yea
   w2 <- word2
   
   # Get total number of word in the article to standarise for different article lengths
-  library(slam)
   leng <- row_sums(y)
   # now get total number of word of interest (always lower case)
   word1 <- as.matrix(y[,dimnames(y)$Terms %in% w1])
@@ -59,11 +59,9 @@ JSTOR_2words <- function(unpack1grams, word1, word2, span = 0.4, se = FALSE, yea
 
    
   # get years for each article and make data frame
-  suppressMessages(library(data.table))
   twowords_by_year <- data.table(word1_ratio, word2_ratio, year = as.numeric(as.character(bibliodata$year)))
   # reshape into a long table to make it easier to work with in ggplt
-  library(reshape2)
-  twowords_by_year_melt <- melt(twowords_by_year, id.vars = "year")
+  twowords_by_year_melt <- reshape2::melt(twowords_by_year, id.vars = "year")
   
   if(is.null(yearfrom)) { # if no value entered by user, take min value of years in dataset
     
@@ -110,20 +108,26 @@ if(is.null(yearto)) { # if no value entered by user, take max value of years in 
 
 
   # visualise
-  library(ggplot2)
-  library(scales)
   twowords_by_year_melt <- twowords_by_year_melt[twowords_by_year_melt$value > 0, ]
   g <- suppressWarnings(ggplot(twowords_by_year_melt, aes(year, log(value))) +
                      geom_point(aes(colour = variable), size = I(3)) +
                      geom_smooth( aes(colour = variable), se = se, method = "loess", span = span) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1), 
-                           legend.background = element_blank(), legend.key = element_blank(), 
-                           panel.background = element_blank(), panel.border = element_blank(), 
-                           strip.background = element_blank(), plot.background = element_blank()) +
+                           legend.background = element_blank(), 
+                           legend.key = element_blank(), 
+                           panel.background = element_blank(), 
+                           panel.border = element_blank(), 
+                           strip.background = element_blank(), 
+                           plot.background = element_blank()) +
                      ylab(paste0("log of frequency per 1000 words")) +
                      
-                     scale_x_continuous(limits=c(yearfrom, yearto), breaks = seq((yearfrom - 1), (yearto + 1), 2)) +
-                     scale_colour_discrete(labels = c(paste(w1, collapse = ", "), paste(w2, collapse = ", "))) +
+                     scale_x_continuous(limits=c(yearfrom, yearto), 
+                                        breaks = seq((yearfrom - 1), 
+                                                     (yearto + 1), 2)) +
+                     scale_colour_discrete(labels = c(paste(w1, 
+                                                            collapse = ", "),
+                                                      paste(w2, 
+                                                            collapse = ", "))) +
                      guides(colour=guide_legend(title="words"))) 
 }
 # put DOIs back on 

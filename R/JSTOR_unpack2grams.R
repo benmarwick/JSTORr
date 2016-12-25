@@ -1,16 +1,17 @@
 #' Unpack JSTOR journal articles and bibliographic data to a Document Term Matrix of 2-grams
 #' 
-#' @description Import journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/). 
+#' @description Import journal articles and bibliographic data from the downloaded zipfile and reshape ready for simple text mining. For use with JSTOR's Data for Research datasets (\url{http://dfr.jstor.org/}). 
 #' @param path full path to directory containing 'bigrams' folder and the citations.CSV file. These are obtained after unzipping the file downloaded from DfR (you should unzip the file before running this function). Default is the working directory.
-#' @param parallel if TRUE, apply function in parallel, using the parallel library. Default is FALSE as this is typically faster for smaller datasets (ie. ~5000 articles) due to communication overhead.
 #' @return Returns a list of two items. First is "bigrams", a Document Term Matrix of 2-grams, and second is 'bibliodata', a data frame of bibliographic information for all articles. 
 #' @examples 
-  #' ## unpack2grams <- JSTOR_unpack2grams(path = "C:/Users/marwick/Downloads/JSTOR") # then follow prompts to navigate to the location of the zipfile
+#' ## unpack2grams <- JSTOR_unpack2grams(path = "C:/Users/marwick/Downloads/JSTOR") 
+#' # then follow prompts to navigate to the location of the zipfile
+#' @import plyr data.table slam tm stringr
 
 
 
 
-JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
+JSTOR_unpack2grams <- function( path=getwd()){
  
   # set working directory to newly created folder
   # (within working directory) with lots of CSV files
@@ -35,26 +36,12 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   myfiles <- dir(pattern = "\\.(csv|CSV)$", full.names = TRUE)
   # read CSV files into a R data.table object
   # fread is 10x faster than read.csv...
-  suppressMessages(library(data.table))
-  library(plyr)
+
   read_csv2dt <- function(x) data.table(fread(x, sep = ",", stringsAsFactors=FALSE))
                                                 
-  if(parallel) {
-    
-    suppressMessages(library(snow)); suppressMessages(library(parallel))
-    cl <- makeCluster(detectCores(), type = "SOCK")
-    clusterExport(cl, c("myfiles", "read_csv2dt"), envir=environment())
-    clusterEvalQ(cl, library(data.table))
-    aawc <- parLapplyLB(cl, myfiles, read_csv2dt)
-    stopCluster(cl); invisible(gc(verbose = FALSE))
-    
-  } else {
-    
-    library(plyr)
+ 
     aawc <-  llply(myfiles, read_csv2dt, .progress = "text", .inform = FALSE)
-  }
-  
-
+ 
   # assign file names to each dataframe in the list
   names(aawc) <- myfiles
   message("done")
@@ -63,7 +50,7 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   message("reshaping the 2-grams into a document term matrix...")
   
   # custom version of tm::DocumentTermMatrix for 1-grams
-  library(slam); library(tm)
+ 
   my_dtm_2gram <- function(x){ 
     y <- as.integer(x$WEIGHT)
     names(y) <- x$BIGRAMS
@@ -84,23 +71,10 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   }
   
   # get all tables into dtms
-  if(parallel) {
-    
-    suppressMessages(library(snow)); suppressMessages(library(parallel))
-    cl <- makeCluster(detectCores(), type = "SOCK")
-    clusterExport(cl, c("aawc", "my_dtm_2gram"), envir=environment())
-    clusterEvalQ(cl, list(library(tm), library(slam)))
-    aawc1 <- parLapplyLB(cl, 1:length(aawc), function(i) my_dtm_2gram(aawc[[i]]) )
-    stopCluster(cl); rm("aawc"); invisible(gc(verbose = FALSE))
-    
-   } else {
-     
-     library(plyr)
+
      aawc1 <- llply(1:length(aawc), function(i) my_dtm_2gram(aawc[[i]]), .progress = "text", .inform = FALSE)
-  }
-  
-  
-  library(stringr)
+ 
+
   names(aawc1) <- str_extract(basename(myfiles), "[^bigrams_].+[^.CSV]")
  
   message("done")
@@ -127,7 +101,6 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   # cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
-  library(stringr)
   cit$id <- str_extract(chartr('/', '_', cit$id), ".*[^\t]")
   # limit list of citations to full length articles only 
   # note that citation type is not in the correct column
@@ -151,23 +124,8 @@ JSTOR_unpack2grams <- function(parallel=FALSE, path=getwd()){
   rm(aawc1, cit, citfla, myfiles); invisible(gc(verbose = FALSE))
   
   # make one giant dtm with all docs (rather slow...)
-  
-  
-  if(parallel) {
-    
-    suppressMessages(library(snow)); suppressMessages(library(parallel))
-    cl <- makeCluster(detectCores(), type = "SOCK")
-    clusterExport(cl, c("bigrams"), envir=environment())
-    clusterEvalQ(cl, library(tm) )
-    bigrams <- do.call(tm:::c.DocumentTermMatrix, bigrams)
-    stopCluster(cl); invisible(gc(verbose = FALSE))
-    
-  } else {
-    
-    
+   
       bigrams <- do.call(tm:::c.DocumentTermMatrix, bigrams)
-
-  }
 
   
   # give docs their DOI as names

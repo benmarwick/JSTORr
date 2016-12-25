@@ -1,5 +1,8 @@
 #' Subset 1gram object
 #' 
+#' 
+#' @param unpack1grams object returned by the function JSTOR_unpack1grams.
+#' @param word The word or vector of words to subset the documents by, ie. use only documents containing this word (or words) in the cluster analysis
 #' @description Subsets 1 grams 
 #' @export
 

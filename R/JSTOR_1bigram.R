@@ -8,6 +8,7 @@
 #' @examples 
 #' ## JSTOR_1bigram(unpack2grams, "pirate booty")
 #' ## JSTOR_1bigram(unpack2grams, c("treasure chest", "musket balls", "jolly roger"), span = 0.7)
+#' @import slam data.table ggplot2 scales
 
 JSTOR_1bigram <- function(unpack2grams, bigram, span = 0.4){
   #### investigate change in use of certain bigrams of interest over time
@@ -19,7 +20,7 @@ JSTOR_1bigram <- function(unpack2grams, bigram, span = 0.4){
   # using dtm
   # y <- as.matrix(bigrams)
   # Get total number of word in the article to standarise for different article lengths
-  library(slam)
+
   leng <- row_sums(y)
   # now get total number of word of interest (always lower case)
   bigram1 <- as.matrix(y[,dimnames(y)$Terms %in% bigram])
@@ -37,19 +38,26 @@ JSTOR_1bigram <- function(unpack2grams, bigram, span = 0.4){
   
   
   # get years for each article
-  suppressMessages(library(data.table))
   bigram_by_year <- data.table(bigram_ratio, year = as.numeric(as.character(bibliodata$year)))
   setnames(bigram_by_year, c("bigram_ratio", "year"))
   lim_min <- as.numeric(as.character(min(bibliodata$year)))
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # vizualise one word over time
-  library(ggplot2)
   bigram_by_year <- bigram_by_year[bigram_by_year$bigram_ratio > 0, ]
-  suppressWarnings(ggplot(bigram_by_year, aes(year, log(bigram_ratio))) +
+  suppressWarnings(ggplot(bigram_by_year, 
+                          aes(year, log(bigram_ratio))) +
                      geom_point() +
-                     geom_smooth( aes(group=1), method = "loess", span = span, data=bigram_by_year) +
-                     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-                     ylab(paste0("log of frequency of the bigram '", bigram, "'")) +
+                     geom_smooth( aes(group=1), 
+                                  method = "loess", 
+                                  span = span, 
+                                  data=bigram_by_year) +
+                     theme(axis.text.x = element_text(angle = 90, 
+                                                      hjust = 1)) +
+                     ylab(paste0("log of frequency of the bigram '", 
+                                 bigram, "'")) +
                      # inspect bibliodata$year to see min and max year to set axis limits
-                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)))
+                     scale_x_continuous(limits=c(lim_min, 
+                                                 lim_max), 
+                                        breaks = seq(lim_min-1, 
+                                                     lim_max+1, 2)))
 }

@@ -9,6 +9,8 @@
 #' @examples 
 #' ## JSTOR_2bigrams(unpack2grams, "pirate booty", "treasure chest")
 #' ## JSTOR_2bigrams(unpack2grams, c("treasure chest", "musket balls"), c("jolly roger"), span = 0.2)
+#' @import slam data.table ggplot2 scales 
+#' @importFrom reshape2 melt
 
 
 
@@ -22,7 +24,6 @@ JSTOR_2bigrams <- function(unpack2grams, bigram1, bigram2, span = 0.4){
   # using dtm
   # y <- as.matrix(bigrams)
   # Get total number of word in the article to standarise for different article lengths
-  library(slam)
   leng <- row_sums(y)
   # now get total number of word of interest (always lower case)
   bigram1a <- as.matrix(y[,dimnames(y)$Terms %in% bigram1])
@@ -41,22 +42,25 @@ JSTOR_2bigrams <- function(unpack2grams, bigram1, bigram2, span = 0.4){
   bigram1_ratio <- bigram1a/leng
   bigram2_ratio <- bigram2a/leng
   # get years for each article
-  suppressMessages(library(data.table))
   two_bigrams_by_year <- data.table(bigram1_ratio, bigram2_ratio,  year = as.numeric(as.character(bibliodata$year)))
   # reshape into a long table to make it easier to work with in ggplt
-  library(reshape2)
-  two_bigrams_by_year_melt <- melt(two_bigrams_by_year, id.vars = "year")
+  two_bigrams_by_year_melt <- reshape2::melt(two_bigrams_by_year, id.vars = "year")
   lim_min <- as.numeric(as.character(min(bibliodata$year)))
   lim_max <- as.numeric(as.character(max(bibliodata$year)))
   # vizualise one word over time
-  library(ggplot2)
   two_bigrams_by_year_melt <- two_bigrams_by_year_melt[two_bigrams_by_year_melt$value > 0, ]
-  suppressWarnings(ggplot(two_bigrams_by_year_melt, aes(year, log(value))) +
+  suppressWarnings(ggplot(two_bigrams_by_year_melt, 
+                          aes(year, log(value))) +
                      geom_point(aes(colour = variable)) +
-                     geom_smooth( aes(colour = variable), method = "loess", span = span) +
+                     geom_smooth( aes(colour = variable), 
+                                  method = "loess", span = span) +
                      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
                      ylab(paste0("log of frequency of bigrams")) +
-                     scale_x_continuous(limits=c(lim_min, lim_max), breaks = seq(lim_min-1, lim_max+1, 2)) +
-                     scale_colour_discrete(labels = c(paste(bigram1, collapse = ", "), paste(bigram2, collapse = ", "))) )
+                     scale_x_continuous(limits=c(lim_min, lim_max), 
+                                        breaks = seq(lim_min-1, lim_max+1, 2)) +
+                     scale_colour_discrete(labels = c(paste(bigram1, 
+                                                            collapse = ", "),
+                                                      paste(bigram2, 
+                                                            collapse = ", "))) )
 }
 
