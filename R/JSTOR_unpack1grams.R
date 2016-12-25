@@ -58,9 +58,9 @@ aawc1 <- aawc[full]
   my_dtm_1gram <- function(x){ 
     y <- as.integer(x$WEIGHT)
     names(y) <- x$WORDCOUNTS
-    v =  unname(y)          # num
-    i = rep(1, length(y))   # int
-    j = seq(1:length(y))    # int
+    v <-  unname(y)          # num
+    i <- rep(1, length(y))   # int
+    j <- seq(1:length(y))    # int
     z <- simple_triplet_matrix(v = v,   # num
                           i = i,        # int
                           j = j,        # int

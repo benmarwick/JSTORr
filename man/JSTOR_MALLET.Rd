@@ -23,13 +23,7 @@ Returns a folder of text files (one text file per document) and a folder of outp
 Generates one or more topic models using MALLET and plots diagnostics. This is a very basic R wrapper for MALLET on Windows, see here for something more complete: http://cran.r-project.org/web/packages/mallet/ For use with JSTOR's Data for Research datasets (http://dfr.jstor.org/).
 }
 \examples{
-## JSTOR_MALLET(nouns, 
-MALLET = "C:/mallet-2.0.7", 
-JAVA = "C:/Program Files (x86)/Java/jre7/bin", 
-K = 150) # generate a single model
-## JSTOR_MALLET(nouns =  unpack1grams$wordcounts, 
-MALLET = "C:/mallet-2.0.7", 
-JAVA = "C:/Program Files (x86)/Java/jre7/bin", 
-K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
+## JSTOR_MALLET(nouns, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = 150) # generate a single model
+## JSTOR_MALLET(nouns =  unpack1grams$wordcounts, MALLET = "C:/mallet-2.0.7", JAVA = "C:/Program Files (x86)/Java/jre7/bin", K = seq(150, 500, 50)) # can also generate multiple models with different numbers of topics 
 }
 
