@@ -194,7 +194,7 @@ dev.off()
 
 message("plotting k-means clustering output...")
 df <- data.frame(as.matrix(cbind(PC1, PC2)))
-df$cluster = factor(cl$cluster)
+df$cluster <-  factor(cl$cluster)
 
 # The following graph color codes the points by cluster
 # 
