@@ -33,10 +33,10 @@ JSTOR_unpack1grams <- function( path = getwd()){
   # read CSV files into a R data.table object
   # fread is 10x faster than read.csv...
 
-  read_csv2dt <- function(x) data.table(fread(x, sep = ",", stringsAsFactors=FALSE))
+  read_csv2dt <- function(x) data.table::data.table(data.table::fread(x, sep = ",", stringsAsFactors=FALSE))
                                                 
   
-    aawc <-  llply(myfiles, read_csv2dt, .progress = "text", .inform = FALSE)
+    aawc <-  plyr::llply(myfiles, read_csv2dt, .progress = "text", .inform = FALSE)
  
 
   # assign file names to each dataframe in the list
@@ -77,14 +77,14 @@ aawc1 <- aawc[full]
   # get all tables into dtms
 
    
-     aawc2 <- llply(1:length(aawc1), function(i) my_dtm_1gram(aawc1[[i]]), .progress = "text", .inform = FALSE)
+aawc2 <- plyr::llply(1:length(aawc1), function(i) my_dtm_1gram(aawc1[[i]]), .progress = "text", .inform = FALSE)
   
   
 ################################### 
 # subset file names so we only get CSV files with three or more words
 myfiles1 <- myfiles[full]
 
-  names(aawc2) <- str_extract(basename(myfiles1), "[^wordcounts_].+[^.CSV]")
+  names(aawc2) <- stringr::str_extract(basename(myfiles1), "[^wordcounts_].+[^.CSV]")
 
   message("done")
  
@@ -96,12 +96,12 @@ myfiles1 <- myfiles[full]
   
   # since citation files can be TSV (JSTOR changed to this in 2015) or csv (before 2015)...
   read_citations <- function(i) {if (stringr::str_sub(i, start=-3) == "CSV" | stringr::str_sub(i, start=-3) == "csv") 
-                                {read.csv(i, quote="", row.names=NULL, comment.char = "", header = TRUE,  stringsAsFactors = FALSE, colClasses="character")}
-                                else 
-                                {if (stringr::str_sub(i, start=-3) == "TSV" | stringr::str_sub(i, start=-3) == "tsv") 
-                                  {read.delim(i, row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")}
-                                  else
-                                  {"Citations files cannot be loaded"}  } 
+        {read.csv(i, quote="", row.names=NULL, comment.char = "", header = TRUE,  stringsAsFactors = FALSE, colClasses="character")}
+        else 
+        {if (stringr::str_sub(i, start=-3) == "TSV" | stringr::str_sub(i, start=-3) == "tsv") 
+        {read.delim(i, row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")}
+        else
+        {"Citations files cannot be loaded"}  } 
     }
   
   
@@ -109,7 +109,7 @@ myfiles1 <- myfiles[full]
   # cit <- read.delim("citations.tsv", row.names = NULL, comment.char = "", header = TRUE, stringsAsFactors = FALSE, colClasses="character", quote = "")
   # replace for-slash with underscore to make it match the filenames
   # and replace odd \t that was added during import 
-  cit$id <- str_extract(chartr('/', '_', cit$id), ".*[^\t]")
+  cit$id <- stringr::str_extract(chartr('/', '_', cit$id), ".*[^\t]")
   # limit list of citations to full length articles only 
   # note that citation type is not in the correct column
   # changed this in case we get a dataset that was not originally all fla
@@ -126,7 +126,7 @@ myfiles1 <- myfiles[full]
   bibliodata <- (merge(names(wordcounts), citfla, by.x=1, by.y="id"))
   # create a variable that holds the year of publication for
   # each article
-  bibliodata$year <- str_extract(bibliodata$issue, "[[:digit:]]{4}")
+  bibliodata$year <- stringr::str_extract(bibliodata$issue, "[[:digit:]]{4}")
   
   # clean up a little
   rm(aawc1, aawc2, cit, citfla, myfiles); invisible(gc(verbose = FALSE))
@@ -134,7 +134,7 @@ myfiles1 <- myfiles[full]
   # make one giant dtm with all docs (rather slow...)
   
   
-    wordcounts <- do.call(tm:::c.DocumentTermMatrix, wordcounts)
+    wordcounts <- do.call(c, wordcounts)
 
 
 

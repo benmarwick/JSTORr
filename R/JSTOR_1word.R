@@ -21,7 +21,7 @@ JSTOR_1word <- function(unpack1grams, oneword, span = 0.5, se=FALSE){
   # using dtm
   # y <- as.matrix(wordcounts)
   # Get total number of word in all articles to standarise for different article lengths
-  leng <- slam:::row_sums.simple_triplet_matrix(y)
+  leng <- slam::row_sums(y)
   # now get total number of word of interest (always lower case)
   word <- as.matrix(  y[ , (dimnames(y)$Terms %in% oneword)  ]  )
   

@@ -132,7 +132,7 @@ rm(list=ls()[! ls() %in% keep])
 
 # combine into one giant dtm, rather slow
 
-wordcounts_combined <- do.call(tm:::c.DocumentTermMatrix, wordcounts_fla)
+wordcounts_combined <- do.call(c, wordcounts_fla)
 
 # give docs their DOI as names (this was wrong! should be good now)
 # wordcounts_combined and wordcounts_fla are in the same order

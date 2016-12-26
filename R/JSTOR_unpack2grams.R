@@ -125,7 +125,7 @@ JSTOR_unpack2grams <- function( path=getwd()){
   
   # make one giant dtm with all docs (rather slow...)
    
-      bigrams <- do.call(tm:::c.DocumentTermMatrix, bigrams)
+      bigrams <- do.call(c, bigrams)
 
   
   # give docs their DOI as names
